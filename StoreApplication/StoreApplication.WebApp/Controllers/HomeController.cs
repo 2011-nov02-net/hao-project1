@@ -13,22 +13,17 @@ namespace StoreApplication.WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IStoreRepository _storeRepo;
+        private readonly Project0databaseContext _context;
 
-
-
-        public HomeController(IStoreRepository storeRepo, ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,Project0databaseContext context)
         {
-            _storeRepo = storeRepo;
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            var viewModel = _storeRepo.GetAllStores();
-            
-
-            return View(viewModel);
+            return View();
         }
 
         public IActionResult Privacy()

@@ -15,9 +15,9 @@ namespace StoreApplication.UnitTests
     public class StoreRepositoryTest
     {
         // don't use actual Azure database, use SQLite for tests
-        /*
+      
         [Fact]
-        public void DBAddAStore()
+        public void DBAddOneStore()
         {
             // setup
             var optionsBuilder = new DbContextOptionsBuilder<Project0databaseContext>();
@@ -37,9 +37,9 @@ namespace StoreApplication.UnitTests
             Assert.Equal(newStore.Storephone, dbStore.Storephone);
             Assert.Empty(dbStore.Storecustomers);
         }
-        */
+        
 
-        /*
+        
         [Fact]
         public void DBAddOneProduct() {
             var optionsBuilder = new DbContextOptionsBuilder<Project0databaseContext>();
@@ -59,9 +59,9 @@ namespace StoreApplication.UnitTests
             Assert.Equal(newProduct.Category, dbProduct.Category);
             Assert.Equal(newProduct.Price, dbProduct.Price);           
         }
-        */
+        
 
-        /*
+        
         [Fact]
         public void DBGetAProductByNameAndCategory()
         {
@@ -82,8 +82,9 @@ namespace StoreApplication.UnitTests
             var dbProduct = context2.Products.Find("Product101");
             Assert.Equal(price, dbProduct.Price);         
         }
-        */
-
+        
+        // SQLite
+        /*
         [Fact]
         public void DBAddOneStore()
         {
@@ -104,12 +105,11 @@ namespace StoreApplication.UnitTests
             var dbStore = context2.Stores.First(x => x.Storeloc == "Mountain View 1");
             Assert.Equal(newStore.Storephone, dbStore.Storephone);
             Assert.Empty(dbStore.Storecustomers);
-
         }
-        
+        */
         
 
-
+        
         static string GetConnectionString()
         {
             string path = "../../../../../../project0-connection-string.json";
@@ -117,16 +117,15 @@ namespace StoreApplication.UnitTests
             try
             {
                 json = File.ReadAllText(path);
-
             }
             catch (FileNotFoundException e)
             {
                 Console.WriteLine($"required file {path} not found. should just be the connection string in quotes.");
                 throw;
             }
-
             string connectionString = JsonSerializer.Deserialize<string>(json);
             return connectionString;
         }
+        
     }
 }

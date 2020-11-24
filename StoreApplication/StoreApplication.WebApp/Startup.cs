@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,8 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 
 namespace StoreApplication.WebApp
 {
@@ -26,8 +25,16 @@ namespace StoreApplication.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("default");
+            if (connectionString is null)
+            {
+                throw new InvalidOperationException("no connection string 'default' found");
+            }
+
+
             services.AddDbContext<Project0databaseContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("Sqlite")));
+                options.UseSqlServer(connectionString));
+
             services.AddControllersWithViews();
         }
 
