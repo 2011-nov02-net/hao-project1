@@ -4,7 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-@{ 
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
@@ -24,8 +28,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model)
-{
+@foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.UniqueID)
@@ -39,10 +42,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
-            
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  id= item.UniqueID }) |
+                @Html.ActionLink("Details", "Details", new {  id= item.UniqueID  }) |
+                @Html.ActionLink("Delete", "Delete", new {  id= item.UniqueID  })
+            </td>
         </tr>
 }
     </tbody>
 </table>
-
-    }

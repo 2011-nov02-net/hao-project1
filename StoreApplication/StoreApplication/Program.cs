@@ -306,7 +306,7 @@ namespace StoreApplication
                 Console.WriteLine("Enter Product quantity");
                 int quantity = ValidateInt(Console.ReadLine());               
                
-                CProduct p = repo.GetAProductByNameAndCategory(name, category);
+                CProduct p = repo.GetOneProductByNameAndCategory(name, category);
                 if (NullChecker(p)) continue;
                 
                 p.Quantity = quantity;

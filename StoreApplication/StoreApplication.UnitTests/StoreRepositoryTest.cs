@@ -75,13 +75,14 @@ namespace StoreApplication.UnitTests
             {
                 IStoreRepository repo = new StoreRepository(option);
                 // action
-                CProduct p = repo.GetAProductByNameAndCategory(name, category);
+                CProduct p = repo.GetOneProductByNameAndCategory(name, category);
             }
             // assert
             using var context2 = new Project0databaseContext(option);
             var dbProduct = context2.Products.Find("Product101");
             Assert.Equal(price, dbProduct.Price);         
         }
+        
         
         // SQLite
         /*

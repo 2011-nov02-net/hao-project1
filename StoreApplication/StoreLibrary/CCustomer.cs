@@ -14,6 +14,7 @@ namespace StoreLibrary
         /// <summary>
         /// property customerid to uniquely identify a customer
         /// </summary>
+        
         public string Customerid { get; set; }
 
         /// <summary>

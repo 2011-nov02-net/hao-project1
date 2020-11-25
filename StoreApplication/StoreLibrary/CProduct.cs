@@ -80,5 +80,12 @@ namespace StoreLibrary
             Category = category;
             Price = price;          
         }
+
+        public CProduct(string name, string category, double price)
+        {
+            Name = name;
+            Category = category;
+            Price = price;
+        }
     }
 }

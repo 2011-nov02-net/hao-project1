@@ -34,7 +34,7 @@ namespace StoreApplication.WebApp
 
             services.AddDbContext<Project0databaseContext>(options =>
                 options.UseSqlServer(connectionString));
-
+            services.AddScoped<IStoreRepository, StoreRepository>();
             services.AddControllersWithViews();
         }
 

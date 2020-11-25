@@ -34,7 +34,23 @@ namespace StoreDatamodel
         // helper methods to display all store locations, only contain location and store phone number
         List<CStore> GetAllStores();
         IEnumerable<CProduct> GetAllProducts();
-        CProduct GetAProductByNameAndCategory(string name, string category);
+        CProduct GetOneProductByNameAndCategory(string name, string category);
+        CProduct GetOneProduct(string productID);
+
+
+        // delete methods
+
+        void DeleteOneProduct(string productID);
+        void DeleteOneCustomer(string customerID);
+
+        // edit
+
+        public void EditOneProduct(CProduct product);
+        public void EditOneStore(CStore store);
+        public void EditOneCustomer(CCustomer customer);
+
+
+
 
     }
 }

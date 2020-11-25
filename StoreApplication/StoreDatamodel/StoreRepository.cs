@@ -15,7 +15,7 @@ namespace StoreDatamodel
         public StoreRepository(DbContextOptions<Project0databaseContext> contextOptions)
         {
             _contextOptions = contextOptions;
-        }       
+        }
 
         // M V C design
         // re-implementation seperating business and data-access
@@ -105,7 +105,7 @@ namespace StoreDatamodel
             return products;
         }
 
-        
+
         // all functionalities
         public void StoreAddOneCusomter(string storeLoc, CCustomer customer)
         {
@@ -187,7 +187,7 @@ namespace StoreDatamodel
             if (dbCustomer == null) return null;
             CCustomer foundCustomer;
             foundCustomer = new CCustomer(dbCustomer.Customerid,
-                                                    dbCustomer.Firstname, dbCustomer.Lastname, dbCustomer.Phonenumber);          
+                                                    dbCustomer.Firstname, dbCustomer.Lastname, dbCustomer.Phonenumber);
             return foundCustomer;
         }
 
@@ -271,7 +271,7 @@ namespace StoreDatamodel
             context.SaveChanges();
 
         }
-       
+
         public void AddOneProduct(CProduct product)
         {
             using var context = new Project0databaseContext(_contextOptions);
@@ -310,7 +310,7 @@ namespace StoreDatamodel
             return conProducts;
         }
 
-        public CProduct GetAProductByNameAndCategory(string name, string category)
+        public CProduct GetOneProductByNameAndCategory(string name, string category)
         {
             using var context = new Project0databaseContext(_contextOptions);
             var dbProduct = context.Products.FirstOrDefault(x => x.Name == name && x.Category == category);
@@ -319,6 +319,92 @@ namespace StoreDatamodel
 
             return p;
         }
+
+        public CProduct GetOneProduct(string productID)
+        { 
+            using var context = new Project0databaseContext(_contextOptions);
+  
+            var dbProduct = context.Products.FirstOrDefault(x => x.Productid == productID);
+            if (dbProduct == null) return null;
+            CProduct p = new CProduct(dbProduct.Name, dbProduct.Category, dbProduct.Price);
+            return p;
+
+        }
+
+        // delete methods
+        // all set to on delete cascade
+        public void DeleteOneProduct(string productID)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbProduct = context.Products.FirstOrDefault(x => x.Productid == productID);
+            if (dbProduct != null)
+            {
+                context.Products.Remove(dbProduct);
+                context.SaveChanges();
+            }
+            // null references handled in the view layer
+        }
+
+
+        public void DeleteOneCustomer(string customerID)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbCustomer = context.Customers.FirstOrDefault(x => x.Customerid == customerID);
+            if (dbCustomer != null)
+            {
+                context.Customers.Remove(dbCustomer);
+                context.SaveChanges();
+            }
+            // null references handled in the view layer
+
+        }
+
+
+        // edit methods
+        public void EditOneProduct(CProduct product)
+        { 
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbProduct = context.Products.FirstOrDefault(x => x.Productid == product.UniqueID);
+            if (dbProduct != null)
+            {
+                dbProduct.Productid = product.UniqueID;
+                dbProduct.Name = product.Name;
+                dbProduct.Category = product.Category;
+                dbProduct.Price = product.Price;
+                context.SaveChanges();
+            }
+
+        }
+
+        public void EditOneStore(CStore store)
+        { 
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbStore = context.Stores.FirstOrDefault(x => x.Storeloc == store.Storeloc );
+            if (dbStore != null)
+            {
+                dbStore.Storeloc = store.Storeloc;
+                dbStore.Storephone = store.Storephone;
+                context.SaveChanges();
+            }
+
+
+        }
+
+        public void EditOneCustomer(CCustomer customer)
+        { 
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbCustomer = context.Customers.FirstOrDefault(x => x.Customerid == customer.Customerid);
+            if (dbCustomer != null)
+            {
+                dbCustomer.Customerid = customer.Customerid;
+                dbCustomer.Firstname = customer.FirstName;
+                dbCustomer.Lastname = customer.LastName;
+                dbCustomer.Phonenumber = customer.PhoneNumber;
+                context.SaveChanges();
+            }
+
+        }
+
     }
 }
 
