@@ -106,7 +106,10 @@ namespace StoreDatamodel
         }
 
 
-        // all functionalities
+
+
+
+        // all 6 functionalities
         public void StoreAddOneCusomter(string storeLoc, CCustomer customer)
         {
             using var context = new Project0databaseContext(_contextOptions);
@@ -258,6 +261,9 @@ namespace StoreDatamodel
             return seekStore;
         }
 
+
+
+
         // add methods
         public void AddOneStore(CStore store)
         {
@@ -286,6 +292,8 @@ namespace StoreDatamodel
             context.SaveChanges();
 
         }
+
+
 
         // helpers
         public List<CStore> GetAllStores()
@@ -330,6 +338,16 @@ namespace StoreDatamodel
             return p;
 
         }
+        public CCredential GetOneCredential(string email)
+        { 
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbCredential = context.Credentials.FirstOrDefault(x => x.Email == email);
+            if (dbCredential == null) return null;
+            CCredential c = new CCredential(dbCredential.Email, dbCredential.Password);
+            return c;
+        }
+
+
 
         // delete methods
         // all set to on delete cascade
@@ -358,6 +376,8 @@ namespace StoreDatamodel
             // null references handled in the view layer
 
         }
+
+
 
 
         // edit methods

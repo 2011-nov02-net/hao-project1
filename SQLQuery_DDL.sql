@@ -31,7 +31,7 @@ create table customer
     firstname NVARCHAR(20) not null,
     lastname NVARCHAR(20) not null,
     phonenumber NVARCHAR(10) not null,
-    email NVARCHAR(30) not null,
+    email NVARCHAR(30) unique not null,
     check(len(phonenumber) = 10),
     check(phonenumber like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
     foreign key(email) REFERENCES credential(email)

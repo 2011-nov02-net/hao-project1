@@ -80,7 +80,7 @@ namespace StoreApplication.WebApp.Controllers
             catch(Exception e)
             {
                 _logger.LogError(e, "error while tring to add a product");
-                ModelState.AddModelError("", "Product ID already in use or other issues");
+                ModelState.AddModelError("", "product ID already in use or other issues");
                 return View();
             }
         }
@@ -114,7 +114,7 @@ namespace StoreApplication.WebApp.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Trying to edit a product that does not exist");
+                    ModelState.AddModelError("", "trying to edit a product that does not exist");
                     return View();
                 }
                 return RedirectToAction(nameof(Index));
@@ -122,7 +122,7 @@ namespace StoreApplication.WebApp.Controllers
             catch( Exception e)
             {
                 _logger.LogError( e , "error while trying to edit a product");
-                ModelState.AddModelError("","Failed to edit a product" );
+                ModelState.AddModelError("","failed to edit a product" );
                 return View();
             }
         }
@@ -149,15 +149,14 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult Delete(string id, IFormCollection collection)
         {
             try
-            {
-               
+            {               
                 _storeRepo.DeleteOneProduct(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch( Exception e)
             {
-                _logger.LogError("", "error while trying to delete a product");
-                ViewData["ErrorMsg"] = "Trying to delete a product that does not exist";
+                _logger.LogError(e, "error while trying to delete a product");
+                ModelState.AddModelError("","Trying to delete a product that does not exist");
                 var viewMode = _storeRepo.GetOneProduct(id);
 
                 return View();

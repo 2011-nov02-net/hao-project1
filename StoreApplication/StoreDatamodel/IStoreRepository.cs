@@ -36,7 +36,7 @@ namespace StoreDatamodel
         IEnumerable<CProduct> GetAllProducts();
         CProduct GetOneProductByNameAndCategory(string name, string category);
         CProduct GetOneProduct(string productID);
-
+        CCredential GetOneCredential(string email);
 
         // delete methods
 

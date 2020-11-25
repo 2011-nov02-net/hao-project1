@@ -12,8 +12,9 @@ namespace StoreApplication.WebApp.ViewModels
         
         public string EmailAddress { get; set; }
 
+        
         [Required]
-        [StringLength(8)]
+        [MinLength(9)]
         public string Password { get; set; }
     }
 }

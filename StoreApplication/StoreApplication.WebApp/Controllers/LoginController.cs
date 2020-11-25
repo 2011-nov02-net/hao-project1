@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
+using StoreLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace StoreApplication.WebApp.Controllers
 
 
         // GET: LoginController/Create
-        public ActionResult Login()
+        public ActionResult Index()
         {
             return View();
         }
@@ -32,17 +33,43 @@ namespace StoreApplication.WebApp.Controllers
         // POST: LoginController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel viewLogin)
+        public ActionResult Index(LoginViewModel viewLogin)
         {
             try
             {
-                _storeRepo.GetOneCredential();
+                if (!ModelState.IsValid)
+                {
+                    ModelState.AddModelError("", "Invalid login format");
+                    return View();
+                }
+
+                CCredential cCredential = _storeRepo.GetOneCredential(viewLogin.EmailAddress);
+                if (cCredential == null)
+                {
+                    ModelState.AddModelError("", "This email address has not been registered");
+                    return View();
+                }
 
 
-                return RedirectToAction(nameof(Index));
+                if (cCredential.Password == viewLogin.Password)
+                { 
+                    // temp data
+                    ModelState.
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Password does not match");
+                    return View();
+                }
+
+                // relative path
+                return RedirectToAction("Index","Home");
             }
-            catch
+            catch(Exception e)
+
             {
+                _logger.LogError(e, "error while tring to login");
+                ModelState.AddModelError("", "failed to login");
                 return View();
             }
         }
