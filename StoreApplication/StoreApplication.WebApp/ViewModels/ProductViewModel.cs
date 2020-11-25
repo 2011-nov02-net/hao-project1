@@ -19,7 +19,6 @@ namespace StoreApplication.WebApp.ViewModels
         [Display( Name= "Product Category")]
         [Required]
         public string Category { get; set; }
-
         
         [Required]
         [Range(0,99999)]

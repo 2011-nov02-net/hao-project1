@@ -278,6 +278,23 @@ namespace StoreDatamodel
 
         }
 
+        // web version
+        public void AddOneCustomer(CCustomer customer)
+        { 
+            using var context = new Project0databaseContext(_contextOptions);
+            var newCustomer = new Customer
+            {
+                Customerid = customer.Customerid,
+                Firstname = customer.FirstName,
+                Lastname = customer.LastName,
+                Phonenumber = customer.PhoneNumber,
+                Email = customer.Email
+
+            };
+            context.Customers.Add(newCustomer);
+            context.SaveChanges();
+        }
+
         public void AddOneProduct(CProduct product)
         {
             using var context = new Project0databaseContext(_contextOptions);
@@ -291,6 +308,11 @@ namespace StoreDatamodel
             context.Products.Add(newProduct);
             context.SaveChanges();
 
+        }
+
+        public void AddOneCredential(CCredential credential)
+        { 
+            
         }
 
 
@@ -316,6 +338,16 @@ namespace StoreDatamodel
             IEnumerable<Product> dbProducts = context.Products.ToList();
             IEnumerable<CProduct> conProducts = dbProducts.Select(x => new CProduct(x.Productid, x.Name, x.Category, x.Price, 1));
             return conProducts;
+        }
+
+        public CCustomer GetOneCustomerByEmail(string email)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbCustomer = context.Customers.FirstOrDefault(x => x.Email == email);
+            if (dbCustomer == null) return null;
+            CCustomer c = new CCustomer(dbCustomer.Customerid, dbCustomer.Firstname, dbCustomer.Lastname, dbCustomer.Phonenumber, dbCustomer.Email);
+            
+            return c;
         }
 
         public CProduct GetOneProductByNameAndCategory(string name, string category)

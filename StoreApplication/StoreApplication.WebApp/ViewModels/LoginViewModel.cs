@@ -8,10 +8,8 @@ namespace StoreApplication.WebApp.ViewModels
 {
     public class LoginViewModel
     {
-        [Required]
-        
-        public string EmailAddress { get; set; }
-
+        [Required]       
+        public string Email { get; set; }
         
         [Required]
         [MinLength(9)]

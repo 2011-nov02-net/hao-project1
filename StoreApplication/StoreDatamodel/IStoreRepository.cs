@@ -26,14 +26,17 @@ namespace StoreDatamodel
         
         // all add methods take library model objects, convert them to dbcontext objects and map them to db
         void AddOneStore(CStore store);
+        void AddOneCustomer(CCustomer customer);
         
         void AddOneProduct(CProduct product);
+        void AddOneCredential(CCredential cerdential);
 
 
 
-        // helper methods to display all store locations, only contain location and store phone number
+        // helper methods
         List<CStore> GetAllStores();
         IEnumerable<CProduct> GetAllProducts();
+        CCustomer GetOneCustomerByEmail(string email);
         CProduct GetOneProductByNameAndCategory(string name, string category);
         CProduct GetOneProduct(string productID);
         CCredential GetOneCredential(string email);

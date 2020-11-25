@@ -32,6 +32,8 @@ namespace StoreLibrary
         /// </summary>
         public string PhoneNumber { get; set; }
 
+        public string Email { get; set; }
+
         /// <summary>
         /// property to keep track of all orders of a customer
         /// </summary>
@@ -65,6 +67,15 @@ namespace StoreLibrary
             FirstName = firstName;
             LastName = lastName;
             PhoneNumber = phoneNumber;    
+        }
+
+        public CCustomer(string customerid, string firstName, string lastName, string phoneNumber, string email)
+        {
+            Customerid = customerid;
+            FirstName = firstName;
+            LastName = lastName;
+            PhoneNumber = phoneNumber;
+            Email = email;
         }
 
         /// <summary>

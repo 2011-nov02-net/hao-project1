@@ -13,9 +13,9 @@
         <form asp-action="Index">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="EmailAddress" class="control-label"></label>
-                <input asp-for="EmailAddress" class="form-control" />
-                <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
@@ -24,6 +24,7 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Sign in" class="btn btn-primary" />
+                <a asp-action="Register">New Customer? start here</a>
             </div>
         </form>
     </div>

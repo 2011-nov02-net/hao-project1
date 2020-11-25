@@ -42,31 +42,27 @@ namespace StoreApplication.WebApp.Controllers
                     ModelState.AddModelError("", "Invalid login format");
                     return View();
                 }
-
-                CCredential cCredential = _storeRepo.GetOneCredential(viewLogin.EmailAddress);
+                CCredential cCredential = _storeRepo.GetOneCredential(viewLogin.Email);
                 if (cCredential == null)
                 {
                     ModelState.AddModelError("", "This email address has not been registered");
                     return View();
                 }
-
-
                 if (cCredential.Password == viewLogin.Password)
-                { 
+                {
                     // temp data
-                    ModelState.
+                    // ModelState.
+                   
                 }
                 else
                 {
                     ModelState.AddModelError("", "Password does not match");
                     return View();
                 }
-
                 // relative path
                 return RedirectToAction("Index","Home");
             }
             catch(Exception e)
-
             {
                 _logger.LogError(e, "error while tring to login");
                 ModelState.AddModelError("", "failed to login");
@@ -74,6 +70,52 @@ namespace StoreApplication.WebApp.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(CustomerViewModel viewCustomer)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    ModelState.AddModelError("", "Invalid input format");
+                    return View();
+
+                }
+
+                CCustomer cCustomer = _storeRepo.GetOneCustomerByEmail(viewCustomer.Email);
+                if (cCustomer != null)
+                {
+                    ModelState.AddModelError("", "This email is already in use, try a different one");
+                    return View();
+                }
+                else
+                {
+                    // customer profile does not contain password
+                    // need to generate an ID automatically
+                    cCustomer = new CCustomer(viewCustomer.Firstname, viewCustomer.Lastname, viewCustomer.Phonenumber, viewCustomer.Email);
+                    // 
+                    CCredential cCredential = new CCredential(viewCustomer.Email, viewCustomer.Password);
+                    _storeRepo.AddOneCustomer(cCustomer);
+                    _storeRepo.AddOneCredential(cCredential);
+
+                }
+                return RedirectToAction("Index","Home");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "error while trying to register");
+                ModelState.AddModelError("", "failed to register");
+                return View();
+            }
+        }
       
 
     }
