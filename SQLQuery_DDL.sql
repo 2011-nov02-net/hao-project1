@@ -36,9 +36,14 @@ create table customer
     check(phonenumber like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
     foreign key(email) REFERENCES credential(email)
         on delete cascade on update cascade
-)
+);
 
-
+create table admincredential
+(
+    email NVARCHAR(30) primary key not null,
+    password NVARCHAR(30) not null,
+  
+);
 
 
 create table orderr
@@ -102,5 +107,5 @@ create table storecustomer
 
 
 drop table storecustomer; drop table inventory; drop table orderproduct; drop table orderr; 
-drop table customer;drop table credential; drop table store; drop table product
+drop table customer;drop table credential; drop table admincredential; drop table store; drop table product
 

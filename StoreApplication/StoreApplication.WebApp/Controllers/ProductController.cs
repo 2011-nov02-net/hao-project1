@@ -35,18 +35,27 @@ namespace StoreApplication.WebApp.Controllers
             return View(viewProduct);
         }
 
+        
+
         // GET: ProductController/Details/5
         public ActionResult Details(string id)
         {
             // this is returning a null reference
-            CProduct cProduct = _storeRepo.GetOneProduct(id);
+            CProduct foundProduct = _storeRepo.GetOneProduct(id);
+            // concurrent
             
+            if (foundProduct == null)
+            {
+                ModelState.AddModelError("", "Another admin has just deleted this product");
+                return View();
+            }
+
             var viewProduct = new ProductViewModel
             {
-                UniqueID = cProduct.UniqueID,
-                Name = cProduct.Name,
-                Category = cProduct.Category,
-                Price = cProduct.Price,
+                UniqueID = foundProduct.UniqueID,
+                Name = foundProduct.Name,
+                Category = foundProduct.Category,
+                Price = foundProduct.Price,
             };           
             return View(viewProduct);
         }
@@ -67,12 +76,23 @@ namespace StoreApplication.WebApp.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    ModelState.AddModelError("", "Invalid input format");
                     return View();
                 }
-                // view model does not have quantity
-                var cProduct = new CProduct(viewProduct.UniqueID, viewProduct.Name, viewProduct.Category, viewProduct.Price);
-                _storeRepo.AddOneProduct(cProduct);
 
+                var foundProduct = _storeRepo.GetOneProductByNameAndCategory(viewProduct.Name, viewProduct.Category);
+                if (foundProduct != null)
+                {
+                    ModelState.AddModelError("","This product already exist in this category");
+                    return View();
+                }
+
+                
+                // view model does not have quantity               
+                string productID = Guid.NewGuid().ToString().Substring(0, 10);
+                var cProduct = new CProduct(productID, viewProduct.Name, viewProduct.Category, viewProduct.Price);
+                _storeRepo.AddOneProduct(cProduct);
+                
                 // add tempdata here
 
                 return RedirectToAction(nameof(Index));
@@ -80,21 +100,30 @@ namespace StoreApplication.WebApp.Controllers
             catch(Exception e)
             {
                 _logger.LogError(e, "error while tring to add a product");
-                ModelState.AddModelError("", "product ID already in use or other issues");
+                ModelState.AddModelError("", "failed to create a product");
                 return View();
             }
         }
 
         // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            var cProduct = _storeRepo.GetOneProduct(id);
+            var viewProduct = new ProductViewModel
+            {
+                UniqueID = cProduct.UniqueID,
+                Name = cProduct.Name,
+                Category = cProduct.Category,
+                Price = cProduct.Price,
+            };
+
+            return View(viewProduct);
         }
 
         // POST: ProductController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit( ProductViewModel viewProduct)
+        public ActionResult Edit( string id, ProductViewModel viewProduct)
         {
             try
             {
@@ -102,21 +131,26 @@ namespace StoreApplication.WebApp.Controllers
                 { 
                     return View();
                 }
-                
-                CProduct cProduct = _storeRepo.GetOneProduct(viewProduct.UniqueID);
 
-                if (cProduct != null)
-                {                  
-                    cProduct = new CProduct(viewProduct.UniqueID, viewProduct.Name, viewProduct.Category, viewProduct.Price);
-                    _storeRepo.EditOneProduct(cProduct);
-                    // add tempo data
-                    
-                }
-                else
+                // concurrent
+                var foundProduct = _storeRepo.GetOneProduct(id);
+                if (foundProduct == null)
                 {
-                    ModelState.AddModelError("", "trying to edit a product that does not exist");
+                    ModelState.AddModelError("", "Another admin has just deleted this product");
                     return View();
                 }
+
+                // see if the edited version already exist in db
+                var editedProduct = _storeRepo.GetOneProductByNameCategoryPrice(viewProduct.Name, viewProduct.Category,viewProduct.Price);
+                if (editedProduct != null)
+                {
+                    ModelState.AddModelError("", "A record with the same data already exist in this category");
+                    return View();
+                }
+                               
+                foundProduct = new CProduct(foundProduct.UniqueID, viewProduct.Name, viewProduct.Category, viewProduct.Price);
+                _storeRepo.EditOneProduct(foundProduct);
+                    // add tempo data                                  
                 return RedirectToAction(nameof(Index));
             }
             catch( Exception e)
@@ -149,7 +183,15 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult Delete(string id, IFormCollection collection)
         {
             try
-            {               
+            {
+                // concurrent
+                var foundProduct = _storeRepo.GetOneProduct(id);
+                if (foundProduct == null)
+                {
+                    ModelState.AddModelError("", "Another admin has just deleted this product");
+                    return View();
+                }
+
                 _storeRepo.DeleteOneProduct(id);
                 return RedirectToAction(nameof(Index));
             }

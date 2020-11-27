@@ -1,23 +1,18 @@
 ﻿@model IEnumerable<StoreApplication.WebApp.ViewModels.ProductViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Overview";
 }
 
-@{
-    Layout = "_AdminLayout";
-}
-
+<h1>Tour</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UniqueID)
-            </th>
+           
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -31,11 +26,9 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model) {
+@foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UniqueID)
-            </td>
+         
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -45,11 +38,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new {  id= item.UniqueID }) |
-                @Html.ActionLink("Details", "Details", new {  id= item.UniqueID  }) |
-                @Html.ActionLink("Delete", "Delete", new {  id= item.UniqueID  })
-            </td>
+           
         </tr>
 }
     </tbody>

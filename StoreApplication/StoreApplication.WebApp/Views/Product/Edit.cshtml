@@ -4,9 +4,11 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+@{
+    Layout = "_AdminLayout";
+}
 
-<h4>ProductViewModel</h4>
+<h1>Edit</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,7 +16,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UniqueID" class="control-label"></label>
-                <input asp-for="UniqueID" class="form-control" />
+                <input asp-for="UniqueID" class="form-control" disabled  />
                 <span asp-validation-for="UniqueID" class="text-danger"></span>
             </div>
             <div class="form-group">

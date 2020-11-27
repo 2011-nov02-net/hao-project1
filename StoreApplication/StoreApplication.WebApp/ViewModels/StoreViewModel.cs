@@ -18,6 +18,8 @@ namespace StoreApplication.WebApp.ViewModels
         [RegularExpression("[0-9]*")]
         public string Storephone { get; set; }
 
+        public IEnumerable<StoreViewModel> Stores { get; set; }
+
         // no attributes needed
         public IEnumerable<ProductViewModel> Products { get; set; }
     }

@@ -42,17 +42,35 @@ namespace StoreApplication.WebApp.Controllers
                     ModelState.AddModelError("", "Invalid login format");
                     return View();
                 }
+
+                // admin login
+                CAdmincredential cAdmin = _storeRepo.GetOneAdminCredential(viewLogin.Email);
+                if (cAdmin != null)
+                {
+                    if (cAdmin.Password == viewLogin.Password)
+                    {
+                        // admin successful login
+                        TempData["User"] = viewLogin.Email;
+                        // each user can store some information
+                        TempData[viewLogin.Email] = 1;
+                        return RedirectToAction("Index", "Admin");
+                    }
+                }
+
+                // memeber login
                 CCredential cCredential = _storeRepo.GetOneCredential(viewLogin.Email);
                 if (cCredential == null)
                 {
                     ModelState.AddModelError("", "This email address has not been registered");
                     return View();
-                }
+                }                
+                
                 if (cCredential.Password == viewLogin.Password)
                 {
-                    // temp data
-                    // ModelState.
-                   
+                    // user successful login
+                    TempData["User"] = viewLogin.Email;
+                    TempData[viewLogin.Email] = 1;
+
                 }
                 else
                 {
@@ -60,7 +78,7 @@ namespace StoreApplication.WebApp.Controllers
                     return View();
                 }
                 // relative path
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index","Store");
             }
             catch(Exception e)
             {
@@ -87,7 +105,11 @@ namespace StoreApplication.WebApp.Controllers
                 {
                     ModelState.AddModelError("", "Invalid input format");
                     return View();
-
+                }
+                if (viewCustomer.Password != viewCustomer.ConfirmPassword)
+                {
+                    ModelState.AddModelError("", "Passwords do not match");
+                    return View();
                 }
 
                 CCustomer cCustomer = _storeRepo.GetOneCustomerByEmail(viewCustomer.Email);
@@ -98,14 +120,19 @@ namespace StoreApplication.WebApp.Controllers
                 }
                 else
                 {
-                    // customer profile does not contain password
-                    // need to generate an ID automatically
-                    cCustomer = new CCustomer(viewCustomer.Firstname, viewCustomer.Lastname, viewCustomer.Phonenumber, viewCustomer.Email);
-                    // 
+                    // customer don't type in his ID number, is assigned automatically
+                    string customerID = Guid.NewGuid().ToString().Substring(0,10);
+                  
+                    cCustomer = new CCustomer(customerID, viewCustomer.Firstname, viewCustomer.Lastname, viewCustomer.Phonenumber, viewCustomer.Email);    
                     CCredential cCredential = new CCredential(viewCustomer.Email, viewCustomer.Password);
-                    _storeRepo.AddOneCustomer(cCustomer);
+                    // it is possible that the credential gets in and customer profile not
                     _storeRepo.AddOneCredential(cCredential);
-
+                    _storeRepo.AddOneCustomer(cCustomer);
+                    
+                    TempData["User"] = cCustomer.Email;
+                    // changed to shopping cart later
+                    TempData[cCustomer.Email] = 1;
+                   
                 }
                 return RedirectToAction("Index","Home");
             }

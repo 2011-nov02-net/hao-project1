@@ -17,6 +17,7 @@ namespace StoreDatamodel
         {
         }
 
+        public virtual DbSet<Admincredential> Admincredentials { get; set; }
         public virtual DbSet<Credential> Credentials { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Inventory> Inventories { get; set; }
@@ -28,10 +29,27 @@ namespace StoreDatamodel
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Admincredential>(entity =>
+            {
+                entity.HasKey(e => e.Email)
+                    .HasName("PK__admincre__AB6E616506641EF8");
+
+                entity.ToTable("admincredential");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(30)
+                    .HasColumnName("email");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .HasColumnName("password");
+            });
+
             modelBuilder.Entity<Credential>(entity =>
             {
                 entity.HasKey(e => e.Email)
-                    .HasName("PK__credenti__AB6E61655502F460");
+                    .HasName("PK__credenti__AB6E616524386D51");
 
                 entity.ToTable("credential");
 
@@ -49,7 +67,7 @@ namespace StoreDatamodel
             {
                 entity.ToTable("customer");
 
-                entity.HasIndex(e => e.Email, "UQ__customer__AB6E6164605D6A2F")
+                entity.HasIndex(e => e.Email, "UQ__customer__AB6E6164EF47244D")
                     .IsUnique();
 
                 entity.Property(e => e.Customerid)
@@ -79,13 +97,13 @@ namespace StoreDatamodel
                 entity.HasOne(d => d.EmailNavigation)
                     .WithOne(p => p.Customer)
                     .HasForeignKey<Customer>(d => d.Email)
-                    .HasConstraintName("FK__customer__email__0FEC5ADD");
+                    .HasConstraintName("FK__customer__email__351DDF8C");
             });
 
             modelBuilder.Entity<Inventory>(entity =>
             {
                 entity.HasKey(e => e.Supplyid)
-                    .HasName("PK__inventor__EF33FCB89E306086");
+                    .HasName("PK__inventor__EF33FCB8FE35CA05");
 
                 entity.ToTable("inventory");
 
@@ -106,18 +124,18 @@ namespace StoreDatamodel
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.Productid)
-                    .HasConstraintName("FK__inventory__produ__1F2E9E6D");
+                    .HasConstraintName("FK__inventory__produ__46486B8E");
 
                 entity.HasOne(d => d.StorelocNavigation)
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.Storeloc)
-                    .HasConstraintName("FK__inventory__store__1E3A7A34");
+                    .HasConstraintName("FK__inventory__store__45544755");
             });
 
             modelBuilder.Entity<Orderproduct>(entity =>
             {
                 entity.HasKey(e => e.Processid)
-                    .HasName("PK__orderpro__01C8E75A4CB69A87");
+                    .HasName("PK__orderpro__01C8E75A5128209A");
 
                 entity.ToTable("orderproduct");
 
@@ -138,18 +156,18 @@ namespace StoreDatamodel
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.Orderproducts)
                     .HasForeignKey(d => d.Orderid)
-                    .HasConstraintName("FK__orderprod__order__1975C517");
+                    .HasConstraintName("FK__orderprod__order__408F9238");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Orderproducts)
                     .HasForeignKey(d => d.Productid)
-                    .HasConstraintName("FK__orderprod__produ__1A69E950");
+                    .HasConstraintName("FK__orderprod__produ__4183B671");
             });
 
             modelBuilder.Entity<Orderr>(entity =>
             {
                 entity.HasKey(e => e.Orderid)
-                    .HasName("PK__orderr__080E3775ED750DB8");
+                    .HasName("PK__orderr__080E37752533458C");
 
                 entity.ToTable("orderr");
 
@@ -177,12 +195,12 @@ namespace StoreDatamodel
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orderrs)
                     .HasForeignKey(d => d.Customerid)
-                    .HasConstraintName("FK__orderr__customer__15A53433");
+                    .HasConstraintName("FK__orderr__customer__3CBF0154");
 
                 entity.HasOne(d => d.StorelocNavigation)
                     .WithMany(p => p.Orderrs)
                     .HasForeignKey(d => d.Storeloc)
-                    .HasConstraintName("FK__orderr__storeloc__14B10FFA");
+                    .HasConstraintName("FK__orderr__storeloc__3BCADD1B");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -209,11 +227,11 @@ namespace StoreDatamodel
             modelBuilder.Entity<Store>(entity =>
             {
                 entity.HasKey(e => e.Storeloc)
-                    .HasName("PK__store__443C314F78B0A4F4");
+                    .HasName("PK__store__443C314F28E1C678");
 
                 entity.ToTable("store");
 
-                entity.HasIndex(e => e.Storephone, "UQ__store__6C66E290A8D0B1EF")
+                entity.HasIndex(e => e.Storephone, "UQ__store__6C66E2903F84CCD5")
                     .IsUnique();
 
                 entity.Property(e => e.Storeloc)
@@ -229,7 +247,7 @@ namespace StoreDatamodel
             modelBuilder.Entity<Storecustomer>(entity =>
             {
                 entity.HasKey(e => e.Relationid)
-                    .HasName("PK__storecus__F0BCF30FD2451761");
+                    .HasName("PK__storecus__F0BCF30FAC700438");
 
                 entity.ToTable("storecustomer");
 
@@ -248,12 +266,12 @@ namespace StoreDatamodel
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Storecustomers)
                     .HasForeignKey(d => d.Customerid)
-                    .HasConstraintName("FK__storecust__custo__22FF2F51");
+                    .HasConstraintName("FK__storecust__custo__4A18FC72");
 
                 entity.HasOne(d => d.StorelocNavigation)
                     .WithMany(p => p.Storecustomers)
                     .HasForeignKey(d => d.Storeloc)
-                    .HasConstraintName("FK__storecust__store__220B0B18");
+                    .HasConstraintName("FK__storecust__store__4924D839");
             });
 
             OnModelCreatingPartial(modelBuilder);

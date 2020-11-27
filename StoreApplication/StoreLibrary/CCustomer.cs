@@ -15,7 +15,7 @@ namespace StoreLibrary
         /// property customerid to uniquely identify a customer
         /// </summary>
         
-        public string Customerid { get; set; }
+        public string Customerid { get; set; }   
 
         /// <summary>
         /// property first name of a customer
@@ -60,6 +60,7 @@ namespace StoreLibrary
             LastName = lastName;
             PhoneNumber = phoneNumber;
         }
+      
 
         public CCustomer(string customerid,string firstName, string lastName, string phoneNumber)
         {
@@ -77,6 +78,8 @@ namespace StoreLibrary
             PhoneNumber = phoneNumber;
             Email = email;
         }
+
+
 
         /// <summary>
         /// customer's behavior to place an order at a store   

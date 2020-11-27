@@ -11,6 +11,9 @@ insert into credential(email,password) values ('ASavage@gmail.com', '52640ASavag
 insert into credential(email,password) values ('KKong@gmail.com', '52640KKong');
 insert into credential(email,password) values ('TCook@gmail.com', '52640TCook');
 
+--insert admin login credential
+insert into admincredential values('haoyang439@gmail.com','52640HYang');
+
 -- insert customer
 insert into customer(customerid,firstname,lastname,email,phonenumber) values('cus1','John','Smith','JSmith@gmail.com','6021231234');
 insert into customer(customerid,firstname,lastname,email,phonenumber) values('cus2','Adam','Savage','ASavage@gmail.com','4801231234');
@@ -69,14 +72,11 @@ insert into storecustomer(storeloc,customerid) values('River View 4','cus4');
 select* from store;
 select* from customer;
 select* from credential;
+select* from admincredential;
 select* from storecustomer;
 select* from orderr;
 select* from orderproduct;
 SELECT* from inventory;
 select* from product;
-
-
-
-
 select* from inventory;
 

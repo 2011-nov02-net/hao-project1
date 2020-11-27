@@ -35,23 +35,30 @@ namespace StoreDatamodel
 
         // helper methods
         List<CStore> GetAllStores();
+        IEnumerable<CCustomer> GetAllCustomers();
         IEnumerable<CProduct> GetAllProducts();
         CCustomer GetOneCustomerByEmail(string email);
+        CCustomer GetOneCustomer(string id);
+
+        CProduct GetOneProductByNameCategoryPrice(string name, string category, double price);
         CProduct GetOneProductByNameAndCategory(string name, string category);
         CProduct GetOneProduct(string productID);
         CCredential GetOneCredential(string email);
+        CAdmincredential GetOneAdminCredential(string email);
 
         // delete methods
 
         void DeleteOneProduct(string productID);
         void DeleteOneCustomer(string customerID);
-
+        void DelelteOneCredential(string email);
         // edit
 
-        public void EditOneProduct(CProduct product);
         public void EditOneStore(CStore store);
         public void EditOneCustomer(CCustomer customer);
+        public void EditOneProduct(CProduct product);
 
+
+        public void EditOneCredential(string previousEmail, CCredential credential);
 
 
 

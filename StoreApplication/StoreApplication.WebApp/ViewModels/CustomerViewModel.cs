@@ -8,6 +8,9 @@ namespace StoreApplication.WebApp.ViewModels
 {
     public class CustomerViewModel
     {
+
+        public string Customerid { get; set; }
+
         [Required]
         [Display(Name = "First Name:")]
         public string Firstname { get; set; }
@@ -30,6 +33,12 @@ namespace StoreApplication.WebApp.ViewModels
         [Display(Name = "Password:")]
         [MinLength(9)]
         public string Password { get; set; }
+
+         
+        [Required]
+        [Display(Name = "Confirm Password:")]
+        [MinLength(9)]
+        public string ConfirmPassword { get; set; }
 
     }
 }

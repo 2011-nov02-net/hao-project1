@@ -27,16 +27,11 @@ namespace StoreApplication.WebApp.Controllers
         }
 
         public IActionResult Index()
-        {          
-            var viewModel = _storeRepo.GetAllProducts().Select(p => new ProductViewModel
-            {
-                UniqueID = p.UniqueID,
-                Name = p.Name,
-                Category = p.Category,
-                Price = p.Price
+        {
 
-            });
-            return View(viewModel); 
+
+
+            return View();
         }
 
         [HttpGet]
@@ -53,6 +48,22 @@ namespace StoreApplication.WebApp.Controllers
 
 
             return View();
+        }
+
+        public IActionResult Tour()
+        {
+            var viewProduct = _storeRepo.GetAllProducts().Select(x => new ProductViewModel
+            {
+                 
+                Name = x.Name,
+                Category = x.Category,
+                Price = x.Price,
+
+
+            });
+            return View(viewProduct);
+            
+        
         }
 
 

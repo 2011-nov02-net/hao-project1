@@ -311,8 +311,15 @@ namespace StoreDatamodel
         }
 
         public void AddOneCredential(CCredential credential)
-        { 
-            
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            Credential cCredential = new Credential
+            {
+                Email = credential.Email,
+                Password = credential.Password
+            };
+            context.Credentials.Add(cCredential);
+            context.SaveChanges();
         }
 
 
@@ -332,6 +339,15 @@ namespace StoreDatamodel
             return stores;
         }
 
+        public IEnumerable<CCustomer> GetAllCustomers()
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbCustomers = context.Customers.ToList();
+            var CCustomer = dbCustomers.Select(x => new CCustomer(x.Customerid,x.Firstname, x.Lastname,
+                                                    x.Phonenumber, x.Email));
+            return CCustomer;
+;        }
+
         public IEnumerable<CProduct> GetAllProducts()
         {
             using var context = new Project0databaseContext(_contextOptions);
@@ -350,6 +366,26 @@ namespace StoreDatamodel
             return c;
         }
 
+        public CCustomer GetOneCustomer(string id)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbCustomer = context.Customers.FirstOrDefault(x => x.Customerid == id);
+            if (dbCustomer == null) return null;
+            CCustomer cCustomer = new CCustomer(dbCustomer.Customerid, dbCustomer.Firstname, dbCustomer.Lastname,
+                                               dbCustomer.Phonenumber, dbCustomer.Email);
+            return cCustomer;
+        }
+
+        public CProduct GetOneProductByNameCategoryPrice(string name, string category, double price)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbProduct = context.Products.FirstOrDefault(x => x.Name == name && x.Category == category && x.Price == price);
+            if (dbProduct == null) return null;
+            CProduct p = new CProduct(dbProduct.Productid, dbProduct.Name, dbProduct.Category, dbProduct.Price);
+
+            return p;
+        }
+
         public CProduct GetOneProductByNameAndCategory(string name, string category)
         {
             using var context = new Project0databaseContext(_contextOptions);
@@ -366,7 +402,7 @@ namespace StoreDatamodel
   
             var dbProduct = context.Products.FirstOrDefault(x => x.Productid == productID);
             if (dbProduct == null) return null;
-            CProduct p = new CProduct(dbProduct.Name, dbProduct.Category, dbProduct.Price);
+            CProduct p = new CProduct(dbProduct.Productid,dbProduct.Name, dbProduct.Category, dbProduct.Price);
             return p;
 
         }
@@ -377,6 +413,14 @@ namespace StoreDatamodel
             if (dbCredential == null) return null;
             CCredential c = new CCredential(dbCredential.Email, dbCredential.Password);
             return c;
+        }
+        public CAdmincredential GetOneAdminCredential(string email)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbAdmincredential = context.Admincredentials.FirstOrDefault(x => x.Email == email);
+            if (dbAdmincredential == null) return null;
+            CAdmincredential a = new CAdmincredential(dbAdmincredential.Email, dbAdmincredential.Password);
+            return a;
         }
 
 
@@ -409,10 +453,49 @@ namespace StoreDatamodel
 
         }
 
+        public void DelelteOneCredential(string email)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbCredential = context.Credentials.FirstOrDefault(x => x.Email == email);
+            if (dbCredential != null)
+            {
+                context.Credentials.Remove(dbCredential);
+                context.SaveChanges();
+            }
+        }
+
 
 
 
         // edit methods
+        public void EditOneStore(CStore store)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbStore = context.Stores.FirstOrDefault(x => x.Storeloc == store.Storeloc);
+            if (dbStore != null)
+            {
+                dbStore.Storeloc = store.Storeloc;
+                dbStore.Storephone = store.Storephone;
+                context.SaveChanges();
+            }
+
+
+        }
+        public void EditOneCustomer(CCustomer customer)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbCustomer = context.Customers.FirstOrDefault(x => x.Customerid == customer.Customerid);
+            if (dbCustomer != null)
+            {
+                dbCustomer.Customerid = customer.Customerid;
+                dbCustomer.Firstname = customer.FirstName;
+                dbCustomer.Lastname = customer.LastName;
+                dbCustomer.Phonenumber = customer.PhoneNumber;
+                dbCustomer.Email = customer.Email;
+                context.SaveChanges();
+            }
+
+        }
         public void EditOneProduct(CProduct product)
         { 
             using var context = new Project0databaseContext(_contextOptions);
@@ -428,34 +511,21 @@ namespace StoreDatamodel
 
         }
 
-        public void EditOneStore(CStore store)
-        { 
+        public void EditOneCredential(string previousEmail, CCredential credential)
+        {
             using var context = new Project0databaseContext(_contextOptions);
-            var dbStore = context.Stores.FirstOrDefault(x => x.Storeloc == store.Storeloc );
-            if (dbStore != null)
+            var dbCredential = context.Credentials.FirstOrDefault(x => x.Email == previousEmail);
+            if (dbCredential != null)
             {
-                dbStore.Storeloc = store.Storeloc;
-                dbStore.Storephone = store.Storephone;
+                dbCredential.Email = credential.Email;
+                dbCredential.Password = credential. Password;
+            
                 context.SaveChanges();
             }
-
-
         }
+       
 
-        public void EditOneCustomer(CCustomer customer)
-        { 
-            using var context = new Project0databaseContext(_contextOptions);
-            var dbCustomer = context.Customers.FirstOrDefault(x => x.Customerid == customer.Customerid);
-            if (dbCustomer != null)
-            {
-                dbCustomer.Customerid = customer.Customerid;
-                dbCustomer.Firstname = customer.FirstName;
-                dbCustomer.Lastname = customer.LastName;
-                dbCustomer.Phonenumber = customer.PhoneNumber;
-                context.SaveChanges();
-            }
-
-        }
+        
 
     }
 }
