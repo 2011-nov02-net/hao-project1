@@ -12,6 +12,8 @@ namespace StoreApplication.WebApp.ViewModels
 
         public string StoreLoc { get; set; }
 
+        public string Customerid { get; set; }
+
         public DateTime OrderedTime { get; set; }
 
         public double TotalCost { get; set; }

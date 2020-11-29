@@ -11,6 +11,7 @@ namespace StoreDatamodel
         CStore GetAStore(string storeLoc);
         List<CProduct> GetInventoryOfAStore(string storeLoc);
         Dictionary<string, CCustomer> GetAllCustomersAtOneStore(string storeLoc);
+        List<CCustomer> GetAllCustomersAtOneStoreByName(string storeLoc, string firstname, string lastName);
         List<COrder> GetAllOrdersOfOneCustomer(string customerid, CStore store, CCustomer customer);
         List<CProduct> GetAllProductsOfOneOrder(string orderid);
 
@@ -20,6 +21,7 @@ namespace StoreDatamodel
         void StoreAddOneCustomer(string storeLoc, CCustomer customer);
         void CustomerPlaceOneOrder(COrder order, CStore store, double totalCost);
         CCustomer GetOneCustomerByNameAndPhone(string firstName, string lastName, string phonenumber);
+       
         COrder GetAnOrderByID(string orderid);
         CCustomer GetOneCustomerOrderHistory(string firstName, string lastName, string phoneNumber, CStore store);
         CStore GetOneStoreOrderHistory(string storeLoc);

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<StoreApplication.WebApp.ViewModels.OrderViewModel>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@{ Layout = "_AdminLayout";}
+
+<h1>Order Details</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Orderid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreLoc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customerid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderedTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalCost)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Orderid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StoreLoc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customerid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderedTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalCost)
+            </td>
+            <td>
+          
+                @Html.ActionLink("Product Details", "Products", new {  id=item.Orderid  }) 
+       
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

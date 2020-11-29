@@ -23,7 +23,7 @@ namespace StoreApplication.WebApp.Controllers
         }
 
         // customers at one store location
-        public ActionResult Index()
+        public ActionResult Index(string firstName,string lastName)
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             var viewCustomer = _storeRepo.GetAllCustomersAtOneStore(storeLoc).Select(cCustomer => new CustomerViewModel
@@ -34,9 +34,29 @@ namespace StoreApplication.WebApp.Controllers
                 Phonenumber = cCustomer.Value.PhoneNumber,             
             });
 
+             
+
+            if (!String.IsNullOrEmpty(firstName) && !String.IsNullOrEmpty(lastName))
+            {
+                // get
+                 var customers = _storeRepo.GetAllCustomersAtOneStoreByName(storeLoc, firstName, lastName);
+                viewCustomer = customers.Select(x => new CustomerViewModel
+                {
+                    Customerid = x.Customerid,
+                    Firstname = x.FirstName,
+                    Lastname = x.LastName,
+                    Phonenumber = x.PhoneNumber,
+
+                });
+                
+            }
+
             return View(viewCustomer);
         }
-        // GET: CustomerController/Details/5
+        
+
+        // search bar
+
         public ActionResult Details(string id)
         {
             CCustomer cCustomer = _storeRepo.GetOneCustomer(id);
@@ -132,7 +152,7 @@ namespace StoreApplication.WebApp.Controllers
                 Phonenumber = cCustomer.PhoneNumber,
                 Email = cCustomer.Email,
                 Password = cCredential.Password,
-                ConfirmPassword = cCredential.Password
+                //ConfirmPassword = cCredential.Password
                 
             };
             return View(viewCustomer);

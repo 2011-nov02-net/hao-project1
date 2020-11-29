@@ -35,7 +35,7 @@ namespace StoreApplication.WebApp.ViewModels
         public string Password { get; set; }
 
          
-        [Required]
+        //[Required]
         [Display(Name = "Confirm Password:")]
         [MinLength(9)]
         public string ConfirmPassword { get; set; }

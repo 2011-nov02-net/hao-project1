@@ -61,9 +61,31 @@ namespace StoreDatamodel
             foreach (var customer in dbStore.Storecustomers)
             {
                 CCustomer c = new CCustomer(customer.Customer.Customerid, customer.Customer.Firstname,
-                                                customer.Customer.Lastname, customer.Customer.Phonenumber);
+                                                customer.Customer.Lastname, customer.Customer.Phonenumber,customer.Customer.Email);
                 // these customers have no order history atm
                 customers[c.Customerid] = c;
+            }
+            return customers;
+        }
+
+        public List<CCustomer> GetAllCustomersAtOneStoreByName(string storeLoc,string firstname,string lastName)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbStore = context.Stores.Include(x => x.Storecustomers)
+                                            .ThenInclude(x => x.Customer)
+                                                .FirstOrDefault(x => x.Storeloc == storeLoc);
+            if (dbStore == null) return null;
+            List<CCustomer> customers = new List<CCustomer>();
+            foreach (var customer in dbStore.Storecustomers)
+            {
+                if (customer.Customer.Firstname == firstname && customer.Customer.Lastname == lastName)
+                {
+                    CCustomer c = new CCustomer(customer.Customer.Customerid, customer.Customer.Firstname,
+                                                customer.Customer.Lastname, customer.Customer.Phonenumber, customer.Customer.Email);
+                    // these customers have no order history atm
+                    customers.Add(c);
+                }
+                
             }
             return customers;
         }
@@ -79,7 +101,7 @@ namespace StoreDatamodel
             {
                 // these orders have no product list
                 // total cost not yet set
-                COrder o = new COrder(order.Orderid, store, customer, order.Orderedtime);
+                COrder o = new COrder(order.Orderid, store, customer, order.Orderedtime,order.Totalcost);
                 orders.Add(o);
             }
 
@@ -402,6 +424,7 @@ namespace StoreDatamodel
             return cCustomer;
         }
 
+        //
         public CProduct GetOneProductByNameCategoryPrice(string name, string category, double price)
         {
             using var context = new Project0databaseContext(_contextOptions);

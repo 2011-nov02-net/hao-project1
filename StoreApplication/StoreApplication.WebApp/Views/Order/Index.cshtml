@@ -4,24 +4,18 @@
     ViewData["Title"] = "Index";
 }
 
-@{
-    Layout = "_AdminLayout";
-}
+@{ Layout = "_AdminLayout";}
 
- 
 
-<h4>
-    <a asp-action="Create">Create New</a>
-</h4>
-
-<form asp-controller="Customer" asp-action="Index" method="get">
+<form asp-controller="Order" asp-action="Index" method="get">
     <p>
         First Name: <input type="text" name="firstName">
         Last Name: <input type="text" name="lastName">
         <input type="submit" value="Search" />
     </p>
-   
+
 </form>
+
 <table class="table">
     <thead>
         <tr>
@@ -37,7 +31,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.Phonenumber)
             </th>
- 
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+
         </tr>
     </thead>
     <tbody>
@@ -57,9 +54,12 @@
                     @Html.DisplayFor(modelItem => item.Phonenumber)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Customerid }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Customerid }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Customerid })
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+
+                    @Html.ActionLink("Order Details", "Details", new { id = item.Customerid })
+
                 </td>
             </tr>
         }
