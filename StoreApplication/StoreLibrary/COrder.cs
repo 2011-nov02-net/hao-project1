@@ -99,12 +99,20 @@ namespace StoreLibrary
             TotalCost = totalCost;
         }
 
-        public COrder(string orderid, CStore storeLocation, CCustomer customer, DateTime orderedTime)
+        public COrder(string orderid, CStore storeLocation, CCustomer customer,DateTime orderedTime)
         {
             Orderid = orderid;
             StoreLocation = storeLocation;
             Customer = customer;
             OrderedTime = orderedTime;        
+        }
+
+        public COrder(string orderid, CStore storeLocation, CCustomer customer, double totalCost)
+        {
+            Orderid = orderid;
+            StoreLocation = storeLocation;
+            Customer = customer;        
+            TotalCost = totalCost;
         }
 
     }

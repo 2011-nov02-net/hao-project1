@@ -69,6 +69,22 @@ namespace StoreLibrary
             */
         }
 
+        public void WriteProductsData(List<CProduct> data)
+        {
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.Converters.Add(new Newtonsoft.Json.Converters.IsoDateTimeConverter());
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+            serializer.TypeNameHandling = TypeNameHandling.Auto;
+            serializer.Formatting = Formatting.Indented;
+            using (StreamWriter sw = new StreamWriter(path))
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                serializer.Serialize(writer, data, typeof(List<CProduct>));
+            }
+        }
+
+
+
         /// <summary>
         /// original behavior to read data and deserialize
         /// have jsonignore on model order class to avoid object cycle
@@ -96,5 +112,34 @@ namespace StoreLibrary
             }
             return data;
         }
+
+        public List<CProduct> ReadProductsData()
+        {
+            List<CProduct> data;
+            try
+            {
+                string json = File.ReadAllText(path);
+
+
+                /*
+                // object cycle
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
+                */
+                data = JsonConvert.DeserializeObject<List<CProduct>>(json, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    NullValueHandling = NullValueHandling.Ignore,
+                });
+            }
+            catch (FileNotFoundException e)
+            {
+                return new List<CProduct>();
+            }
+            return data;
+        }
+
+
+
     }
 }

@@ -1,17 +1,14 @@
 ﻿@model IEnumerable<StoreApplication.WebApp.ViewModels.DetailedProductViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "OrderDetail";
 }
 
-@{
-    Layout = "_AdminLayout";
-}
+@{ Layout = "_StoreLayout";}
+
+<h1>OrderDetail</h1>
 
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -30,11 +27,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalCostPerProduct)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model) {
+@foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.UniqueID)
@@ -51,13 +51,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
-
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.UniqueID })|
-                @Html.ActionLink("Details", "Details", new { id = item.UniqueID })|
-                @Html.ActionLink("Delete", "Delete", new { id = item.UniqueID })
+                @Html.DisplayFor(modelItem => item.TotalCostPerProduct)
             </td>
+         
         </tr>
 }
     </tbody>
 </table>
+<a asp-action="CheckOrder">Back to List</a>

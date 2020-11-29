@@ -8,7 +8,7 @@ namespace StoreApplication.WebApp.ViewModels
 {
     public class CustomerViewModel
     {
-
+        // [Required]
         public string Customerid { get; set; }
 
         [Required]

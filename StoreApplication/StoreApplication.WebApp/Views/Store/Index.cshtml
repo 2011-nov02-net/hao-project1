@@ -4,6 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
+@{ 
+    Layout = "_EmptyLayout";
+
+}
+
 <h1>Select A Location</h1>
 
 
@@ -29,8 +34,8 @@
                 @Html.DisplayFor(modelItem => item.Storephone)
             </td>
             <td>
-                @Html.ActionLink("Select", "Select", new {  id=item.Storeloc })
-
+                @Html.ActionLink("Select", "Select", new { storeLoc = item.Storeloc })
+            
             </td>
         </tr>
 }

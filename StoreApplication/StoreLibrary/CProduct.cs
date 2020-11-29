@@ -60,7 +60,23 @@ namespace StoreLibrary
                 
             }
         }
-      
+
+        public CProduct() { }
+        public CProduct(string name, string category, double price)
+        {
+            Name = name;
+            Category = category;
+            Price = price;
+        }
+
+        public CProduct(string ID, string name, string category, double price)
+        {
+            UniqueID = ID;
+            Name = name;
+            Category = category;
+            Price = price;
+        }
+
         /// <summary>
         /// parameterized constructor for a product
         /// </summary>    
@@ -73,19 +89,8 @@ namespace StoreLibrary
             Quantity = quantity;
         }
 
-        public CProduct(string ID, string name, string category, double price)
-        {
-            UniqueID = ID;
-            Name = name;
-            Category = category;
-            Price = price;          
-        }
+        
 
-        public CProduct(string name, string category, double price)
-        {
-            Name = name;
-            Category = category;
-            Price = price;
-        }
+        
     }
 }

@@ -28,11 +28,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Phonenumber)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-
-            <th></th>
+ 
         </tr>
     </thead>
     <tbody>
@@ -51,10 +47,6 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Phonenumber)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Customerid }) |
                     @Html.ActionLink("Details", "Details", new { id = item.Customerid }) |

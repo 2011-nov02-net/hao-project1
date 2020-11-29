@@ -8,8 +8,8 @@ namespace StoreApplication.WebApp.ViewModels
 {
     public class ProductViewModel
     {
-        [Display( Name = "Product ID")]
-        [Required]
+        // [Required]
+        [Display( Name = "Product ID")]    
         public string UniqueID { get; set; }
 
         [Display( Name = "Product Name")]

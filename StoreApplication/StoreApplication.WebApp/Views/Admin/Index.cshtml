@@ -1,11 +1,42 @@
-﻿
+﻿@model IEnumerable<StoreApplication.WebApp.ViewModels.StoreViewModel>
+
 @{
     ViewData["Title"] = "Index";
 }
 
+
 @{
-    Layout = "_AdminLayout";
+    Layout = "_EmptyLayout";
 }
 
-<img src ="~/admin_index.jpg">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Storeloc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Storephone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Storeloc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Storephone)
+                </td>
+                <td>
 
+                    @Html.ActionLink("Select", "Select", new { storeLoc= item.Storeloc })
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

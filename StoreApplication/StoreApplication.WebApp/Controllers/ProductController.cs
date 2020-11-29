@@ -21,27 +21,27 @@ namespace StoreApplication.WebApp.Controllers
             _logger = logger;
         }
 
-        // GET: ProductController
+        // updated with quantity
         public ActionResult Index()
         {
-            var viewProduct = _storeRepo.GetAllProducts().Select(cProduct => new ProductViewModel
+            string storeLoc = TempData.Peek("adminLoc").ToString();
+            var viewProduct = _storeRepo.GetInventoryOfAStore(storeLoc).Select(cProduct => new DetailedProductViewModel
             {
                 UniqueID = cProduct.UniqueID,
                 Name = cProduct.Name,
                 Category = cProduct.Category,
                 Price = cProduct.Price,
+                Quantity = cProduct.Quantity,
             });
 
             return View(viewProduct);
         }
 
-        
-
-        // GET: ProductController/Details/5
+        // placeholder for more information in the future
         public ActionResult Details(string id)
         {
-            // this is returning a null reference
-            CProduct foundProduct = _storeRepo.GetOneProduct(id);
+            string storeLoc = TempData.Peek("adminLoc").ToString();
+            CProduct foundProduct = _storeRepo.GetOneProductWithQuantity(storeLoc,id);
             // concurrent
             
             if (foundProduct == null)
@@ -50,12 +50,14 @@ namespace StoreApplication.WebApp.Controllers
                 return View();
             }
 
-            var viewProduct = new ProductViewModel
+            // subject to change to more detailed view model
+            var viewProduct = new DetailedProductViewModel
             {
                 UniqueID = foundProduct.UniqueID,
                 Name = foundProduct.Name,
                 Category = foundProduct.Category,
                 Price = foundProduct.Price,
+                Quantity = foundProduct.Quantity,
             };           
             return View(viewProduct);
         }
@@ -67,11 +69,12 @@ namespace StoreApplication.WebApp.Controllers
             return View();
         }
 
-        // POST: ProductController/Create
+        // create a new product with quantity, update produc table, and inventory table
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ProductViewModel viewProduct)
+        public ActionResult Create(DetailedProductViewModel viewDP)
         {
+            string storeLoc = TempData.Peek("adminLoc").ToString();
             try
             {
                 if (!ModelState.IsValid)
@@ -80,7 +83,7 @@ namespace StoreApplication.WebApp.Controllers
                     return View();
                 }
 
-                var foundProduct = _storeRepo.GetOneProductByNameAndCategory(viewProduct.Name, viewProduct.Category);
+                var foundProduct = _storeRepo.GetOneProductByNameAndCategory(viewDP.Name, viewDP.Category);
                 if (foundProduct != null)
                 {
                     ModelState.AddModelError("","This product already exist in this category");
@@ -90,8 +93,8 @@ namespace StoreApplication.WebApp.Controllers
                 
                 // view model does not have quantity               
                 string productID = Guid.NewGuid().ToString().Substring(0, 10);
-                var cProduct = new CProduct(productID, viewProduct.Name, viewProduct.Category, viewProduct.Price);
-                _storeRepo.AddOneProduct(cProduct);
+                var cProduct = new CProduct(productID, viewDP.Name, viewDP.Category, viewDP.Price,viewDP.Quantity);
+                _storeRepo.StoreAddOneProduct(storeLoc,cProduct,viewDP.Quantity);
                 
                 // add tempdata here
 
@@ -105,26 +108,29 @@ namespace StoreApplication.WebApp.Controllers
             }
         }
 
-        // GET: ProductController/Edit/5
+        // not yet updated, should be able to update quantity as well
         public ActionResult Edit(string id)
         {
-            var cProduct = _storeRepo.GetOneProduct(id);
-            var viewProduct = new ProductViewModel
+            string storeLoc = TempData.Peek("adminLoc").ToString();
+            var cProduct = _storeRepo.GetOneProductWithQuantity(storeLoc,id);
+            var viewProduct = new DetailedProductViewModel
             {
                 UniqueID = cProduct.UniqueID,
                 Name = cProduct.Name,
                 Category = cProduct.Category,
                 Price = cProduct.Price,
+                Quantity = cProduct.Quantity,
             };
 
             return View(viewProduct);
         }
 
-        // POST: ProductController/Edit/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit( string id, ProductViewModel viewProduct)
+        public ActionResult Edit( string id, DetailedProductViewModel viewDP)
         {
+            string storeLoc = TempData.Peek("adminLoc").ToString();
             try
             {
                 if(!ModelState.IsValid)
@@ -140,16 +146,19 @@ namespace StoreApplication.WebApp.Controllers
                     return View();
                 }
 
-                // see if the edited version already exist in db
-                var editedProduct = _storeRepo.GetOneProductByNameCategoryPrice(viewProduct.Name, viewProduct.Category,viewProduct.Price);
-                if (editedProduct != null)
+                // if you have changed the name or category
+                if (foundProduct.Name != viewDP.Name || foundProduct.Category != viewDP.Category)
                 {
-                    ModelState.AddModelError("", "A record with the same data already exist in this category");
-                    return View();
-                }
-                               
-                foundProduct = new CProduct(foundProduct.UniqueID, viewProduct.Name, viewProduct.Category, viewProduct.Price);
-                _storeRepo.EditOneProduct(foundProduct);
+                    // see if the edited version already exist
+                    var editedProduct = _storeRepo.GetOneProductByNameAndCategory(viewDP.Name, viewDP.Category);
+                    if (editedProduct != null)
+                    {
+                        ModelState.AddModelError("", "A record with the same data already exist in this category");
+                        return View();
+                    }
+                }          
+                foundProduct = new CProduct(foundProduct.UniqueID, viewDP.Name, viewDP.Category, viewDP.Price);
+                _storeRepo.EditOneProduct(storeLoc,foundProduct, viewDP.Quantity);
                     // add tempo data                                  
                 return RedirectToAction(nameof(Index));
             }
@@ -161,27 +170,29 @@ namespace StoreApplication.WebApp.Controllers
             }
         }
 
-        // GET: ProductController/Delete/5
+        // not yet updated
         public ActionResult Delete(string id)
         {
-            var cProduct = _storeRepo.GetOneProduct(id);
-            var viewProduct = new ProductViewModel
+            string storeLoc = TempData.Peek("adminLoc").ToString();
+            var cProduct = _storeRepo.GetOneProductWithQuantity(storeLoc,id);
+            var viewProduct = new DetailedProductViewModel
             {
                 UniqueID = cProduct.UniqueID,
                 Name = cProduct.Name,
                 Category = cProduct.Category,
                 Price = cProduct.Price,
+                Quantity = cProduct.Quantity,
             };
 
             return View(viewProduct);
         }
 
-        // POST: ProductController/Delete/5
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // id is the primary key
         public ActionResult Delete(string id, IFormCollection collection)
         {
+            string storeLoc = TempData.Peek("adminLoc").ToString();
             try
             {
                 // concurrent
@@ -192,7 +203,7 @@ namespace StoreApplication.WebApp.Controllers
                     return View();
                 }
 
-                _storeRepo.DeleteOneProduct(id);
+                _storeRepo.DeleteOneProduct(storeLoc,id);
                 return RedirectToAction(nameof(Index));
             }
             catch( Exception e)

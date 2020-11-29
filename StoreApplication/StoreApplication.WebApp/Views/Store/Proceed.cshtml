@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "Checkout";
+
+
+}
+
+
+@{ Layout = "_StoreLayout";}
+
+
+
+<h1>Checkout</h1>
+
+
+<div>
+
+  <img src ="/options.jpg">
+
+</div>
+
+<div>
+
+    <p> Order Total: @TempData.Peek("Total") </p>
+
+    </div>
+
+<form asp-action="Checkout">
+    <input type="submit" value="Place Your Order" class="btn btn-danger" /> 
+</form>

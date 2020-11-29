@@ -28,6 +28,10 @@ namespace StoreApplication.WebApp.Controllers
 
         public IActionResult Index()
         {
+            TempData.Remove("User");
+            TempData.Remove("storeLoc");
+            TempData.Remove("Total");
+            TempData.Remove("Sum");
 
 
 

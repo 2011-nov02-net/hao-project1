@@ -15,8 +15,9 @@ namespace StoreDatamodel
         List<CProduct> GetAllProductsOfOneOrder(string orderid);
 
 
-        // required functionalities in order from 1-7
-        void StoreAddOneCusomter(string storeLoc, CCustomer customer);
+        // required functionalities 
+        void StoreAddOneProduct(string storeLoc, CProduct product, int quantity);
+        void StoreAddOneCustomer(string storeLoc, CCustomer customer);
         void CustomerPlaceOneOrder(COrder order, CStore store, double totalCost);
         CCustomer GetOneCustomerByNameAndPhone(string firstName, string lastName, string phonenumber);
         COrder GetAnOrderByID(string orderid);
@@ -42,20 +43,22 @@ namespace StoreDatamodel
 
         CProduct GetOneProductByNameCategoryPrice(string name, string category, double price);
         CProduct GetOneProductByNameAndCategory(string name, string category);
+        CProduct GetOneProductWithQuantity(string storeLoc,string productID);
         CProduct GetOneProduct(string productID);
+
         CCredential GetOneCredential(string email);
         CAdmincredential GetOneAdminCredential(string email);
 
         // delete methods
 
-        void DeleteOneProduct(string productID);
-        void DeleteOneCustomer(string customerID);
+        void DeleteOneProduct(string storeLoc, string productID);
+        void DeleteOneCustomer(string storeLoc,string customerID);
         void DelelteOneCredential(string email);
         // edit
 
         public void EditOneStore(CStore store);
         public void EditOneCustomer(CCustomer customer);
-        public void EditOneProduct(CProduct product);
+        public void EditOneProduct(string storeLoc,CProduct product,int quantity);
 
 
         public void EditOneCredential(string previousEmail, CCredential credential);

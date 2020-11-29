@@ -51,6 +51,7 @@ namespace StoreApplication.WebApp.Controllers
                     {
                         // admin successful login
                         TempData["User"] = viewLogin.Email;
+                        TempData.Keep("User");
                         // each user can store some information
                         TempData[viewLogin.Email] = 1;
                         return RedirectToAction("Index", "Admin");
@@ -69,6 +70,7 @@ namespace StoreApplication.WebApp.Controllers
                 {
                     // user successful login
                     TempData["User"] = viewLogin.Email;
+                    TempData.Keep("User");
                     TempData[viewLogin.Email] = 1;
 
                 }
@@ -130,11 +132,12 @@ namespace StoreApplication.WebApp.Controllers
                     _storeRepo.AddOneCustomer(cCustomer);
                     
                     TempData["User"] = cCustomer.Email;
+                    TempData.Keep("User");
                     // changed to shopping cart later
                     TempData[cCustomer.Email] = 1;
                    
                 }
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index","Store");
             }
             catch (Exception e)
             {

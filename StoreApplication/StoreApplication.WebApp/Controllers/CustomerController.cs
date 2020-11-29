@@ -22,22 +22,20 @@ namespace StoreApplication.WebApp.Controllers
             _logger = logger;
         }
 
-        // GET: CustomerController
+        // customers at one store location
         public ActionResult Index()
         {
-            var viewCustomer = _storeRepo.GetAllCustomers().Select(cCustomer => new CustomerViewModel
+            string storeLoc = TempData.Peek("adminLoc").ToString();
+            var viewCustomer = _storeRepo.GetAllCustomersAtOneStore(storeLoc).Select(cCustomer => new CustomerViewModel
             {
-                Customerid = cCustomer.Customerid,
-                Firstname = cCustomer.FirstName,
-                Lastname = cCustomer.LastName,
-                Phonenumber = cCustomer.PhoneNumber,
-                Email = cCustomer.Email,
-                // index page does not show password and confirm password               
+                Customerid = cCustomer.Value.Customerid,
+                Firstname = cCustomer.Value.FirstName,
+                Lastname = cCustomer.Value.LastName,
+                Phonenumber = cCustomer.Value.PhoneNumber,             
             });
 
             return View(viewCustomer);
         }
-
         // GET: CustomerController/Details/5
         public ActionResult Details(string id)
         {
@@ -63,8 +61,7 @@ namespace StoreApplication.WebApp.Controllers
                 Lastname = cCustomer.LastName,
                 Phonenumber = cCustomer.PhoneNumber,
                 Email = cCustomer.Email,
-                Password = cCredential.Password
-                
+                Password = cCredential.Password               
             };
             return View(viewCustomer);
         }
@@ -80,6 +77,7 @@ namespace StoreApplication.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CustomerViewModel viewCustomer)
         {
+            string storeLoc = TempData.Peek("adminLoc").ToString();
             try
             {
                 if (!ModelState.IsValid)
@@ -108,9 +106,7 @@ namespace StoreApplication.WebApp.Controllers
 
                     // it is possible that the credential gets in and customer profile not
                     _storeRepo.AddOneCredential(cCredential);
-                    _storeRepo.AddOneCustomer(cCustomer);
-                    // only update customer table, but not storecustomer table,
-                    TempData["User"] = cCustomer.FirstName;
+                    _storeRepo.StoreAddOneCustomer(storeLoc,cCustomer);               
 
                 }
                 return RedirectToAction(nameof(Create));
@@ -147,6 +143,7 @@ namespace StoreApplication.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(string id, CustomerViewModel viewCustomer)
         {
+            string storeLoc = TempData.Peek("adminLoc").ToString();
             try
             {
                 if (!ModelState.IsValid)
@@ -184,12 +181,12 @@ namespace StoreApplication.WebApp.Controllers
                 }
                 var editedCustomer = new CCustomer(id, viewCustomer.Firstname, viewCustomer.Lastname, viewCustomer.Phonenumber, viewCustomer.Email);
                 var editedCredential = new CCredential(viewCustomer.Email, viewCustomer.Password);
-                _storeRepo.DeleteOneCustomer(id);
+                _storeRepo.DeleteOneCustomer(storeLoc,id);
                 _storeRepo.DelelteOneCredential(foundCustomer.Email);
                 // drop dependcy issue
                 //_storeRepo.EditOneCredential(foundCredential.Email,editedCredential);
                 _storeRepo.AddOneCredential(editedCredential);
-                _storeRepo.AddOneCustomer(editedCustomer);
+                _storeRepo.StoreAddOneCustomer(storeLoc,editedCustomer);
                 
                 // add tempo data
 
@@ -227,6 +224,7 @@ namespace StoreApplication.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(string id, int unused)
         {
+            string storeLoc = TempData.Peek("adminLoc").ToString();
             try
             {
                 var foundCustomer = _storeRepo.GetOneCustomer(id);
@@ -243,7 +241,7 @@ namespace StoreApplication.WebApp.Controllers
                     return View();
                 }
 
-                _storeRepo.DeleteOneCustomer(id);
+                _storeRepo.DeleteOneCustomer(storeLoc,id);
                 _storeRepo.DelelteOneCredential(foundCustomer.Email);
                 return RedirectToAction(nameof(Index));
             }

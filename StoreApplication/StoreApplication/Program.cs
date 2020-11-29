@@ -31,7 +31,8 @@ namespace StoreApplication
             StoreRepository repo = new StoreRepository(s_dbContextOptions);
             IDisplay sd = new SimpleDisplay();
             ISearch ss = new SimpleSearch();
-
+            
+           
             // new mvc version
             // display all store locations to choose from
             Console.WriteLine("Welcome to XYZ Enterprise, below are a list of our locations:\n ");
@@ -204,25 +205,7 @@ namespace StoreApplication
                             sd.DisplayAllOrders(pair.Value.OrderHistory);
                         }
                         break;
-                        /*
-                        CStore seekStore = repo.GetAStore(seekLoc);
-                        if (NullChecker(seekStore)) continue;
-
-                        seekStore.CustomerDict = repo.GetAllCustomersAtOneStore(seekLoc);
-
-                        foreach (var pair in seekStore.CustomerDict)
-                        {
-                            CCustomer cust = pair.Value;
-                            cust.OrderHistory = repo.GetAllOrdersOfOneCustomer(cust.Customerid, seekStore, cust);
-                            foreach (var order in cust.OrderHistory)
-                            {
-                                order.ProductList = repo.GetAllProductsOfOneOrder(order.Orderid);
-                                order.TotalCost = store.CalculateTotalPrice(order.ProductList);
-                            }
-                            sd.DisplayAllOrders(cust.OrderHistory);
-                        }
-                        break;
-                        */
+                        
                     }
                 }
                 else if (choice == "7")
@@ -280,7 +263,7 @@ namespace StoreApplication
                 customerid = CIDGen.Gen();
                 CCustomer newCustomer = new CCustomer(customerid, firstname, lastname, phonenumber);
                 store.AddCustomer(newCustomer);
-                repo.StoreAddOneCusomter(storeLoc, newCustomer);
+                repo.StoreAddOneCustomer(storeLoc, newCustomer);
                 Console.WriteLine($"Dear {customerid}, your profile has been set up successfuly");
             }
             return customerid;
@@ -297,12 +280,7 @@ namespace StoreApplication
                 string name = ValidateNotNull(Console.ReadLine());
                 Console.WriteLine("Enter Product category");
                 string category = ValidateNotNull(Console.ReadLine());
-                /*
-                Console.WriteLine("Enter Product price");
-                string priceStr = Console.ReadLine();
-                double price;
-                Double.TryParse(priceStr, out price);
-                */
+               
                 Console.WriteLine("Enter Product quantity");
                 int quantity = ValidateInt(Console.ReadLine());               
                
@@ -459,6 +437,8 @@ namespace StoreApplication
                 }
             }
         }
+
+
 
     }
 }

@@ -79,7 +79,7 @@ namespace StoreDatamodel
             {
                 // these orders have no product list
                 // total cost not yet set
-                COrder o = new COrder(order.Orderid, store, customer, DateTime.Now);
+                COrder o = new COrder(order.Orderid, store, customer, order.Orderedtime);
                 orders.Add(o);
             }
 
@@ -106,11 +106,31 @@ namespace StoreDatamodel
         }
 
 
+        // core functionalities
+        public void StoreAddOneProduct(string storeLoc, CProduct product, int quantity)
+        { 
+            using var context = new Project0databaseContext(_contextOptions);
+            var newProduct = new Product
+            {
+                Productid = product.UniqueID,
+                Name = product.Name,
+                Category = product.Category,
+                Price = product.Price,
+            };
+            context.Products.Add(newProduct);
+            context.SaveChanges();
 
+            var newBridge = new Inventory
+            {
+                Storeloc = storeLoc,
+                Productid = product.UniqueID,
+                Quantity = quantity,
+            };
+            context.Inventories.Add(newBridge);
+            context.SaveChanges();
+        }
 
-
-        // all 6 functionalities
-        public void StoreAddOneCusomter(string storeLoc, CCustomer customer)
+        public void StoreAddOneCustomer(string storeLoc, CCustomer customer)
         {
             using var context = new Project0databaseContext(_contextOptions);
             // only have this part below in the data model, rest moves to console main
@@ -119,7 +139,8 @@ namespace StoreDatamodel
                 Customerid = customer.Customerid,
                 Firstname = customer.FirstName,
                 Lastname = customer.LastName,
-                Phonenumber = customer.PhoneNumber
+                Phonenumber = customer.PhoneNumber,
+                Email = customer.Email,
             };
             context.Customers.Add(newCustomer);
             context.SaveChanges();
@@ -295,6 +316,8 @@ namespace StoreDatamodel
             context.SaveChanges();
         }
 
+  
+
         public void AddOneProduct(CProduct product)
         {
             using var context = new Project0databaseContext(_contextOptions);
@@ -321,6 +344,9 @@ namespace StoreDatamodel
             context.Credentials.Add(cCredential);
             context.SaveChanges();
         }
+
+       
+
 
 
 
@@ -396,6 +422,27 @@ namespace StoreDatamodel
             return p;
         }
 
+        public CProduct GetOneProductWithQuantity(string storeLoc,string productID)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbStore = context.Stores.Include(x => x.Inventories)
+                                            .ThenInclude(x => x.Product)
+                                                .FirstOrDefault(x => x.Storeloc == storeLoc);
+            if (dbStore == null) return null;
+            // List<CProduct> inventory = new List<CProduct>();
+            CProduct p = new CProduct();
+            foreach (var product in dbStore.Inventories)
+            {
+                if (product.Productid == productID)
+                {
+                    p = new CProduct(product.Product.Productid, product.Product.Name,
+                                            product.Product.Category, product.Product.Price, product.Quantity);
+                }
+            }
+            return p;
+
+        }
+
         public CProduct GetOneProduct(string productID)
         { 
             using var context = new Project0databaseContext(_contextOptions);
@@ -406,6 +453,7 @@ namespace StoreDatamodel
             return p;
 
         }
+       
         public CCredential GetOneCredential(string email)
         { 
             using var context = new Project0databaseContext(_contextOptions);
@@ -427,9 +475,16 @@ namespace StoreDatamodel
 
         // delete methods
         // all set to on delete cascade
-        public void DeleteOneProduct(string productID)
+        public void DeleteOneProduct(string storeLoc, string productID)
         {
             using var context = new Project0databaseContext(_contextOptions);
+            var dbBridge = context.Inventories.FirstOrDefault(x => x.Storeloc == storeLoc && x.Productid == productID);
+            if (dbBridge != null)
+            {
+                context.Inventories.Remove(dbBridge);
+                context.SaveChanges();
+            }
+
             var dbProduct = context.Products.FirstOrDefault(x => x.Productid == productID);
             if (dbProduct != null)
             {
@@ -440,9 +495,16 @@ namespace StoreDatamodel
         }
 
 
-        public void DeleteOneCustomer(string customerID)
+        public void DeleteOneCustomer(string storeLoc, string customerID)
         {
             using var context = new Project0databaseContext(_contextOptions);
+            var dbBridge = context.Storecustomers.FirstOrDefault(x => x.Storeloc == storeLoc && x.Customerid == customerID);
+            if (dbBridge != null)
+            {
+                context.Storecustomers.Remove(dbBridge);
+                context.SaveChanges();
+            }
+
             var dbCustomer = context.Customers.FirstOrDefault(x => x.Customerid == customerID);
             if (dbCustomer != null)
             {
@@ -450,7 +512,6 @@ namespace StoreDatamodel
                 context.SaveChanges();
             }
             // null references handled in the view layer
-
         }
 
         public void DelelteOneCredential(string email)
@@ -496,9 +557,17 @@ namespace StoreDatamodel
             }
 
         }
-        public void EditOneProduct(CProduct product)
+        public void EditOneProduct(string storeLoc, CProduct product, int quantity)
         { 
             using var context = new Project0databaseContext(_contextOptions);
+            var dbBridge = context.Inventories.FirstOrDefault(x => x.Storeloc == storeLoc && x.Productid == product.UniqueID);
+            if (dbBridge != null)
+            {
+                dbBridge.Quantity = quantity;
+                context.SaveChanges();
+            }
+
+
             var dbProduct = context.Products.FirstOrDefault(x => x.Productid == product.UniqueID);
             if (dbProduct != null)
             {
@@ -508,7 +577,6 @@ namespace StoreDatamodel
                 dbProduct.Price = product.Price;
                 context.SaveChanges();
             }
-
         }
 
         public void EditOneCredential(string previousEmail, CCredential credential)
