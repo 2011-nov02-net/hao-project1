@@ -25,19 +25,34 @@ namespace StoreApplication.WebApp.Controllers
             _storeRepo = storeRepo;
         }
  
-        public ActionResult Index()
+        public ActionResult Index(string zipCode)
         {
             var viewStore = _storeRepo.GetAllStores().Select(x => new StoreViewModel
             {
                 Storeloc = x.Storeloc,
                 Storephone = x.Storephone,
+                Zipcode = x.Zipcode,
             });
+
+            if (!String.IsNullOrEmpty(zipCode))
+            {
+
+                var stores = _storeRepo.GetAllStoresByZipcode(zipCode);
+                viewStore = stores.Select(x => new StoreViewModel
+                {
+                    Storeloc = x.Storeloc,
+                    Storephone = x.Storephone,
+                    Zipcode = x.Zipcode,
+                });
+            }
             return View(viewStore);
         }
 
         // a list of products sold at that location
-        public ActionResult Select(string storeLoc)
-        {            
+        public ActionResult Select(string storeLoc, string category)
+        {
+
+            if (storeLoc == null) storeLoc = TempData.Peek("storeLoc").ToString();
             var viewProduct = _storeRepo.GetInventoryOfOneStore(storeLoc).Select(cProduct => new ProductViewModel
             {
                 UniqueID = cProduct.UniqueID,
@@ -45,6 +60,18 @@ namespace StoreApplication.WebApp.Controllers
                 Category = cProduct.Category,
                 Price = cProduct.Price,
             });
+      
+            if (!String.IsNullOrEmpty(category))
+            {
+                var products = _storeRepo.GetInventoryOfOneStoreByCategory(storeLoc, category);
+                viewProduct = products.Select(cProduct => new ProductViewModel
+                {
+                    UniqueID = cProduct.UniqueID,
+                    Name = cProduct.Name,
+                    Category = cProduct.Category,
+                    Price = cProduct.Price,
+                });
+            }
             TempData["storeLoc"] = storeLoc;
             TempData.Keep("storeLoc");
             return View(viewProduct);
@@ -223,14 +250,13 @@ namespace StoreApplication.WebApp.Controllers
             CStore store = _storeRepo.GetOneStore(storeLoc);
 
             // collection information about this customer
-            CCustomer foundCustomer = _storeRepo.GetOneCustomerOrderHistory(customer.FirstName, customer.LastName,
-                customer.PhoneNumber , store);
-            if (foundCustomer == null)
+            var OrderHistory = _storeRepo.GetOneCustomerOrderHistory(customer,store);
+            if (OrderHistory == null)
             {
                 return View( new List<OrderViewModel>());
             }
 
-            var viewOrder = foundCustomer.OrderHistory.Select(x => new OrderViewModel
+            var viewOrder = OrderHistory.Select(x => new OrderViewModel
             {
                 Orderid = x.Orderid,
                 StoreLoc = x.StoreLocation.Storeloc,

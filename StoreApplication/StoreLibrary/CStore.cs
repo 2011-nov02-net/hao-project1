@@ -20,6 +20,8 @@ namespace StoreLibrary
         /// </summary>
         public string Storephone { get; set; }
 
+        public string Zipcode { get; set; }
+
         /// <summary>
         /// property to track products left at a store location
         /// key: productid, value: product object reference
@@ -48,6 +50,13 @@ namespace StoreLibrary
         {
             Storeloc = storeLoc;
             Storephone = storePhone;
+        }
+
+        public CStore(string storeLoc, string storePhone, string zipCode)
+        {
+            Storeloc = storeLoc;
+            Storephone = storePhone;
+            Zipcode = zipCode;
         }
 
         /// <summary>

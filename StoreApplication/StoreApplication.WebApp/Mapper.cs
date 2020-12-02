@@ -6,8 +6,16 @@ using System.Text;
 
 namespace StoreLibrary
 {
+    /// <summary>
+    /// static mapper class to convert objects between View and Model
+    /// </summary>
     static public class Mapper
     {
+
+
+
+
+
 
         static public IEnumerable<DetailedProductViewModel> MapDetailedProducts(List<CProduct> products )
         {

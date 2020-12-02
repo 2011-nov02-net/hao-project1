@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StoreLibrary;
-using StoreLibrary.IDGenerator;
+
 using StoreLibrary.Search;
 using System;
 using System.Collections.Generic;
@@ -32,6 +32,28 @@ namespace StoreDatamodel
             return store;
         }
 
+        public IEnumerable<CStore> GetAllStoresByZipcode(string zipCode)
+        { 
+            using var context = new Project0databaseContext(_contextOptions);
+            IEnumerable<Store> dbStores ;
+            try
+            {
+                dbStores = context.Stores.Where(x => x.Zipcode == zipCode).ToList();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            var stores = dbStores.Select(x => new CStore
+            {
+                Storeloc = x.Storeloc,
+                Storephone = x.Storephone,
+                Zipcode = x.Zipcode,
+
+            });
+            return stores;
+        }
+
         // used
         // create a dict of products that can be added to a given store
         public List<CProduct> GetInventoryOfOneStore(string storeLoc)
@@ -50,6 +72,30 @@ namespace StoreDatamodel
             }
             return inventory;
         }
+
+        public List<CProduct> GetInventoryOfOneStoreByCategory(string storeLoc,string category)
+        {
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbStore = context.Stores.Include(x => x.Inventories)
+                                            .ThenInclude(x => x.Product)
+                                                .FirstOrDefault(x => x.Storeloc == storeLoc);
+            if (dbStore == null) return null;
+            List<CProduct> inventory = new List<CProduct>();
+            CProduct p = new CProduct();
+            foreach (var product in dbStore.Inventories)
+            {
+                
+                if (product.Product.Category == category)
+                {
+                    p = new CProduct(product.Product.Productid, product.Product.Name,
+                                                product.Product.Category, product.Product.Price, product.Quantity);
+                    inventory.Add(p);
+                }
+                    
+            }
+            return inventory;
+        }
+
 
         // used
         // create a dictionary of customer to be added to a given store
@@ -98,10 +144,10 @@ namespace StoreDatamodel
         {
             using var context = new Project0databaseContext(_contextOptions);
             var dbCustomer = context.Customers.Include(x => x.Orderrs).FirstOrDefault(x => x.Customerid == customerid);
-            if (dbCustomer == null) return null;            
+            if (dbCustomer == null) return null;
+            List<COrder> orders = new List<COrder>();
             if (dbCustomer.Orderrs == null) return null;
 
-            List<COrder> orders = new List<COrder>();
             foreach (var order in dbCustomer.Orderrs)
             {
                 // these orders have no product list
@@ -131,6 +177,13 @@ namespace StoreDatamodel
             }
             return products;
         }
+
+
+
+
+
+
+
 
 
         // core functionalities
@@ -267,28 +320,24 @@ namespace StoreDatamodel
             return order;
         }
         // find all detail of a customer
-        public CCustomer GetOneCustomerOrderHistory(string firstName, string lastName, string phoneNumber, CStore store)
+        public List<COrder> GetOneCustomerOrderHistory(CCustomer customer, CStore store)
         {
-            using var context = new Project0databaseContext(_contextOptions);
-            var dbCustomer = context.Customers
-                             .FirstOrDefault(x => x.Firstname == firstName && x.Lastname == lastName && x.Phonenumber == phoneNumber);
-            if (dbCustomer == null) return null;
-            CCustomer foundCustomer;
-            foundCustomer = new CCustomer(dbCustomer.Customerid,
-                                                    dbCustomer.Firstname, dbCustomer.Lastname, dbCustomer.Phonenumber);
-
-            List<COrder> OrderHistory = GetAllOrdersOfOneCustomer(foundCustomer.Customerid, store, foundCustomer);
+            using var context = new Project0databaseContext(_contextOptions);         
+            var customerExist = context.Storecustomers.FirstOrDefault(x => x.Storeloc == store.Storeloc && x.Customerid == customer.Customerid);
+            if (customerExist == null) return null;
+                       
+            List<COrder> OrderHistory = GetAllOrdersOfOneCustomer(customer.Customerid, store, customer);
+            // has no order
             if (OrderHistory == null) return null;
-            foundCustomer.OrderHistory = OrderHistory;
-
-            foreach (var order in foundCustomer.OrderHistory)
+            
+            foreach (var order in OrderHistory)
             {
                 order.ProductList = GetAllProductsOfOneOrder(order.Orderid);
                 order.TotalCost = store.CalculateTotalPrice(order.ProductList);
             }
-
-            return foundCustomer;
+            return OrderHistory;
         }
+
 
         public CStore GetOneStoreOrderHistory(string storeLoc)
         {
@@ -388,7 +437,7 @@ namespace StoreDatamodel
             List<CStore> stores = new List<CStore>();
             foreach (var store in dbStores)
             {
-                CStore s = new CStore(store.Storeloc, store.Storephone);
+                CStore s = new CStore(store.Storeloc, store.Storephone,store.Zipcode);
                 stores.Add(s);
             }
             return stores;

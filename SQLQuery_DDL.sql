@@ -13,6 +13,8 @@ create table store
 (
     storeloc NVARCHAR(100) primary key not null,
     storephone NVARCHAR(10) unique not null,
+    zipcode NVARCHAR(5) not null,
+    check(len(zipcode) =5),
     check(len(storephone) = 10),
     check(storephone like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
 )

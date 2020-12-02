@@ -20,15 +20,11 @@ insert into customer(customerid,firstname,lastname,email,phonenumber) values('cu
 insert into customer(customerid,firstname,lastname,email,phonenumber) values('cus3','King','Kong','KKong@gmail.com','9291231234');
 insert into customer(customerid,firstname,lastname,email,phonenumber) values('cus4','Tim','Cook','TCook@gmail.com','7771231234');
 
-
-
-
-
 -- insert store
-insert into store(storeloc,storephone) values('Central Ave 1', '1111111111');
-insert into store(storeloc,storephone) values('South Ave 2', '2222222222');
-insert into store(storeloc,storephone) values('Mountain View 3', '3333333333');
-insert into store(storeloc,storephone) values('River View 4', '4444444444');
+insert into store(storeloc,storephone,zipcode) values('Central Ave 1', '1111111111','85041');
+insert into store(storeloc,storephone,zipcode) values('South Ave 2', '2222222222','85033');
+insert into store(storeloc,storephone,zipcode) values('Mountain View 3', '3333333333','85041');
+insert into store(storeloc,storephone,zipcode) values('River View 4', '4444444444','85033');
 
 
 -- insert order
@@ -60,8 +56,6 @@ update Inventory set quantity = 98 where productid = 'p102';
 update Inventory set quantity = 97 where productid = 'p103';
 update Inventory set quantity = 96 where productid = 'p104';
 
-
-
 -- insert bridges store - customer
 insert into storecustomer(storeloc,customerid) values('Central Ave 1','cus1');
 insert into storecustomer(storeloc,customerid) values('South Ave 2','cus2');
@@ -78,5 +72,5 @@ select* from orderr;
 select* from orderproduct;
 SELECT* from inventory;
 select* from product;
-select* from inventory;
 
+delete from credential where email = 'NGuy@gmail.com';

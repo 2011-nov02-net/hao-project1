@@ -16,6 +16,7 @@ namespace StoreDatamodel
 
         public string Storeloc { get; set; }
         public string Storephone { get; set; }
+        public string Zipcode { get; set; }
 
         public virtual ICollection<Inventory> Inventories { get; set; }
         public virtual ICollection<Orderr> Orderrs { get; set; }

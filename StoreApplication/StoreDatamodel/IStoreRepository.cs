@@ -9,7 +9,11 @@ namespace StoreDatamodel
     {  
         // all setup methods pull data from db and return library model objects
         CStore GetOneStore(string storeLoc);
+
+        IEnumerable<CStore> GetAllStoresByZipcode(string zipCode);
         List<CProduct> GetInventoryOfOneStore(string storeLoc);
+
+        List<CProduct> GetInventoryOfOneStoreByCategory(string storeLoc, string category);
         Dictionary<string, CCustomer> GetAllCustomersAtOneStore(string storeLoc);
         List<CCustomer> GetAllCustomersAtOneStoreByName(string storeLoc, string firstname, string lastName);
         List<COrder> GetAllOrdersOfOneCustomer(string customerid, CStore store, CCustomer customer);
@@ -23,7 +27,7 @@ namespace StoreDatamodel
         CCustomer GetOneCustomerByNameAndPhone(string firstName, string lastName, string phonenumber);
        
         COrder GetAnOrderByID(string orderid);
-        CCustomer GetOneCustomerOrderHistory(string firstName, string lastName, string phoneNumber, CStore store);
+        List<COrder> GetOneCustomerOrderHistory(CCustomer customer, CStore store);
         CStore GetOneStoreOrderHistory(string storeLoc);
 
         
