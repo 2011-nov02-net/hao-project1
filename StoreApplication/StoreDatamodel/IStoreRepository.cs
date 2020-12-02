@@ -8,8 +8,8 @@ namespace StoreDatamodel
     public interface IStoreRepository
     {  
         // all setup methods pull data from db and return library model objects
-        CStore GetAStore(string storeLoc);
-        List<CProduct> GetInventoryOfAStore(string storeLoc);
+        CStore GetOneStore(string storeLoc);
+        List<CProduct> GetInventoryOfOneStore(string storeLoc);
         Dictionary<string, CCustomer> GetAllCustomersAtOneStore(string storeLoc);
         List<CCustomer> GetAllCustomersAtOneStoreByName(string storeLoc, string firstname, string lastName);
         List<COrder> GetAllOrdersOfOneCustomer(string customerid, CStore store, CCustomer customer);

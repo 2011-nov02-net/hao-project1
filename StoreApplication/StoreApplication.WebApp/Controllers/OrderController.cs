@@ -59,7 +59,7 @@ namespace StoreApplication.WebApp.Controllers
         {
             // customer id passed in
             string storeLoc = TempData.Peek("adminLoc").ToString();
-            CStore store = _storeRepo.GetAStore(storeLoc);
+            CStore store = _storeRepo.GetOneStore(storeLoc);
             CCustomer customer = _storeRepo.GetOneCustomer(id);
 
             var orders = _storeRepo.GetAllOrdersOfOneCustomer(id, store, customer);

@@ -21,7 +21,8 @@ namespace StoreDatamodel
         // re-implementation seperating business and data-access
         // create a default store with no customer profile and inventory    
 
-        public CStore GetAStore(string storeLoc)
+        // used
+        public CStore GetOneStore(string storeLoc)
         {
             using var context = new Project0databaseContext(_contextOptions);
             var dbStore = context.Stores.FirstOrDefault(x => x.Storeloc == storeLoc);
@@ -31,8 +32,9 @@ namespace StoreDatamodel
             return store;
         }
 
+        // used
         // create a dict of products that can be added to a given store
-        public List<CProduct> GetInventoryOfAStore(string storeLoc)
+        public List<CProduct> GetInventoryOfOneStore(string storeLoc)
         {
             using var context = new Project0databaseContext(_contextOptions);
             var dbStore = context.Stores.Include(x => x.Inventories)
@@ -49,6 +51,7 @@ namespace StoreDatamodel
             return inventory;
         }
 
+        // used
         // create a dictionary of customer to be added to a given store
         public Dictionary<string, CCustomer> GetAllCustomersAtOneStore(string storeLoc)
         {
@@ -95,7 +98,9 @@ namespace StoreDatamodel
         {
             using var context = new Project0databaseContext(_contextOptions);
             var dbCustomer = context.Customers.Include(x => x.Orderrs).FirstOrDefault(x => x.Customerid == customerid);
-            if (dbCustomer == null) return null;
+            if (dbCustomer == null) return null;            
+            if (dbCustomer.Orderrs == null) return null;
+
             List<COrder> orders = new List<COrder>();
             foreach (var order in dbCustomer.Orderrs)
             {
@@ -272,7 +277,10 @@ namespace StoreDatamodel
             foundCustomer = new CCustomer(dbCustomer.Customerid,
                                                     dbCustomer.Firstname, dbCustomer.Lastname, dbCustomer.Phonenumber);
 
-            foundCustomer.OrderHistory = GetAllOrdersOfOneCustomer(foundCustomer.Customerid, store, foundCustomer);
+            List<COrder> OrderHistory = GetAllOrdersOfOneCustomer(foundCustomer.Customerid, store, foundCustomer);
+            if (OrderHistory == null) return null;
+            foundCustomer.OrderHistory = OrderHistory;
+
             foreach (var order in foundCustomer.OrderHistory)
             {
                 order.ProductList = GetAllProductsOfOneOrder(order.Orderid);
@@ -371,8 +379,7 @@ namespace StoreDatamodel
 
 
 
-
-        // helpers
+         
         public List<CStore> GetAllStores()
         {
             using var context = new Project0databaseContext(_contextOptions);

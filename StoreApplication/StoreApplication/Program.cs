@@ -45,7 +45,7 @@ namespace StoreApplication
             CStore store = null;
             while (store == null)
             {
-                store = repo.GetAStore(storeLoc);
+                store = repo.GetOneStore(storeLoc);
                 if (NullChecker(store))
                 {
                     storeLoc = Console.ReadLine();
@@ -225,7 +225,7 @@ namespace StoreApplication
         // helper classes refactored        
         private static void InventorySetup(IStoreRepository repo, string storeLoc, CStore store)
         {
-            List<CProduct> inventory = repo.GetInventoryOfAStore(storeLoc);           
+            List<CProduct> inventory = repo.GetInventoryOfOneStore(storeLoc);           
             store.CleanInventory();
             store.AddProducts(inventory);
             Console.WriteLine("Initial inventory set up done");

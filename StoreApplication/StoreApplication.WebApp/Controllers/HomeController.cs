@@ -31,10 +31,8 @@ namespace StoreApplication.WebApp.Controllers
             TempData.Remove("User");
             TempData.Remove("storeLoc");
             TempData.Remove("Total");
-            TempData.Remove("Sum");
-
-
-
+            TempData.Remove("adminLoc");
+            TempData.Remove("Cart");
             return View();
         }
 
@@ -55,19 +53,8 @@ namespace StoreApplication.WebApp.Controllers
         }
 
         public IActionResult Tour()
-        {
-            var viewProduct = _storeRepo.GetAllProducts().Select(x => new ProductViewModel
-            {
-                 
-                Name = x.Name,
-                Category = x.Category,
-                Price = x.Price,
-
-
-            });
-            return View(viewProduct);
-            
-        
+        {           
+            return View();                  
         }
 
 

@@ -25,7 +25,7 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult Index()
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
-            var viewProduct = _storeRepo.GetInventoryOfAStore(storeLoc).Select(cProduct => new DetailedProductViewModel
+            var viewProduct = _storeRepo.GetInventoryOfOneStore(storeLoc).Select(cProduct => new DetailedProductViewModel
             {
                 UniqueID = cProduct.UniqueID,
                 Name = cProduct.Name,

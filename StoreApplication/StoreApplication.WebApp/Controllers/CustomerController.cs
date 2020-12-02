@@ -33,24 +33,20 @@ namespace StoreApplication.WebApp.Controllers
                 Lastname = cCustomer.Value.LastName,
                 Phonenumber = cCustomer.Value.PhoneNumber,             
             });
-
-             
-
+           
             if (!String.IsNullOrEmpty(firstName) && !String.IsNullOrEmpty(lastName))
             {
-                // get
-                 var customers = _storeRepo.GetAllCustomersAtOneStoreByName(storeLoc, firstName, lastName);
+                
+                var customers = _storeRepo.GetAllCustomersAtOneStoreByName(storeLoc, firstName, lastName);
                 viewCustomer = customers.Select(x => new CustomerViewModel
                 {
                     Customerid = x.Customerid,
                     Firstname = x.FirstName,
                     Lastname = x.LastName,
                     Phonenumber = x.PhoneNumber,
-
                 });
                 
             }
-
             return View(viewCustomer);
         }
         

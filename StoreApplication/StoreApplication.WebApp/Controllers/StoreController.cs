@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
@@ -23,10 +24,9 @@ namespace StoreApplication.WebApp.Controllers
             _logger = logger;
             _storeRepo = storeRepo;
         }
-
-        // a list of store locations
+ 
         public ActionResult Index()
-        {         
+        {
             var viewStore = _storeRepo.GetAllStores().Select(x => new StoreViewModel
             {
                 Storeloc = x.Storeloc,
@@ -37,17 +37,13 @@ namespace StoreApplication.WebApp.Controllers
 
         // a list of products sold at that location
         public ActionResult Select(string storeLoc)
-        {
-            // no longer takes parameter id
-            // string id = TempData.Peek("storeLoc").ToString();
-            
-            var viewProduct = _storeRepo.GetInventoryOfAStore(storeLoc).Select(cProduct => new ProductViewModel
+        {            
+            var viewProduct = _storeRepo.GetInventoryOfOneStore(storeLoc).Select(cProduct => new ProductViewModel
             {
                 UniqueID = cProduct.UniqueID,
                 Name = cProduct.Name,
                 Category = cProduct.Category,
                 Price = cProduct.Price,
-                
             });
             TempData["storeLoc"] = storeLoc;
             TempData.Keep("storeLoc");
@@ -59,7 +55,7 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult AddToCart(string id)
         {
             var cProduct = _storeRepo.GetOneProduct(id);
-            var viewDP = new DetailedProductViewModel 
+            var viewDP = new DetailedProductViewModel
             {
                 UniqueID = cProduct.UniqueID,
                 Name = cProduct.Name,
@@ -81,29 +77,37 @@ namespace StoreApplication.WebApp.Controllers
                     return View(viewDP);
                 }
 
-                // concurrent
+                // handle concurrency
                 CProduct foundProduct = _storeRepo.GetOneProduct(id);
                 if (foundProduct == null)
                 {
                     ModelState.AddModelError("", "This product has just been deleted");
                     return View(viewDP);
-                }
-
-                // total cost per product to be implamented
-                // change quantity change total
-
+                }         
                 CProduct cProduct = new CProduct(foundProduct.UniqueID, foundProduct.Name, foundProduct.Category, foundProduct.Price,
                                             viewDP.Quantity);
+
+                // use tempdata to store products in a cart
+                // do not know how to return a serialized string directly, use a local text file for now
                 string path = "../../SimplyWriteData.json";
                 JsonFilePersist persist = new JsonFilePersist(path);
-                List<CProduct> products = persist.ReadProductsData();
+                string json = "";
+                if (TempData.ContainsKey("Cart"))
+                {
+                    json = TempData.Peek("Cart").ToString();
+                }
+                           
+                List<CProduct> products = persist.ReadProductsTempData(json);
                 if (products == null)
                 {
                     products = new List<CProduct>();
                 }
                 products.Add(cProduct);
-                persist.WriteProductsData(products);    
-                return RedirectToAction("Select","Store", new StoreViewModel { Storeloc = TempData.Peek("storeLoc").ToString() });
+                string cart = persist.WriteProductsTempData(products);
+                TempData["Cart"] = cart;
+                TempData.Keep("Cart");
+                // route parameter is an object
+                return RedirectToAction("Select", "Store", new StoreViewModel { Storeloc = TempData.Peek("storeLoc").ToString() });               
             }
             catch (Exception e)
             {
@@ -112,28 +116,23 @@ namespace StoreApplication.WebApp.Controllers
                 return View(viewDP);
             }
         }
-             
 
         public ActionResult CheckCart()
-        {
-            string path = "../../SimplyWriteData.json";
-            JsonFilePersist persist = new JsonFilePersist(path);
-            List<CProduct> products = persist.ReadProductsData();
+        {           
+            JsonFilePersist persist = new JsonFilePersist();
+            if (!TempData.ContainsKey("Cart"))
+            {
+                return View(new List<DetailedProductViewModel>());
+            }             
+            List<CProduct> products = persist.ReadProductsTempData(TempData.Peek("Cart").ToString());
+            // empty cart to start with
             if (products == null)
             {
-                return View( new List<DetailedProductViewModel>() );
+                return View(new List<DetailedProductViewModel>());
             }
 
-            var viewProducts = products.Select(x => new DetailedProductViewModel
-            {
-                UniqueID = x.UniqueID,
-                Name = x.Name,
-                Category = x.Category,
-                Price = x.Price,
-                Quantity = x.Quantity,
-                TotalCostPerProduct = x.Price * x.Quantity,
-            });
-
+            var viewProducts = Mapper.MapDetailedProducts(products);
+             
             //fixed            
             double total = 0;
             foreach (var item in viewProducts)
@@ -141,22 +140,26 @@ namespace StoreApplication.WebApp.Controllers
                 total += item.TotalCostPerProduct;
             }
             TempData["Total"] = total.ToString();
-            TempData.Keep("Total");           
-            return View(viewProducts);        
+            TempData.Keep("Total");
+            return View(viewProducts);
         }
 
+       
         public ActionResult Proceed()
         {
             // place to change address and payment method
             // then finally checkout
+            if (!TempData.ContainsKey("Cart"))
+            {
+                return RedirectToAction("CheckCart");
+            }
             return View();
         }
 
         public ActionResult Checkout()
-       {
-            string path = "../../SimplyWriteData.json";
-            JsonFilePersist persist = new JsonFilePersist(path);
-            List<CProduct> products = persist.ReadProductsData();
+       {           
+            JsonFilePersist persist = new JsonFilePersist();           
+            List<CProduct> products = persist.ReadProductsTempData(TempData.Peek("Cart").ToString());
             if (products == null)
             {
                 return View();
@@ -165,67 +168,48 @@ namespace StoreApplication.WebApp.Controllers
             // orderid , store, customer, ordertime, totalcost
             string orderID = Guid.NewGuid().ToString().Substring(0, 10);
             string storeLoc = TempData.Peek("storeLoc").ToString();
-            CStore store = _storeRepo.GetAStore(storeLoc);
+            CStore store = _storeRepo.GetOneStore(storeLoc);
             string email = TempData.Peek("User").ToString();
-            CCustomer cCustomer = _storeRepo.GetOneCustomerByEmail(email);               
+            CCustomer cCustomer = _storeRepo.GetOneCustomerByEmail(email);
+            // recalculate price in case customers change quantity in carts
             double totalCost = store.CalculateTotalPrice(products);
-
-            // in case quantity change
-            //TempData["Sum"] = totalCost;
-            //TempData.Keep("Sum");
 
             COrder newOrder = new COrder(orderID, store, cCustomer ,totalCost);
 
-            List<CProduct> inventory = _storeRepo.GetInventoryOfAStore(storeLoc);
+            // check against inventory
+            List<CProduct> inventory = _storeRepo.GetInventoryOfOneStore(storeLoc);
             store.CleanInventory();
             store.AddProducts(inventory);
 
-            Dictionary<string, CCustomer> customers = _storeRepo.GetAllCustomersAtOneStore(storeLoc);
-            store.CustomerDict = customers;
-          
             bool isSuccessful = false;
             try
             {
                 // quantity limits
                 newOrder.ProductList = products;
-                isSuccessful = true;
-                // Console.WriteLine("Order created successfully!");
+                isSuccessful = true;               
             }
             catch (ArgumentException e)
             {
                 isSuccessful = false;
-                // Console.WriteLine("This order exceeds the max allowed quantities, failed to create the order!");
+                _logger.LogError(e, "Quantity set exceeds the maximum allowed");
             }
-
             if (isSuccessful)
             {
                 if (!store.CheckInventory(newOrder))
                 {
-                    // Console.WriteLine("Do not have enough products left to fulfill this order!");
                 }
                 else
-                {
-                    // map products to an order, orders to a customer,
-                    // store now has complete information
-                    foreach (var pair in store.CustomerDict)
-                    {
-                        CCustomer customer = pair.Value;
-                        customer.OrderHistory = _storeRepo.GetAllOrdersOfOneCustomer(customer.Customerid, store, customer);
-                        foreach (var order in customer.OrderHistory)
-                        {
-                            order.ProductList = _storeRepo.GetAllProductsOfOneOrder(order.Orderid);
-                            order.TotalCost = store.CalculateTotalPrice(order.ProductList);
-                        }
-                    }
-                    store.UpdateInventoryAndCustomerOrder(newOrder);
+                {                  
+                    store.UpdateInventory(newOrder);
                     _storeRepo.CustomerPlaceOneOrder(newOrder, store, totalCost);
                 }
             }
 
-            // clean order
+            // clean cart 
             StreamWriter sw = new StreamWriter("../../SimplyWriteData.json");
             sw.WriteLine(string.Empty);
             sw.Close();
+            TempData.Remove("Cart");
             TempData.Remove("Total");
             return View();        
        }
@@ -236,11 +220,16 @@ namespace StoreApplication.WebApp.Controllers
             string email = TempData.Peek("User").ToString();
             CCustomer customer = _storeRepo.GetOneCustomerByEmail(email);
             string storeLoc = TempData.Peek("storeLoc").ToString();
-            CStore store = _storeRepo.GetAStore(storeLoc);
+            CStore store = _storeRepo.GetOneStore(storeLoc);
 
             // collection information about this customer
             CCustomer foundCustomer = _storeRepo.GetOneCustomerOrderHistory(customer.FirstName, customer.LastName,
-                customer.PhoneNumber , store);          
+                customer.PhoneNumber , store);
+            if (foundCustomer == null)
+            {
+                return View( new List<OrderViewModel>());
+            }
+
             var viewOrder = foundCustomer.OrderHistory.Select(x => new OrderViewModel
             {
                 Orderid = x.Orderid,

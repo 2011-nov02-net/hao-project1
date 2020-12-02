@@ -42,9 +42,9 @@ namespace StoreLibrary
         public double TotalCost {
             get { return totalCost; }
             set {
-                if (value <= 0)
+                if (value < 0)
                 {
-                    throw new ArgumentException("total cost must be positive");
+                    throw new ArgumentException("total cost must be non-negative");
                 }
                 totalCost = value;
             } }
