@@ -27,12 +27,12 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
   workingDirectory: StoreApplication
 
-#- task: DotNetCoreCLI@2
-  #displayName: dotnet test
-  #inputs:
-    #command: 'test'
-    #workingDirectory: StoreApplication
-    #publishTestResults: true
+- task: DotNetCoreCLI@2
+  displayName: dotnet test
+  inputs:
+    command: 'test'
+    workingDirectory: StoreApplication
+    publishTestResults: true
 
 - script: dotnet publish --configuration $(buildConfiguration) --output publish
   displayName: dotnet publish
