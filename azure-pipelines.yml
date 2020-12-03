@@ -18,10 +18,10 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayName: dotnet 5.0
+  displayName: dotnet 2.0
   inputs:
     packageType: 'sdk'
-    version: '5.0.x'
+    version: '2.0.x'
 - task: SonarCloudPrepare@1
   displayName: sonar prep
   inputs:
@@ -41,6 +41,12 @@ steps:
   displayName: sonar analysis publish
   inputs:
     pollingTimeoutSec: '300'
+
+- task: UseDotNet@2
+  displayName: dotnet 5.0
+  inputs:
+    packageType: 'sdk'
+    version: '5.0.x'
 - task: DotNetCoreCLI@2
   displayName: dotnet test
   inputs:
