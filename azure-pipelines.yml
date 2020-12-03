@@ -12,7 +12,7 @@ trigger:
     - master
   paths:
     include:
-     - StoreApplication.WebApp
+    - StoreApplication
 
 
 pool:
