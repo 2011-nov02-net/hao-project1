@@ -21,6 +21,7 @@ variables:
 
 steps:
 - task: UseDotNet@2
+  displayName: dotnet 5.0
   inputs:
     packageType: 'sdk'
     version: '5.0.x'
@@ -30,7 +31,8 @@ steps:
   workingDirectory: StoreApplication
 
 - task: DotNetCoreCLI@2
+  displayName: dotnet test
   inputs:
     command: 'test'
     workingDirectory: StoreApplication
-    
+    publishTestResults: true
