@@ -63,6 +63,28 @@ stages:
     - script: dotnet publish --configuration $(buildConfiguration) --output publish
       displayName: dotnet publish
       workingDirectory: StoreApplication
+    - publish: StoreApplication/publish
+      artifact: app  
+
+- stage: release
+  jobs:
+  - deployment: app service
+    environment: prod
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: app
+          - task: AzureRmWebAppDeployment@4
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure subscription 1(2f48b30f-7fe3-404e-90b7-a9e6dfbbda20)'
+              appType: 'webApp'
+              WebAppName: 'Hao-Techland2'
+              packageForLinux: 'app'
+            
 ##- task: AzureRmWebAppDeployment@4
   ##condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   ##inputs:
