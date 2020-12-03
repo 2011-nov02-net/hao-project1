@@ -21,7 +21,7 @@ steps:
   displayName: dotnet 2.0
   inputs:
     packageType: 'sdk'
-    version: '2.0.x'
+    version: '2.x'
 - task: SonarCloudPrepare@1
   displayName: sonar prep
   inputs:
