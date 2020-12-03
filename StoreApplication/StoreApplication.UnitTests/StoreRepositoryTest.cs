@@ -64,7 +64,7 @@ namespace StoreApplication.UnitTests
         */
         
 
-        
+        /*
         [Fact]
         public void DBGetAProductByNameAndCategory()
         {
@@ -113,7 +113,7 @@ namespace StoreApplication.UnitTests
         */
         
 
-        
+        /*
         static string GetConnectionString()
         {
             string path = "../../../../../../project0-connection-string.json";
@@ -130,6 +130,7 @@ namespace StoreApplication.UnitTests
             string connectionString = JsonSerializer.Deserialize<string>(json);
             return connectionString;
         }
+        */
         
     }
 }

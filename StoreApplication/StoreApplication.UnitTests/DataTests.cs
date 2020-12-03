@@ -39,6 +39,9 @@ namespace StoreApplication.UnitTests
         /// <summary>
         /// testing the ability to simply read data
         /// </summary>
+        /// 
+
+        /*
         [Fact]
         public void SimplyReadData()
         {
@@ -50,10 +53,12 @@ namespace StoreApplication.UnitTests
                 Assert.Equal(4, product.Quantity);
             }
         }
+        */
 
         /// <summary>
         /// testing the ability to read and rewrite data
         /// </summary>
+        /*
         [Fact]
         public void ResupplyAndReorderReadAndWrite()
         {
@@ -78,6 +83,7 @@ namespace StoreApplication.UnitTests
                 Assert.Equal(15, pair.Value.Quantity);
             }
         }
+        */
  
     }
 }
