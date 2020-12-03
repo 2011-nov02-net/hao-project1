@@ -68,7 +68,7 @@ stages:
 
 - stage: release
   jobs:
-  - deployment: app service
+  - deployment: app_service
     environment: prod
     strategy:
       runOnce:
