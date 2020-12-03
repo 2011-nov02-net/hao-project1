@@ -6,6 +6,7 @@ trigger:
             - master
   paths:
         include:
+            - azure-pipelines.yml
             - StoreApplication
 
 
@@ -28,4 +29,8 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
   workingDirectory: StoreApplication
 
-
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    workingDirectory: StoreApplication
+    
