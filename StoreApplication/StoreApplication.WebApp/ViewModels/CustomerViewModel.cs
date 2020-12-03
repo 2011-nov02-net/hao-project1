@@ -21,8 +21,8 @@ namespace StoreApplication.WebApp.ViewModels
 
         [Required]    
         [Display( Name = "Phone Number:")]
-        //[StringLength(10)]
-        //[RegularExpression("[0-9]*")]
+        [StringLength(10)]
+        [RegularExpression("[0-9]*")]
         public string Phonenumber { get; set; }
 
         [Required]

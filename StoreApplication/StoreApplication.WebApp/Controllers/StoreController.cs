@@ -270,17 +270,8 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult OrderDetail(string id)
         {
             List<CProduct> products= _storeRepo.GetAllProductsOfOneOrder(id);
-            var viewproducts = products.Select(x => new DetailedProductViewModel
-            { 
-                UniqueID = x.UniqueID,
-                Name = x.Name,
-                Category = x.Category,
-                Price = x.Price,
-                Quantity = x.Quantity,
-                TotalCostPerProduct = x.Price * x.Quantity,                    
-            });
+            var viewproducts = Mapper.MapDetailedProducts(products);
             return View(viewproducts);
-        }
-    
+        }  
     }
 }

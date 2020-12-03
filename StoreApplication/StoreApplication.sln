@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreApplication", "StoreApplication\StoreApplication.csproj", "{9CA7A9C4-7F84-4C52-A8A6-5DCE45F2C669}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreLibrary", "StoreLibrary\StoreLibrary.csproj", "{2BF091FE-BCF4-456F-AEA6-03531CFE4931}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreApplication.UnitTests", "StoreApplication.UnitTests\StoreApplication.UnitTests.csproj", "{1D2E322B-A289-4F7B-9813-4B881C3E4F60}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreDatamodel", "StoreDatamodel\StoreDatamodel.csproj", "{629F1427-9889-48B3-A6DF-B1F46BF300F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreApplication.WebApp", "StoreApplication.WebApp\StoreApplication.WebApp.csproj", "{FB277A92-10D9-4C22-893C-78375A54EF4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreApplication.WebApp", "StoreApplication.WebApp\StoreApplication.WebApp.csproj", "{FB277A92-10D9-4C22-893C-78375A54EF4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9CA7A9C4-7F84-4C52-A8A6-5DCE45F2C669}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CA7A9C4-7F84-4C52-A8A6-5DCE45F2C669}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9CA7A9C4-7F84-4C52-A8A6-5DCE45F2C669}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CA7A9C4-7F84-4C52-A8A6-5DCE45F2C669}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2BF091FE-BCF4-456F-AEA6-03531CFE4931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2BF091FE-BCF4-456F-AEA6-03531CFE4931}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BF091FE-BCF4-456F-AEA6-03531CFE4931}.Release|Any CPU.ActiveCfg = Release|Any CPU

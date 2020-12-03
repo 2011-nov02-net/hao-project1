@@ -26,19 +26,14 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult Index(string firstName,string lastName)
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
-            var viewCustomer = _storeRepo.GetAllCustomersAtOneStore(storeLoc).Select(cCustomer => new CustomerViewModel
-            {
-                Customerid = cCustomer.Value.Customerid,
-                Firstname = cCustomer.Value.FirstName,
-                Lastname = cCustomer.Value.LastName,
-                Phonenumber = cCustomer.Value.PhoneNumber,             
-            });
+            var customers = _storeRepo.GetAllCustomersAtOneStore(storeLoc);
+            var viewCustomer = Mapper.MapCustomersWithoutEmail(customers);
            
             if (!String.IsNullOrEmpty(firstName) && !String.IsNullOrEmpty(lastName))
-            {
-                
-                var customers = _storeRepo.GetAllCustomersAtOneStoreByName(storeLoc, firstName, lastName);
-                viewCustomer = customers.Select(x => new CustomerViewModel
+            {    
+                // list, not mapped
+                var searchedCustomers = _storeRepo.GetAllCustomersAtOneStoreByName(storeLoc, firstName, lastName);
+                viewCustomer = searchedCustomers.Select(x => new CustomerViewModel
                 {
                     Customerid = x.Customerid,
                     Firstname = x.FirstName,
@@ -49,9 +44,6 @@ namespace StoreApplication.WebApp.Controllers
             }
             return View(viewCustomer);
         }
-        
-
-        // search bar
 
         public ActionResult Details(string id)
         {
@@ -69,16 +61,7 @@ namespace StoreApplication.WebApp.Controllers
                 ModelState.AddModelError("", "Another admin has just deleted this email");
                 return View();
             }
-
-            var viewCustomer = new CustomerViewModel
-            {
-                Customerid = cCustomer.Customerid,
-                Firstname = cCustomer.FirstName,
-                Lastname = cCustomer.LastName,
-                Phonenumber = cCustomer.PhoneNumber,
-                Email = cCustomer.Email,
-                Password = cCredential.Password               
-            };
+            var viewCustomer = Mapper.MapSingleCustomerWithCredential(cCustomer, cCredential);
             return View(viewCustomer);
         }
 
@@ -140,17 +123,7 @@ namespace StoreApplication.WebApp.Controllers
         {
             var cCustomer = _storeRepo.GetOneCustomer(id);
             CCredential cCredential = _storeRepo.GetOneCredential(cCustomer.Email);
-            var viewCustomer = new CustomerViewModel
-            {
-                Customerid = cCustomer.Customerid,
-                Firstname = cCustomer.FirstName,
-                Lastname = cCustomer.LastName,
-                Phonenumber = cCustomer.PhoneNumber,
-                Email = cCustomer.Email,
-                Password = cCredential.Password,
-                //ConfirmPassword = cCredential.Password
-                
-            };
+            var viewCustomer = Mapper.MapSingleCustomerWithCredential(cCustomer, cCredential);
             return View(viewCustomer);
         }
 
@@ -202,9 +175,7 @@ namespace StoreApplication.WebApp.Controllers
                 // drop dependcy issue
                 //_storeRepo.EditOneCredential(foundCredential.Email,editedCredential);
                 _storeRepo.AddOneCredential(editedCredential);
-                _storeRepo.StoreAddOneCustomer(storeLoc,editedCustomer);
-                
-                // add tempo data
+                _storeRepo.StoreAddOneCustomer(storeLoc,editedCustomer);                
 
                 return RedirectToAction(nameof(Index));
             }
@@ -221,17 +192,7 @@ namespace StoreApplication.WebApp.Controllers
         {
             var cCustomer = _storeRepo.GetOneCustomer(id);
             CCredential cCredential = _storeRepo.GetOneCredential(cCustomer.Email);
-            var viewCustomer = new CustomerViewModel
-            {
-                Customerid = cCustomer.Customerid,
-                Firstname = cCustomer.FirstName,
-                Lastname = cCustomer.LastName,
-                Phonenumber = cCustomer.PhoneNumber,
-                Email = cCustomer.Email,
-                Password = cCredential.Password,
-                ConfirmPassword = cCredential.Password
-
-            };
+            var viewCustomer = Mapper.MapSingleCustomerWithCredential(cCustomer, cCredential);
             return View(viewCustomer);
         }
 

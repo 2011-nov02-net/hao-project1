@@ -16,6 +16,7 @@ namespace StoreApplication.UnitTests
     {
         // don't use actual Azure database, use SQLite for tests
       
+        /*
         [Fact]
         public void DBAddOneStore()
         {
@@ -37,9 +38,10 @@ namespace StoreApplication.UnitTests
             Assert.Equal(newStore.Storephone, dbStore.Storephone);
             Assert.Empty(dbStore.Storecustomers);
         }
-        
+        */
 
-        
+
+        /*
         [Fact]
         public void DBAddOneProduct() {
             var optionsBuilder = new DbContextOptionsBuilder<Project0databaseContext>();
@@ -59,6 +61,7 @@ namespace StoreApplication.UnitTests
             Assert.Equal(newProduct.Category, dbProduct.Category);
             Assert.Equal(newProduct.Price, dbProduct.Price);           
         }
+        */
         
 
         

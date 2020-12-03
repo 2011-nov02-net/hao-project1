@@ -1,4 +1,4 @@
-﻿using StoreApplication.Display;
+﻿ 
 using StoreLibrary;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,8 @@ namespace StoreApplication.UnitTests
     {
         /// <summary>
         /// testing the ability to simply write data
-        /// </summary>     
+        /// </summary>  
+        /*
         [Fact]
         public void SimplyWriteData()
         {
@@ -34,7 +35,7 @@ namespace StoreApplication.UnitTests
             persist.WriteStoreData(store);
             
         }
-        
+        */
         /// <summary>
         /// testing the ability to simply read data
         /// </summary>

@@ -25,15 +25,8 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult Index()
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
-            var viewProduct = _storeRepo.GetInventoryOfOneStore(storeLoc).Select(cProduct => new DetailedProductViewModel
-            {
-                UniqueID = cProduct.UniqueID,
-                Name = cProduct.Name,
-                Category = cProduct.Category,
-                Price = cProduct.Price,
-                Quantity = cProduct.Quantity,
-            });
-
+            var products = _storeRepo.GetInventoryOfOneStore(storeLoc);
+            var viewProduct = Mapper.MapDetailedProductsWithoutTotal(products);         
             return View(viewProduct);
         }
 
@@ -42,30 +35,20 @@ namespace StoreApplication.WebApp.Controllers
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             CProduct foundProduct = _storeRepo.GetOneProductWithQuantity(storeLoc,id);
-            // concurrent
-            
+
+            // concurrent            
             if (foundProduct == null)
             {
                 ModelState.AddModelError("", "Another admin has just deleted this product");
                 return View();
-            }
-
-            // subject to change to more detailed view model
-            var viewProduct = new DetailedProductViewModel
-            {
-                UniqueID = foundProduct.UniqueID,
-                Name = foundProduct.Name,
-                Category = foundProduct.Category,
-                Price = foundProduct.Price,
-                Quantity = foundProduct.Quantity,
-            };           
+            }           
+            var viewProduct = Mapper.MapSingleDetailedProduct(foundProduct);           
             return View(viewProduct);
         }
 
-        // GET: ProductController/Create
+         
         public ActionResult Create()
-        {
-                   
+        {                
             return View();
         }
 
@@ -82,22 +65,18 @@ namespace StoreApplication.WebApp.Controllers
                     ModelState.AddModelError("", "Invalid input format");
                     return View();
                 }
-
+                // avoid duplicate
                 var foundProduct = _storeRepo.GetOneProductByNameAndCategory(viewDP.Name, viewDP.Category);
                 if (foundProduct != null)
                 {
                     ModelState.AddModelError("","This product already exist in this category");
                     return View();
                 }
-
-                
-                // view model does not have quantity               
+                // a new randomly generated id for a new product                      
                 string productID = Guid.NewGuid().ToString().Substring(0, 10);
                 var cProduct = new CProduct(productID, viewDP.Name, viewDP.Category, viewDP.Price,viewDP.Quantity);
                 _storeRepo.StoreAddOneProduct(storeLoc,cProduct,viewDP.Quantity);
-                
-                // add tempdata here
-
+    
                 return RedirectToAction(nameof(Index));
             }
             catch(Exception e)
@@ -113,15 +92,7 @@ namespace StoreApplication.WebApp.Controllers
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             var cProduct = _storeRepo.GetOneProductWithQuantity(storeLoc,id);
-            var viewProduct = new DetailedProductViewModel
-            {
-                UniqueID = cProduct.UniqueID,
-                Name = cProduct.Name,
-                Category = cProduct.Category,
-                Price = cProduct.Price,
-                Quantity = cProduct.Quantity,
-            };
-
+            var viewProduct = Mapper.MapSingleDetailedProductWithoutTotal(cProduct);
             return View(viewProduct);
         }
 
@@ -146,7 +117,7 @@ namespace StoreApplication.WebApp.Controllers
                     return View();
                 }
 
-                // if you have changed the name or category
+                // check if you have changed the name or category
                 if (foundProduct.Name != viewDP.Name || foundProduct.Category != viewDP.Category)
                 {
                     // see if the edited version already exist
@@ -158,8 +129,7 @@ namespace StoreApplication.WebApp.Controllers
                     }
                 }          
                 foundProduct = new CProduct(foundProduct.UniqueID, viewDP.Name, viewDP.Category, viewDP.Price);
-                _storeRepo.EditOneProduct(storeLoc,foundProduct, viewDP.Quantity);
-                    // add tempo data                                  
+                _storeRepo.EditOneProduct(storeLoc,foundProduct, viewDP.Quantity);                              
                 return RedirectToAction(nameof(Index));
             }
             catch( Exception e)
@@ -175,15 +145,7 @@ namespace StoreApplication.WebApp.Controllers
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             var cProduct = _storeRepo.GetOneProductWithQuantity(storeLoc,id);
-            var viewProduct = new DetailedProductViewModel
-            {
-                UniqueID = cProduct.UniqueID,
-                Name = cProduct.Name,
-                Category = cProduct.Category,
-                Price = cProduct.Price,
-                Quantity = cProduct.Quantity,
-            };
-
+            var viewProduct = Mapper.MapSingleDetailedProductWithoutTotal(cProduct);
             return View(viewProduct);
         }
 

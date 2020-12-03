@@ -1,4 +1,4 @@
-﻿using StoreApplication.Display;
+﻿ 
 using StoreLibrary;
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,7 @@ namespace StoreApplication.UnitTests
         /// testing the ability to simple display an order
         /// </summary>
         // move codes here to Main program for testing
+        /*
         [Fact]
         public void DisplayOneOrderPrintOnConsole()
         {
@@ -31,10 +32,13 @@ namespace StoreApplication.UnitTests
             dis.DisplayOneOrder(order);
             Assert.True(true);
         }
+        */
 
         /// <summary>
         /// testing the ability to simple display multiple orders
         /// </summary>
+        /// 
+        /*
         [Fact]
         public void DisplayAllOrdersPrintOnConsole()
         {
@@ -52,5 +56,6 @@ namespace StoreApplication.UnitTests
             dis.DisplayAllOrders(orders);
             Assert.True(true);
         }
+        */
     }
 }

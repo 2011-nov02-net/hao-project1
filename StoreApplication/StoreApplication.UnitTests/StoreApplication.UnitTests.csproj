@@ -31,7 +31,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StoreApplication.WebApp\StoreApplication.WebApp.csproj" />
-    <ProjectReference Include="..\StoreApplication\StoreApplication.csproj" />
     <ProjectReference Include="..\StoreDatamodel\StoreDatamodel.csproj" />
     <ProjectReference Include="..\StoreLibrary\StoreLibrary.csproj" />
   </ItemGroup>
