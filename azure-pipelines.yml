@@ -30,6 +30,7 @@ steps:
     scannerMode: 'MSBuild'
     projectKey: '2011-nov02-net_hao-project1'
     projectName: 'Techland 2.0 Sonar'
+    extraProperties: 'sonar.exclusions=**/lib/**'
 
 - task: UseDotNet@2
   displayName: dotnet 5.0
