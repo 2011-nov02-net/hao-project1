@@ -26,21 +26,33 @@ namespace StoreDatamodel
             var dbStore = context.Stores.FirstOrDefault(x => x.Storeloc == storeLoc);
             if (dbStore == null) return null;
             // store has no customer profile yet
-            CStore store = new CStore(dbStore.Storeloc, dbStore.Storephone);
-            return store;
+            CStore domainStore = new CStore(dbStore.Storeloc, dbStore.Storephone,dbStore.Zipcode);          
+            return domainStore;
         }
-        public List<CStore> GetAllStores()
+        public IEnumerable<CStore> GetAllStores()
         {
             using var context = new Project0databaseContext(_contextOptions);
             var dbStores = context.Stores.ToList();
             if (dbStores == null) return null;
+
+            var domainStores = dbStores.Select(x => new CStore
+            {
+                Storeloc = x.Storeloc,
+                Storephone = x.Storephone,
+                Zipcode = x.Zipcode,
+            });
+
+
+            /*
             List<CStore> stores = new List<CStore>();
             foreach (var store in dbStores)
             {
                 CStore s = new CStore(store.Storeloc, store.Storephone, store.Zipcode);
                 stores.Add(s);
             }
-            return stores;
+            */
+
+            return domainStores;
         }
         public IEnumerable<CStore> GetAllStoresByZipcode(string zipCode)
         { 
@@ -59,7 +71,6 @@ namespace StoreDatamodel
                 Storeloc = x.Storeloc,
                 Storephone = x.Storephone,
                 Zipcode = x.Zipcode,
-
             });
             return stores;
         }

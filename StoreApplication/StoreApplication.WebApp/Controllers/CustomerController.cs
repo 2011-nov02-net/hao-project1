@@ -27,7 +27,7 @@ namespace StoreApplication.WebApp.Controllers
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             var customers = _storeRepo.GetAllCustomersAtOneStore(storeLoc);
-            var viewCustomer = Mapper.MapCustomersWithoutEmail(customers);
+            var viewCustomer = ViewModelMapper.MapCustomersWithoutEmail(customers);
            
             if (!String.IsNullOrEmpty(firstName) && !String.IsNullOrEmpty(lastName))
             {    
@@ -61,7 +61,7 @@ namespace StoreApplication.WebApp.Controllers
                 ModelState.AddModelError("", "Another admin has just deleted this email");
                 return View();
             }
-            var viewCustomer = Mapper.MapSingleCustomerWithCredential(cCustomer, cCredential);
+            var viewCustomer = ViewModelMapper.MapSingleCustomerWithCredential(cCustomer, cCredential);
             return View(viewCustomer);
         }
 
@@ -123,7 +123,7 @@ namespace StoreApplication.WebApp.Controllers
         {
             var cCustomer = _storeRepo.GetOneCustomer(id);
             CCredential cCredential = _storeRepo.GetOneCredential(cCustomer.Email);
-            var viewCustomer = Mapper.MapSingleCustomerWithCredential(cCustomer, cCredential);
+            var viewCustomer = ViewModelMapper.MapSingleCustomerWithCredential(cCustomer, cCredential);
             return View(viewCustomer);
         }
 
@@ -192,7 +192,7 @@ namespace StoreApplication.WebApp.Controllers
         {
             var cCustomer = _storeRepo.GetOneCustomer(id);
             CCredential cCredential = _storeRepo.GetOneCredential(cCustomer.Email);
-            var viewCustomer = Mapper.MapSingleCustomerWithCredential(cCustomer, cCredential);
+            var viewCustomer = ViewModelMapper.MapSingleCustomerWithCredential(cCustomer, cCredential);
             return View(viewCustomer);
         }
 

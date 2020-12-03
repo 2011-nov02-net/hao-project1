@@ -158,7 +158,7 @@ namespace StoreApplication.WebApp.Controllers
                 return View(new List<DetailedProductViewModel>());
             }
 
-            var viewProducts = Mapper.MapDetailedProducts(products);
+            var viewProducts = ViewModelMapper.MapDetailedProducts(products);
              
             //fixed            
             double total = 0;
@@ -255,14 +255,7 @@ namespace StoreApplication.WebApp.Controllers
             {
                 return View( new List<OrderViewModel>());
             }
-
-            var viewOrder = OrderHistory.Select(x => new OrderViewModel
-            {
-                Orderid = x.Orderid,
-                StoreLoc = x.StoreLocation.Storeloc,
-                OrderedTime = x.OrderedTime,
-                TotalCost = x.TotalCost,
-            });
+            var viewOrder = ViewModelMapper.MapOrders(OrderHistory);
             return View(viewOrder);
         }
 
@@ -270,7 +263,7 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult OrderDetail(string id)
         {
             List<CProduct> products= _storeRepo.GetAllProductsOfOneOrder(id);
-            var viewproducts = Mapper.MapDetailedProducts(products);
+            var viewproducts = ViewModelMapper.MapDetailedProducts(products);
             return View(viewproducts);
         }  
     }

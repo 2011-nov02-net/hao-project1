@@ -26,7 +26,7 @@ namespace StoreApplication.WebApp.Controllers
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             var products = _storeRepo.GetInventoryOfOneStore(storeLoc);
-            var viewProduct = Mapper.MapDetailedProductsWithoutTotal(products);         
+            var viewProduct = ViewModelMapper.MapDetailedProductsWithoutTotal(products);         
             return View(viewProduct);
         }
 
@@ -42,7 +42,7 @@ namespace StoreApplication.WebApp.Controllers
                 ModelState.AddModelError("", "Another admin has just deleted this product");
                 return View();
             }           
-            var viewProduct = Mapper.MapSingleDetailedProduct(foundProduct);           
+            var viewProduct = ViewModelMapper.MapSingleDetailedProduct(foundProduct);           
             return View(viewProduct);
         }
 
@@ -92,7 +92,7 @@ namespace StoreApplication.WebApp.Controllers
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             var cProduct = _storeRepo.GetOneProductWithQuantity(storeLoc,id);
-            var viewProduct = Mapper.MapSingleDetailedProductWithoutTotal(cProduct);
+            var viewProduct = ViewModelMapper.MapSingleDetailedProductWithoutTotal(cProduct);
             return View(viewProduct);
         }
 
@@ -145,7 +145,7 @@ namespace StoreApplication.WebApp.Controllers
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             var cProduct = _storeRepo.GetOneProductWithQuantity(storeLoc,id);
-            var viewProduct = Mapper.MapSingleDetailedProductWithoutTotal(cProduct);
+            var viewProduct = ViewModelMapper.MapSingleDetailedProductWithoutTotal(cProduct);
             return View(viewProduct);
         }
 

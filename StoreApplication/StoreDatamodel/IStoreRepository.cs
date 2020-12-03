@@ -10,7 +10,7 @@ namespace StoreDatamodel
         // Get methods
         // store level
         CStore GetOneStore(string storeLoc);
-        List<CStore> GetAllStores();
+        IEnumerable<CStore> GetAllStores();
         IEnumerable<CStore> GetAllStoresByZipcode(string zipCode);
         List<CProduct> GetInventoryOfOneStore(string storeLoc);
         List<CProduct> GetInventoryOfOneStoreByCategory(string storeLoc, string category);

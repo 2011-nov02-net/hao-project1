@@ -9,7 +9,7 @@ namespace StoreLibrary
     /// <summary>
     /// static mapper class to convert objects between View and Model
     /// </summary>
-    static public class Mapper
+    static public class ViewModelMapper
     {
         // products
         static public IEnumerable<DetailedProductViewModel> MapDetailedProductsWithoutTotal(List<CProduct> products)
@@ -39,7 +39,7 @@ namespace StoreLibrary
         }
         static public DetailedProductViewModel MapSingleDetailedProductWithoutTotal(CProduct product)
         {
-            var viewProducts = new DetailedProductViewModel
+            var viewProduct = new DetailedProductViewModel
             {
                 UniqueID = product.UniqueID,
                 Name = product.Name,
@@ -47,11 +47,11 @@ namespace StoreLibrary
                 Price = product.Price,
                 Quantity = product.Quantity,
             };
-            return viewProducts;
+            return viewProduct;
         }
         static public DetailedProductViewModel MapSingleDetailedProduct (CProduct product )
         {
-            var viewProducts = new DetailedProductViewModel
+            var viewProduct = new DetailedProductViewModel
             {
                 UniqueID = product.UniqueID,
                 Name =  product.Name,
@@ -60,24 +60,24 @@ namespace StoreLibrary
                 Quantity = product.Quantity,
                 TotalCostPerProduct = product.Price * product.Quantity,
             };
-            return viewProducts;
+            return viewProduct;
         }
 
         // customers
         static public IEnumerable<CustomerViewModel> MapCustomersWithoutEmail(Dictionary<string,CCustomer> customers)
         { 
-            var viewCustomer = customers.Select(x => new CustomerViewModel
+            var viewCustomers = customers.Select(x => new CustomerViewModel
              {
                  Customerid = x.Value.Customerid,
                  Firstname = x.Value.FirstName,
                  Lastname = x.Value.LastName,
                  Phonenumber = x.Value.PhoneNumber,
              });
-            return viewCustomer;
+            return viewCustomers;
         }
         static public IEnumerable<CustomerViewModel> MapCustomers(Dictionary<string, CCustomer> customers)
         {
-            var viewCustomer = customers.Select(x => new CustomerViewModel
+            var viewCustomers = customers.Select(x => new CustomerViewModel
             {
                 Customerid = x.Value.Customerid,
                 Firstname = x.Value.FirstName,
@@ -85,7 +85,7 @@ namespace StoreLibrary
                 Phonenumber = x.Value.PhoneNumber,
                 Email = x.Value.Email,
             });
-            return viewCustomer;
+            return viewCustomers;
         }
         static public CustomerViewModel MapSingleCustomerWithCredential(CCustomer customer, CCredential credential )
         {
@@ -101,5 +101,18 @@ namespace StoreLibrary
             return viewCustomer;
         }
 
+        // orders
+        static public IEnumerable<OrderViewModel> MapOrders(List<COrder> orders)
+        {
+            var viewOrders = orders.Select(x => new OrderViewModel
+            {
+                Orderid = x.Orderid,
+                StoreLoc = x.StoreLocation.Storeloc,
+                OrderedTime = x.OrderedTime,
+                TotalCost = x.TotalCost,
+            });
+            return viewOrders;
+               
+        }
     }
 }
