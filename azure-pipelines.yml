@@ -26,7 +26,7 @@ steps:
     packageType: 'sdk'
     version: '5.0.x'
 
-- script: dotnet build --configuration $(buildConfiguration)
+- script: dotnet publish --configuration $(buildConfiguration) --output publish
   displayName: 'dotnet build $(buildConfiguration)'
   workingDirectory: StoreApplication
 
@@ -36,3 +36,10 @@ steps:
     command: 'test'
     workingDirectory: StoreApplication
     publishTestResults: true
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure subscription 1(2f48b30f-7fe3-404e-90b7-a9e6dfbbda20)'
+    appType: 'webApp'
+    WebAppName: 'Hao-Techland2'
+    packageForLinux: 'StoreApplication/publish'
