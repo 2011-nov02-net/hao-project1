@@ -67,6 +67,7 @@ stages:
       artifact: app  
 
 - stage: release
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: app_service
     environment: prod
@@ -77,13 +78,12 @@ stages:
           - download: current
             artifact: app
           - task: AzureRmWebAppDeployment@4
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: 'Azure subscription 1(2f48b30f-7fe3-404e-90b7-a9e6dfbbda20)'
               appType: 'webApp'
               WebAppName: 'Hao-Techland2'
-              packageForLinux: '$(System.ArtifactsDirectory)/app'
+              packageForLinux: '$(pipeline.Workspace)/app'
             
 ##- task: AzureRmWebAppDeployment@4
   ##condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
