@@ -74,13 +74,24 @@ namespace StoreDatamodel
             });
             return stores;
         }
-        public List<CProduct> GetInventoryOfOneStore(string storeLoc)
+        public IEnumerable<CProduct> GetInventoryOfOneStore(string storeLoc)
         {
             using var context = new Project0databaseContext(_contextOptions);
             var dbStore = context.Stores.Include(x => x.Inventories)
                                             .ThenInclude(x => x.Product)
                                                 .FirstOrDefault(x => x.Storeloc == storeLoc);
             if (dbStore == null) return null;
+
+            var domainInv = dbStore.Inventories.Select(x => new CProduct
+            {
+                UniqueID = x.Productid,
+                Name = x.Product.Name,
+                Category = x.Product.Category,
+                Price = x.Product.Price,
+                Quantity = x.Quantity,
+
+            });
+            /*
             List<CProduct> inventory = new List<CProduct>();
             foreach (var product in dbStore.Inventories)
             {
@@ -88,7 +99,8 @@ namespace StoreDatamodel
                                             product.Product.Category, product.Product.Price, product.Quantity);
                 inventory.Add(p);
             }
-            return inventory;
+            */
+            return domainInv;
         }
         public List<CProduct> GetInventoryOfOneStoreByCategory(string storeLoc,string category)
         {
