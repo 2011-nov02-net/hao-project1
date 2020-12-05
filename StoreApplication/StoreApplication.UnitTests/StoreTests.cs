@@ -11,6 +11,9 @@ namespace StoreApplication.UnitTests
     /// </summary>
     public class StoreTests
     {
+
+
+
         /// <summary>
         /// testing its constructor
         /// </summary>

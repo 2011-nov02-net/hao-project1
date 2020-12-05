@@ -89,7 +89,7 @@ namespace StoreLibrary
         /// store's behavior to restock
         /// add a product's quantity if it already exists, otherwise create a new pair
         /// </summary>
-        public void AddProducts(List<CProduct> supply)
+        public void AddProducts(IEnumerable<CProduct> supply)
         {
             foreach (var product in supply)
             {

@@ -22,11 +22,24 @@ namespace StoreApplication.WebApp.Controllers
         }
 
         // updated with quantity
-        public ActionResult Index()
+        public ActionResult Index(string category)
         {
-            string storeLoc = TempData.Peek("adminLoc").ToString();
+            string storeLoc = TempData.Peek("adminLoc").ToString();            
             var products = _storeRepo.GetInventoryOfOneStore(storeLoc);
-            var viewProduct = ViewModelMapper.MapDetailedProductsWithoutTotal(products);         
+            var viewProduct = ViewModelMapper.MapDetailedProductsWithoutTotal(products);
+
+            if (!String.IsNullOrEmpty(category))
+            {
+                var foundProducts = _storeRepo.GetInventoryOfOneStoreByCategory(storeLoc, category);
+                viewProduct = foundProducts.Select(x => new DetailedProductViewModel
+                {
+                    UniqueID = x.UniqueID,
+                    Name = x.Name,
+                    Category = x.Category,
+                    Price = x.Price,
+                    Quantity = x.Quantity,
+                });
+            }
             return View(viewProduct);
         }
 

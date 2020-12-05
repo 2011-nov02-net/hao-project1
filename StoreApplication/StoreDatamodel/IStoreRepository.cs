@@ -12,7 +12,7 @@ namespace StoreDatamodel
         CStore GetOneStore(string storeLoc);
         IEnumerable<CStore> GetAllStores();
         IEnumerable<CStore> GetAllStoresByZipcode(string zipCode);
-        List<CProduct> GetInventoryOfOneStore(string storeLoc);
+        IEnumerable<CProduct> GetInventoryOfOneStore(string storeLoc);
         List<CProduct> GetInventoryOfOneStoreByCategory(string storeLoc, string category);
 
         // customer level
@@ -39,6 +39,7 @@ namespace StoreDatamodel
         // Add methods
         void StoreAddOneProduct(string storeLoc, CProduct product, int quantity);
         void StoreAddOneCustomer(string storeLoc, CCustomer customer);
+        void AddOneStore(CStore store);
         void AddOneCustomer(CCustomer customer);
         void AddOneCredential(CCredential cerdential);
 

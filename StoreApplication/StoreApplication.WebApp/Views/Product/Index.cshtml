@@ -12,6 +12,20 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+
+<form asp-controller="Product" asp-action="Index" method="get">
+    <p>
+        Category: <input type="text" name="category">
+
+        <input type="submit" value="Search" />
+    </p>
+
+</form>
+
+
+
+
 <table class="table">
     <thead>
         <tr>
@@ -34,30 +48,31 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UniqueID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniqueID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
 
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.UniqueID })|
-                @Html.ActionLink("Details", "Details", new { id = item.UniqueID })|
-                @Html.ActionLink("Delete", "Delete", new { id = item.UniqueID })
-            </td>
-        </tr>
-}
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.UniqueID })|
+                    @Html.ActionLink("Details", "Details", new { id = item.UniqueID })|
+                    @Html.ActionLink("Delete", "Delete", new { id = item.UniqueID })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

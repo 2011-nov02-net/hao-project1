@@ -12,7 +12,7 @@ namespace StoreLibrary
     static public class ViewModelMapper
     {
         // products
-        static public IEnumerable<DetailedProductViewModel> MapDetailedProductsWithoutTotal(List<CProduct> products)
+        static public IEnumerable<DetailedProductViewModel> MapDetailedProductsWithoutTotal(IEnumerable<CProduct> products)
         {
             var viewProducts = products.Select(x => new DetailedProductViewModel
             {
@@ -24,7 +24,7 @@ namespace StoreLibrary
             });
             return viewProducts;
         }
-        static public IEnumerable<DetailedProductViewModel> MapDetailedProducts(List<CProduct> products )
+        static public IEnumerable<DetailedProductViewModel> MapDetailedProducts(IEnumerable<CProduct> products )
         {
             var viewProducts = products.Select(x => new DetailedProductViewModel
             {

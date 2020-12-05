@@ -22,13 +22,26 @@ namespace StoreApplication.WebApp.Controllers
         }
 
         // GET: AdminController
-        public ActionResult Index()
+        public ActionResult Index(string zipCode)
         {
             var viewStore = _storeRepo.GetAllStores().Select(x => new StoreViewModel
             {
                 Storeloc = x.Storeloc,
                 Storephone = x.Storephone,
+                Zipcode = x.Zipcode
             });
+
+            if (!String.IsNullOrEmpty(zipCode))
+            {
+
+                var stores = _storeRepo.GetAllStoresByZipcode(zipCode);
+                viewStore = stores.Select(x => new StoreViewModel
+                {
+                    Storeloc = x.Storeloc,
+                    Storephone = x.Storephone,
+                    Zipcode = x.Zipcode,
+                });
+            }
             return View(viewStore);
         }
 

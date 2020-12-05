@@ -9,6 +9,18 @@
     Layout = "_EmptyLayout";
 }
 
+<h1>Select A Location</h1>
+
+<form asp-controller="Admin" asp-action="Index" method="get">
+    <p>
+        Zip Code: <input type="text" name="zipCode">
+        <input type="submit" value="Search" />
+    </p>
+
+</form>
+
+
+
 <table class="table">
     <thead>
         <tr>
@@ -18,25 +30,32 @@
             <th>
                 @Html.DisplayNameFor(model => model.Storephone)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Zipcode)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Storeloc)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Storephone)
-                </td>
-                <td>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Storeloc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Storephone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Zipcode)
+            </td>
 
-                    @Html.ActionLink("Select", "Select", new { storeLoc= item.Storeloc })
+            <td>
 
-                </td>
-            </tr>
+                @Html.ActionLink("Select", "Select", new { storeLoc = item.Storeloc })
+
+            </td>
+        </tr>
         }
     </tbody>
 </table>

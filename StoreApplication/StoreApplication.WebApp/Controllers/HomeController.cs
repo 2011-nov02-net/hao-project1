@@ -27,6 +27,7 @@ namespace StoreApplication.WebApp.Controllers
 
         public IActionResult Index()
         {
+            // remove any temp data that could've remained
             TempData.Remove("User");
             TempData.Remove("storeLoc");
             TempData.Remove("Total");

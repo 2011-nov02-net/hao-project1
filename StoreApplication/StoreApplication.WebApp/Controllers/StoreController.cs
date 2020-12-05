@@ -204,7 +204,7 @@ namespace StoreApplication.WebApp.Controllers
             COrder newOrder = new COrder(orderID, store, cCustomer ,totalCost);
 
             // check against inventory
-            List<CProduct> inventory = _storeRepo.GetInventoryOfOneStore(storeLoc);
+            var inventory = _storeRepo.GetInventoryOfOneStore(storeLoc);
             store.CleanInventory();
             store.AddProducts(inventory);
 

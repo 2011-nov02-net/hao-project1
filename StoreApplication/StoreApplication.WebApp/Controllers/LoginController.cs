@@ -23,14 +23,12 @@ namespace StoreApplication.WebApp.Controllers
         }
 
 
-        // GET: LoginController/Create
         public ActionResult Index()
         {
             return View();
         }
 
-        //
-        // POST: LoginController/Create
+    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(LoginViewModel viewLogin)
