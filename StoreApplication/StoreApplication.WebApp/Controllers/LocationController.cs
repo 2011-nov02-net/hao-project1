@@ -55,7 +55,7 @@ namespace StoreApplication.WebApp.Controllers
                     return View(viewStore);
                 }
 
-                // unifinished
+                // unfinished
                 var newLocation = new CStore(viewStore.Storeloc, viewStore.Storephone, viewStore.Zipcode);
                 _storeRepo.AddOneStore(newLocation);
                 return RedirectToAction(nameof(Index));
