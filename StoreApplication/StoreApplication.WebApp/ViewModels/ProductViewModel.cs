@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StoreApplication.WebApp.ViewModels
 {
+    // replaced by DetailedProductViewModel
     public class ProductViewModel
     {
         // [Required]

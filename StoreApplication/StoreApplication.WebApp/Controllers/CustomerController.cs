@@ -30,14 +30,7 @@ namespace StoreApplication.WebApp.Controllers
             {
                 // list, not mapped
                 var searchedCustomers = _storeRepo.GetAllCustomersAtOneStoreByName(storeLoc, firstName, lastName);
-                viewCustomer = searchedCustomers.Select(x => new CustomerViewModel
-                {
-                    Customerid = x.Customerid,
-                    Firstname = x.FirstName,
-                    Lastname = x.LastName,
-                    Phonenumber = x.PhoneNumber,
-                });
-
+                viewCustomer = ViewModelMapper.MapCustomersWithoutEmail(searchedCustomers);
             }
             return View(viewCustomer);
         }
@@ -86,7 +79,6 @@ namespace StoreApplication.WebApp.Controllers
                     ModelState.AddModelError("", "Passwords do not match");
                     return View();
                 }
-
 
                 CCustomer cCustomer = _storeRepo.GetOneCustomerByEmail(viewCustomer.Email);
                 if (cCustomer != null)
@@ -221,10 +213,8 @@ namespace StoreApplication.WebApp.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "error while trying to delete a product");
-                ModelState.AddModelError("", "Trying to delete a product that does not exist");
-                var viewMode = _storeRepo.GetOneProduct(id);
-
+                _logger.LogError(e, "error while trying to delete a customer");
+                ModelState.AddModelError("", "Trying to delete a customer that does not exist");
                 return View();
             }
         }

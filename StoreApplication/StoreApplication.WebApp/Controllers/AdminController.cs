@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
+using StoreLibrary;
 using System;
 using System.Linq;
 
@@ -21,25 +22,14 @@ namespace StoreApplication.WebApp.Controllers
         // GET: AdminController
         public ActionResult Index(string zipCode)
         {
-            var viewStore = _storeRepo.GetAllStores().Select(x => new StoreViewModel
-            {
-                Storeloc = x.Storeloc,
-                Storephone = x.Storephone,
-                Zipcode = x.Zipcode
-            });
-
+            var stores = _storeRepo.GetAllStores();
+            var viewStores = ViewModelMapper.MapStores(stores);             
             if (!String.IsNullOrEmpty(zipCode))
             {
-
-                var stores = _storeRepo.GetAllStoresByZipcode(zipCode);
-                viewStore = stores.Select(x => new StoreViewModel
-                {
-                    Storeloc = x.Storeloc,
-                    Storephone = x.Storephone,
-                    Zipcode = x.Zipcode,
-                });
+                var searchedStores = _storeRepo.GetAllStoresByZipcode(zipCode);
+                viewStores = ViewModelMapper.MapStores(searchedStores);
             }
-            return View(viewStore);
+            return View(viewStores);
         }
 
         public ActionResult Select(string storeLoc)

@@ -4,6 +4,7 @@ using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
 using StoreLibrary;
 using System;
+using System.Net.Mail;
 
 namespace StoreApplication.WebApp.Controllers
 {
@@ -18,12 +19,10 @@ namespace StoreApplication.WebApp.Controllers
             _logger = logger;
         }
 
-
         public ActionResult Index()
         {
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -32,6 +31,13 @@ namespace StoreApplication.WebApp.Controllers
             try
             {
                 if (!ModelState.IsValid)
+                {
+                    ModelState.AddModelError("", "Invalid login format");
+                    return View();
+                }
+
+                MailAddress result;
+                if (!MailAddress.TryCreate(viewLogin.Email, out result))
                 {
                     ModelState.AddModelError("", "Invalid login format");
                     return View();
@@ -66,7 +72,6 @@ namespace StoreApplication.WebApp.Controllers
                     TempData["User"] = viewLogin.Email;
                     TempData.Keep("User");
                     TempData[viewLogin.Email] = 1;
-
                 }
                 else
                 {
@@ -102,6 +107,14 @@ namespace StoreApplication.WebApp.Controllers
                     ModelState.AddModelError("", "Invalid input format");
                     return View();
                 }
+
+                MailAddress result;
+                if (!MailAddress.TryCreate(viewCustomer.Email, out result))
+                {
+                    ModelState.AddModelError("", "Invalid login format");
+                    return View();
+                }
+
                 if (viewCustomer.Password != viewCustomer.ConfirmPassword)
                 {
                     ModelState.AddModelError("", "Passwords do not match");
@@ -129,7 +142,6 @@ namespace StoreApplication.WebApp.Controllers
                     TempData.Keep("User");
                     // changed to shopping cart later
                     TempData[cCustomer.Email] = 1;
-
                 }
                 return RedirectToAction("Index", "Store");
             }

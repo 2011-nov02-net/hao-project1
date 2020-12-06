@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -68,6 +69,7 @@ namespace StoreLibrary
             }
             catch (FileNotFoundException e)
             {
+                Console.WriteLine(e);
                 return new CStore();
             }
             return data;
@@ -116,6 +118,7 @@ namespace StoreLibrary
             }
             catch (FileNotFoundException e)
             {
+                Console.WriteLine(e);
                 return new List<CProduct>();
             }
             return data;

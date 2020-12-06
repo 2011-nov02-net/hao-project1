@@ -29,14 +29,7 @@ namespace StoreApplication.WebApp.Controllers
             if (!String.IsNullOrEmpty(category))
             {
                 var foundProducts = _storeRepo.GetInventoryOfOneStoreByCategory(storeLoc, category);
-                viewProduct = foundProducts.Select(x => new DetailedProductViewModel
-                {
-                    UniqueID = x.UniqueID,
-                    Name = x.Name,
-                    Category = x.Category,
-                    Price = x.Price,
-                    Quantity = x.Quantity,
-                });
+                viewProduct = ViewModelMapper.MapDetailedProductsWithoutTotal(foundProducts);
             }
             return View(viewProduct);
         }
@@ -182,9 +175,7 @@ namespace StoreApplication.WebApp.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "error while trying to delete a product");
-                ModelState.AddModelError("", "Trying to delete a product that does not exist");
-                var viewMode = _storeRepo.GetOneProduct(id);
-
+                ModelState.AddModelError("", "Trying to delete a product that does not exist");    
                 return View();
             }
         }

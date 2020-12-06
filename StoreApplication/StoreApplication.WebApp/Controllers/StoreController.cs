@@ -24,23 +24,13 @@ namespace StoreApplication.WebApp.Controllers
 
         public ActionResult Index(string zipCode)
         {
-            var viewStore = _storeRepo.GetAllStores().Select(x => new StoreViewModel
-            {
-                Storeloc = x.Storeloc,
-                Storephone = x.Storephone,
-                Zipcode = x.Zipcode,
-            });
+            var stores = _storeRepo.GetAllStores();
+            var viewStore = ViewModelMapper.MapStores(stores);
 
             if (!String.IsNullOrEmpty(zipCode))
             {
-
-                var stores = _storeRepo.GetAllStoresByZipcode(zipCode);
-                viewStore = stores.Select(x => new StoreViewModel
-                {
-                    Storeloc = x.Storeloc,
-                    Storephone = x.Storephone,
-                    Zipcode = x.Zipcode,
-                });
+                var searchedStores = _storeRepo.GetAllStoresByZipcode(zipCode);
+                viewStore = ViewModelMapper.MapStores(searchedStores);
             }
             return View(viewStore);
         }
@@ -50,24 +40,13 @@ namespace StoreApplication.WebApp.Controllers
         {
 
             if (storeLoc == null) storeLoc = TempData.Peek("storeLoc").ToString();
-            var viewProduct = _storeRepo.GetInventoryOfOneStore(storeLoc).Select(cProduct => new ProductViewModel
-            {
-                UniqueID = cProduct.UniqueID,
-                Name = cProduct.Name,
-                Category = cProduct.Category,
-                Price = cProduct.Price,
-            });
+            var products = _storeRepo.GetInventoryOfOneStore(storeLoc);
+            var viewProduct = ViewModelMapper.MapNonDetailedProducts(products);
 
             if (!String.IsNullOrEmpty(category))
             {
-                var products = _storeRepo.GetInventoryOfOneStoreByCategory(storeLoc, category);
-                viewProduct = products.Select(cProduct => new ProductViewModel
-                {
-                    UniqueID = cProduct.UniqueID,
-                    Name = cProduct.Name,
-                    Category = cProduct.Category,
-                    Price = cProduct.Price,
-                });
+                var foundProducts = _storeRepo.GetInventoryOfOneStoreByCategory(storeLoc, category);
+                viewProduct = ViewModelMapper.MapNonDetailedProducts(foundProducts);
             }
             TempData["storeLoc"] = storeLoc;
             TempData.Keep("storeLoc");
@@ -79,13 +58,7 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult AddToCart(string id)
         {
             var cProduct = _storeRepo.GetOneProduct(id);
-            var viewDP = new DetailedProductViewModel
-            {
-                UniqueID = cProduct.UniqueID,
-                Name = cProduct.Name,
-                Category = cProduct.Category,
-                Price = cProduct.Price,
-            };
+            var viewDP = ViewModelMapper.MapSingleNonDetailedProduct(cProduct);
             return View(viewDP);
         }
 
@@ -226,7 +199,6 @@ namespace StoreApplication.WebApp.Controllers
             }
             else
             {
-                isSuccessful = false;
                 ModelState.AddModelError("", "Quantity set exceeds the maximum allowed");
                 _logger.LogError("Quantity set exceeds the maximum allowed");
                 return RedirectToAction("CheckCart");

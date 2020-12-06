@@ -39,7 +39,7 @@ namespace StoreDatamodel
         void StoreAddOneCustomer(string storeLoc, CCustomer customer);
         void AddOneStore(CStore store);
         void AddOneCustomer(CCustomer customer);
-        void AddOneCredential(CCredential cerdential);
+        void AddOneCredential(CCredential credential);
 
         // Edit methods
         public void EditOneProduct(string storeLoc, CProduct product, int quantity);

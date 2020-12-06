@@ -20,9 +20,8 @@ namespace StoreApplication.WebApp.ViewModels
         [StringLength(5)]
         public string Zipcode { get; set; }
 
+        // for drop down menu
         public IEnumerable<StoreViewModel> Locations { get; set; }
-
-        // no attributes needed
-        public IEnumerable<ProductViewModel> Products { get; set; }
+        
     }
 }

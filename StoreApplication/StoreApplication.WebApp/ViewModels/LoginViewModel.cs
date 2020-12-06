@@ -5,6 +5,7 @@ namespace StoreApplication.WebApp.ViewModels
     public class LoginViewModel
     {
         [Required]
+        //[RegularExpression("")]
         public string Email { get; set; }
 
         [Required]

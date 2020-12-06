@@ -1,24 +1,20 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-.header {
-    background-color: darkorange;
-}
-
 a.navbar-brand {
 
-  white-space: normal;
+  white-space:normal;
   text-align: center;
   word-break: break-all;
 }
 
 /* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+a { 
+  font-size:medium;
+  color: #ff6a00;
 }
 
 .btn-primary {
-
   color: White;
   background-color: black;
   border-color: darkorange;
@@ -70,7 +66,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    background-color: whitesmoke;
+    background-color: #fffef7;
 }
 .footer {
     background-color: darkorange;

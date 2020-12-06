@@ -15,40 +15,22 @@ namespace StoreApplication.WebApp.Controllers
 
         private readonly IStoreRepository _storeRepo;
         private readonly ILogger<OrderController> _logger;
-
         public OrderController(IStoreRepository storeRepo, ILogger<OrderController> logger)
         {
             _storeRepo = storeRepo;
             _logger = logger;
         }
 
-        // GET: OrderController
         public ActionResult Index(string firstName, string lastName)
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             Dictionary<string, CCustomer> customers = _storeRepo.GetAllCustomersAtOneStore(storeLoc);
-            var viewCustomer = customers.Select(x => new CustomerViewModel
-            {
-                Customerid = x.Value.Customerid,
-                Firstname = x.Value.FirstName,
-                Lastname = x.Value.LastName,
-                Phonenumber = x.Value.PhoneNumber,
-                Email = x.Value.Email,
-            });
-
+            var viewCustomer = ViewModelMapper.MapCustomers(customers);
             if (!String.IsNullOrEmpty(firstName) && !String.IsNullOrEmpty(lastName))
             {
                 // get
                 var searchedCustomers = _storeRepo.GetAllCustomersAtOneStoreByName(storeLoc, firstName, lastName);
-                viewCustomer = searchedCustomers.Select(x => new CustomerViewModel
-                {
-                    Customerid = x.Customerid,
-                    Firstname = x.FirstName,
-                    Lastname = x.LastName,
-                    Phonenumber = x.PhoneNumber,
-
-                });
-
+                viewCustomer = ViewModelMapper.MapCustomers(searchedCustomers);
             }
             return View(viewCustomer);
         }
@@ -139,20 +121,9 @@ namespace StoreApplication.WebApp.Controllers
 
         public ActionResult Products(string id)
         {
-            // order id passed in
             var products = _storeRepo.GetAllProductsOfOneOrder(id);
-            var viewProduct = products.Select(x => new DetailedProductViewModel
-            {
-                UniqueID = x.UniqueID,
-                Name = x.Name,
-                Category = x.Category,
-                Price = x.Price,
-                Quantity = x.Quantity,
-                TotalCostPerProduct = x.Price * x.Quantity,
-
-            });
+            var viewProduct = ViewModelMapper.MapDetailedProducts(products);
             return View(viewProduct);
-
         }
     }
 }

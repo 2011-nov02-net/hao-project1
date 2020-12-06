@@ -24,12 +24,7 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult Index()
         {
             var locations = _storeRepo.GetAllStores();
-            var viewStores = locations.Select(x => new StoreViewModel
-            {
-                Storeloc = x.Storeloc,
-                Storephone = x.Storephone,
-                Zipcode = x.Zipcode,
-            });
+            var viewStores = ViewModelMapper.MapStores(locations);
             return View(viewStores);
         }
 

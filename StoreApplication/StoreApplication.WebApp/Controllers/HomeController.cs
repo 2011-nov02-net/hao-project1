@@ -35,13 +35,10 @@ namespace StoreApplication.WebApp.Controllers
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Login(int notUsed)
         {
-
-
             return View();
         }
 
@@ -49,8 +46,6 @@ namespace StoreApplication.WebApp.Controllers
         {
             return View();
         }
-
-
 
         public IActionResult Privacy()
         {
