@@ -1,5 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
+﻿ 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using StoreDatamodel;
 using StoreLibrary;
 using System;
@@ -13,13 +14,20 @@ using Xunit;
 namespace StoreApplication.UnitTests
 {
     public class StoreRepositoryTest
-    {           
+    {   
+        
         // repository only handles data logic, if conditions are all in controllers
         // test get methods first to avoid duplicate records/null references
         [Fact]
         public void Database_GetAProductByNameAndCategory()
         {
             // arrange
+            /*
+            IServiceCollection services;
+            services.AddDbContext<AspDbContext>(options =>
+    options.UseSqlServer(config.GetConnectionString("optimumDB")));
+            */
+
             var optionsBuilder = new DbContextOptionsBuilder<Project0databaseContext>();
             optionsBuilder.UseSqlServer(GetConnectionString());
             var option = optionsBuilder.Options;
@@ -128,11 +136,9 @@ namespace StoreApplication.UnitTests
         }
         */
 
-
-
         static string GetConnectionString()
         {
-            string path = "../../../../../../project0-connection-string.json";
+            string path = "../../../pcs.json";
             string json;
             try
             {
