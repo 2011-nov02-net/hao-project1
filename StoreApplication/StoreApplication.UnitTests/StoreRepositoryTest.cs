@@ -143,6 +143,7 @@ namespace StoreApplication.UnitTests
             }
             catch (FileNotFoundException e)
             {
+                Console.WriteLine(e);
                 Console.WriteLine($"required file {path} not found. should just be the connection string in quotes.");
                 throw;
             }
