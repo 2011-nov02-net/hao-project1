@@ -15,7 +15,7 @@
 
 <div>
 
-  <img src ="/options.jpg">
+    <img src="/options.jpg">
 
 </div>
 
@@ -23,8 +23,12 @@
 
     <p> Order Total: @TempData.Peek("Total") </p>
 
-    </div>
+</div>
 
 <form asp-action="Checkout">
-    <input type="submit" value="Place Your Order" class="btn btn-danger" /> 
+    <input type="submit" value="Place Your Order" class="btn btn-danger" />
 </form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -5,7 +5,7 @@
 }
 
 @{ Layout = "_StoreLayout";
-    }
+}
 
 <h1>CheckCart</h1>
 
@@ -34,35 +34,40 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UniqueID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalCostPerProduct)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.UniqueID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.UniqueID })
-            </td>
-        </tr>
-}       
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniqueID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalCostPerProduct)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.UniqueID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.UniqueID })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 <div class="checkout">
     <p>Order Total: @TempData.Peek("Total")</p>
-     <a asp-action="Proceed">Proceed To Checkout</a>
+    <a asp-action="Proceed">Proceed To Checkout</a>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

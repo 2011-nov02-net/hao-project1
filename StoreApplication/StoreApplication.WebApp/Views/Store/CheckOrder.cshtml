@@ -43,10 +43,14 @@
                 </td>
                 <td>
 
-                    @Html.ActionLink("Order Details", "OrderDetail", new { id = item.Orderid }) 
+                    @Html.ActionLink("Order Details", "OrderDetail", new { id = item.Orderid })
 
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

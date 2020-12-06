@@ -49,28 +49,11 @@ namespace StoreLibrary
                 totalCost = value;
             } }
 
-        private List<CProduct> productList = new List<CProduct>();
 
         /// <summary>
         /// property to contain a list of products in an order, total quantity must not exceed 500
         /// </summary>
-        public List<CProduct> ProductList {
-            get
-            { return productList; }
-            set
-            {
-                // rejects orders with unreasonably high product quantities
-                int quantity = 0;
-                foreach (var p in productList)
-                {
-                    quantity += p.Quantity;
-                }
-                if (quantity >= 500)
-                {
-                    throw new ArgumentException("total number of products exceeds maximum");
-                }
-                productList = value;
-            } }
+        public List<CProduct> ProductList { get; set; }        
 
         /// <summary>
         /// default constructor

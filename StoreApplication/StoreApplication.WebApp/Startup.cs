@@ -36,6 +36,7 @@ namespace StoreApplication.WebApp
                 options.UseSqlServer(connectionString));
             services.AddScoped<IStoreRepository, StoreRepository>();
             services.AddControllersWithViews();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

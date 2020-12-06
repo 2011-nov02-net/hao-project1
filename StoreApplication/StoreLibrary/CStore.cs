@@ -85,6 +85,23 @@ namespace StoreLibrary
             return total;
         }
 
+        public bool CalculateThreshhold(List<CProduct> productList)
+        {
+            int quantity = 0;
+            foreach (var product in productList)
+            {
+                quantity += product.Quantity;
+            }
+            if (quantity >= 500)
+            {
+                return false;
+                //throw new ArgumentException("total number of products exceeds maximum");
+            }
+            else
+                return true;
+
+        }
+
         /// <summary>
         /// store's behavior to restock
         /// add a product's quantity if it already exists, otherwise create a new pair
@@ -164,7 +181,8 @@ namespace StoreLibrary
                     // update inventory
                     Inventory[purchasedProduct.UniqueID].Quantity -= purchasedProduct.Quantity;
                 }
-            }      
+            }
+            
         }
 
         /// <summary>

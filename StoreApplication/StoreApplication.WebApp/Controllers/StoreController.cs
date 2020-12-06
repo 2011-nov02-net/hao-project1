@@ -171,6 +171,17 @@ namespace StoreApplication.WebApp.Controllers
             return View(viewProducts);
         }
 
+
+        public ActionResult Edit()
+        {
+            return View();
+        }
+
+        public ActionResult Delete()
+        {
+            return View();
+        }
+
        
         public ActionResult Proceed()
         {
@@ -178,6 +189,7 @@ namespace StoreApplication.WebApp.Controllers
             // then finally checkout
             if (!TempData.ContainsKey("Cart"))
             {
+                ModelState.AddModelError("","Cannot checkout empty cart");
                 return RedirectToAction("CheckCart");
             }
             return View();
@@ -189,7 +201,7 @@ namespace StoreApplication.WebApp.Controllers
             List<CProduct> products = persist.ReadProductsTempData(TempData.Peek("Cart").ToString());
             if (products == null)
             {
-                return View();
+                return RedirectToAction("CheckCart");
             }
 
             // orderid , store, customer, ordertime, totalcost
@@ -209,21 +221,27 @@ namespace StoreApplication.WebApp.Controllers
             store.AddProducts(inventory);
 
             bool isSuccessful = false;
-            try
+            if (store.CalculateThreshhold(products))
             {
                 // quantity limits
                 newOrder.ProductList = products;
-                isSuccessful = true;               
+                isSuccessful = true;
             }
-            catch (ArgumentException e)
+            else
             {
                 isSuccessful = false;
-                _logger.LogError(e, "Quantity set exceeds the maximum allowed");
-            }
+                ModelState.AddModelError("", "Quantity set exceeds the maximum allowed");
+                _logger.LogError("Quantity set exceeds the maximum allowed");
+                return RedirectToAction("CheckCart");
+            }           
             if (isSuccessful)
             {
+     
                 if (!store.CheckInventory(newOrder))
                 {
+                    ModelState.AddModelError("", "Not enough left in the inventory");
+                    _logger.LogError("Not enough left in the inventory");
+                    return RedirectToAction("CheckCart");
                 }
                 else
                 {                  
