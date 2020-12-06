@@ -100,14 +100,7 @@ namespace StoreApplication.UnitTests
             var viewResult = Assert.IsAssignableFrom<RedirectToActionResult>(actionResult);
             mockStoreRepository.Verify(r => r.AddOneStore(It.IsAny<CStore>()), Times.Once);
             */
-
-
-
-
-
         }
-
-
     }
 }
 

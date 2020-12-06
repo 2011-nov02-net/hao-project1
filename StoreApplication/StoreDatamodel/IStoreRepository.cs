@@ -47,6 +47,7 @@ namespace StoreDatamodel
         public void EditOneProduct(string storeLoc, CProduct product, int quantity);
 
         // Delete methods
+        void DeleteOneStore(string storeLoc);
         void DeleteOneProduct(string storeLoc, string productID);
         void DeleteOneCustomer(string storeLoc, string customerID);
         void DelelteOneCredential(string email);

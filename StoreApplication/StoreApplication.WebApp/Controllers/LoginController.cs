@@ -14,9 +14,9 @@ namespace StoreApplication.WebApp.Controllers
     public class LoginController : Controller
     {
 
-        private readonly ILogger<ProductController> _logger;
+        private readonly ILogger<LoginController> _logger;
         private readonly IStoreRepository _storeRepo;
-        public LoginController(IStoreRepository storeRepo, ILogger<ProductController> logger)
+        public LoginController(IStoreRepository storeRepo, ILogger<LoginController> logger)
         {
             _storeRepo = storeRepo;
             _logger = logger;

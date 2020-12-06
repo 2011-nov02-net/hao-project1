@@ -41,6 +41,12 @@ namespace StoreApplication.WebApp.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
 
         // POST: LocationController/Create
         [HttpPost]

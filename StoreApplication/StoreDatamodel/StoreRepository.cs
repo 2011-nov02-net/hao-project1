@@ -412,6 +412,16 @@ namespace StoreDatamodel
         }
 
         // Delete methods
+        public void DeleteOneStore(string storeLoc)
+        { 
+            using var context = new Project0databaseContext(_contextOptions);
+            var dbStore = context.Stores.FirstOrDefault(x => x.Storeloc == storeLoc);
+            if (dbStore != null)
+            {
+                context.Stores.Remove(dbStore);
+                context.SaveChanges();
+            }
+        }
         public void DeleteOneProduct(string storeLoc, string productID)
         {
             using var context = new Project0databaseContext(_contextOptions);

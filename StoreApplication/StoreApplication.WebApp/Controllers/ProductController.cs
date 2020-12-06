@@ -20,7 +20,7 @@ namespace StoreApplication.WebApp.Controllers
             _storeRepo = storeRepo;
             _logger = logger;
         }
-
+     
         // updated with quantity
         public ActionResult Index(string category)
         {
