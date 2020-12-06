@@ -1,7 +1,5 @@
 ﻿using StoreLibrary;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace StoreApplication.UnitTests
@@ -25,7 +23,7 @@ namespace StoreApplication.UnitTests
             };
             CStore store = new CStore("Phoenix101", "606", supply);
 
-            Assert.Equal("Phoenix101", store.Storeloc );
+            Assert.Equal("Phoenix101", store.Storeloc);
             foreach (var product in supply)
             {
                 Assert.Equal(product.Quantity, store.Inventory[product.UniqueID].Quantity);

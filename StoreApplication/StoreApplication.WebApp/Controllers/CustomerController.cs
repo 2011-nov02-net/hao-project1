@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
 using StoreLibrary;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace StoreApplication.WebApp.Controllers
 {
@@ -23,14 +20,14 @@ namespace StoreApplication.WebApp.Controllers
         }
 
         // customers at one store location
-        public ActionResult Index(string firstName,string lastName)
+        public ActionResult Index(string firstName, string lastName)
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             var customers = _storeRepo.GetAllCustomersAtOneStore(storeLoc);
             var viewCustomer = ViewModelMapper.MapCustomersWithoutEmail(customers);
-           
+
             if (!String.IsNullOrEmpty(firstName) && !String.IsNullOrEmpty(lastName))
-            {    
+            {
                 // list, not mapped
                 var searchedCustomers = _storeRepo.GetAllCustomersAtOneStoreByName(storeLoc, firstName, lastName);
                 viewCustomer = searchedCustomers.Select(x => new CustomerViewModel
@@ -40,7 +37,7 @@ namespace StoreApplication.WebApp.Controllers
                     Lastname = x.LastName,
                     Phonenumber = x.PhoneNumber,
                 });
-                
+
             }
             return View(viewCustomer);
         }
@@ -105,7 +102,7 @@ namespace StoreApplication.WebApp.Controllers
 
                     // it is possible that the credential gets in and customer profile not
                     _storeRepo.AddOneCredential(cCredential);
-                    _storeRepo.StoreAddOneCustomer(storeLoc,cCustomer);               
+                    _storeRepo.StoreAddOneCustomer(storeLoc, cCustomer);
 
                 }
                 return RedirectToAction(nameof(Create));
@@ -117,7 +114,7 @@ namespace StoreApplication.WebApp.Controllers
                 return View();
             }
         }
-            // GET: CustomerController/Edit/5
+        // GET: CustomerController/Edit/5
 
         public ActionResult Edit(string id)
         {
@@ -166,16 +163,16 @@ namespace StoreApplication.WebApp.Controllers
                         ModelState.AddModelError("", "This email is already in use");
                         return View();
                     }
-                    
+
                 }
                 var editedCustomer = new CCustomer(id, viewCustomer.Firstname, viewCustomer.Lastname, viewCustomer.Phonenumber, viewCustomer.Email);
                 var editedCredential = new CCredential(viewCustomer.Email, viewCustomer.Password);
-                _storeRepo.DeleteOneCustomer(storeLoc,id);
+                _storeRepo.DeleteOneCustomer(storeLoc, id);
                 _storeRepo.DelelteOneCredential(foundCustomer.Email);
                 // drop dependcy issue
                 //_storeRepo.EditOneCredential(foundCredential.Email,editedCredential);
                 _storeRepo.AddOneCredential(editedCredential);
-                _storeRepo.StoreAddOneCustomer(storeLoc,editedCustomer);                
+                _storeRepo.StoreAddOneCustomer(storeLoc, editedCustomer);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -218,7 +215,7 @@ namespace StoreApplication.WebApp.Controllers
                     return View();
                 }
 
-                _storeRepo.DeleteOneCustomer(storeLoc,id);
+                _storeRepo.DeleteOneCustomer(storeLoc, id);
                 _storeRepo.DelelteOneCredential(foundCustomer.Email);
                 return RedirectToAction(nameof(Index));
             }

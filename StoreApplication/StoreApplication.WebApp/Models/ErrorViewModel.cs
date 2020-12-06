@@ -1,5 +1,3 @@
-using System;
-
 namespace StoreApplication.WebApp.Models
 {
     public class ErrorViewModel

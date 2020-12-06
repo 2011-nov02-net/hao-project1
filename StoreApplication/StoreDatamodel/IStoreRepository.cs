@@ -1,12 +1,10 @@
-﻿using System;
+﻿using StoreLibrary;
 using System.Collections.Generic;
-using System.Text;
-using StoreLibrary;
 
 namespace StoreDatamodel
 {
     public interface IStoreRepository
-    {  
+    {
         // Get methods
         // store level
         CStore GetOneStore(string storeLoc);
@@ -17,7 +15,7 @@ namespace StoreDatamodel
 
         // customer level
         CCustomer GetOneCustomer(string id);
-        CCustomer GetOneCustomerByEmail(string email);       
+        CCustomer GetOneCustomerByEmail(string email);
         Dictionary<string, CCustomer> GetAllCustomersAtOneStore(string storeLoc);
         List<CCustomer> GetAllCustomersAtOneStoreByName(string storeLoc, string firstname, string lastName);
 
@@ -33,7 +31,7 @@ namespace StoreDatamodel
         // product level
         CProduct GetOneProduct(string productID);
         CProduct GetOneProductByNameAndCategory(string name, string category);
-        CProduct GetOneProductWithQuantity(string storeLoc, string productID);       
+        CProduct GetOneProductWithQuantity(string storeLoc, string productID);
         List<CProduct> GetAllProductsOfOneOrder(string orderid);
 
         // Add methods

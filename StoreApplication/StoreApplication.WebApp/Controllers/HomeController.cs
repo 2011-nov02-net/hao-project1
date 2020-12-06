@@ -3,14 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StoreApplication.WebApp.Models;
 using StoreDatamodel;
-using StoreApplication.WebApp.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using StoreLibrary;
 
 namespace StoreApplication.WebApp.Controllers
 {
@@ -22,7 +15,7 @@ namespace StoreApplication.WebApp.Controllers
         public HomeController(ILogger<HomeController> logger, IStoreRepository storeRepo)
         {
             _logger = logger;
-            _storeRepo = storeRepo;         
+            _storeRepo = storeRepo;
         }
 
         public IActionResult Index()
@@ -40,8 +33,8 @@ namespace StoreApplication.WebApp.Controllers
         public IActionResult Login()
         {
             return View();
-        }   
-        
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -53,8 +46,8 @@ namespace StoreApplication.WebApp.Controllers
         }
 
         public IActionResult Tour()
-        {           
-            return View();                  
+        {
+            return View();
         }
 
 

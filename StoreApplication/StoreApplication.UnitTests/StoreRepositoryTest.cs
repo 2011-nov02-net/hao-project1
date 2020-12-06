@@ -1,21 +1,18 @@
-﻿ 
+﻿
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using StoreDatamodel;
 using StoreLibrary;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using Xunit;
 
 namespace StoreApplication.UnitTests
 {
     public class StoreRepositoryTest
-    {   
-        
+    {
+
         // repository only handles data logic, if conditions are all in controllers
         // test get methods first to avoid duplicate records/null references
         [Fact]
@@ -43,7 +40,7 @@ namespace StoreApplication.UnitTests
             // assert
             using var context2 = new Project0databaseContext(option);
             var dbProduct = context2.Products.Find("p101");
-            Assert.Equal(dbProduct.Price, searchedProduct.Price);         
+            Assert.Equal(dbProduct.Price, searchedProduct.Price);
         }
 
         [Fact]
@@ -76,7 +73,7 @@ namespace StoreApplication.UnitTests
             var optionsBuilder = new DbContextOptionsBuilder<Project0databaseContext>();
             optionsBuilder.UseSqlServer(GetConnectionString());
             var option = optionsBuilder.Options;
-            CStore newStore = new CStore("Techland China 5", "6026626662","84561");
+            CStore newStore = new CStore("Techland China 5", "6026626662", "84561");
             using (var context1 = new Project0databaseContext(option))
             {
                 IStoreRepository repo = new StoreRepository(option);
@@ -152,7 +149,7 @@ namespace StoreApplication.UnitTests
             string connectionString = JsonSerializer.Deserialize<string>(json);
             return connectionString;
         }
-        
-        
+
+
     }
 }

@@ -7,29 +7,24 @@ using StoreApplication.WebApp.Controllers;
 using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
 using StoreLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace StoreApplication.UnitTests
 {
     public class LoginControllerTests
     {
-       
+
         [Fact]
         public void Index_AdminLoginSuccess()
         {
             // arrange
             var _mockRepo = new Mock<IStoreRepository>();
             var httpContext = new DefaultHttpContext();
-            var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());         
+            var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
             var controller = new LoginController(_mockRepo.Object, new NullLogger<LoginController>())
             {
                 TempData = tempData
-            };            
+            };
             _mockRepo.Setup(x => x.GetOneAdminCredential(It.IsAny<string>())).Returns(
                 new CAdmincredential("admin@gmail.com", "admin12345"));
 
@@ -52,7 +47,7 @@ namespace StoreApplication.UnitTests
         }
 
         [Fact]
-        public void Index_RegularUserLoginSuccess() 
+        public void Index_RegularUserLoginSuccess()
         {
             // arrange
             var _mockRepo = new Mock<IStoreRepository>();

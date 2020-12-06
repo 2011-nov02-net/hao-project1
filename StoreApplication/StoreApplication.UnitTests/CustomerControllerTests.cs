@@ -7,16 +7,13 @@ using StoreApplication.WebApp.Controllers;
 using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
 using StoreLibrary;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace StoreApplication.UnitTests
 {
-    
+
     public class CustomerControllerTests
     {
         string storeLoc = "fake1";
@@ -55,7 +52,7 @@ namespace StoreApplication.UnitTests
             Assert.Equal("Kyle", customerList[0].Firstname);
             Assert.Equal("Crane", customerList[0].Lastname);
             Assert.Equal("6663331111", customerList[1].Phonenumber);
-            Assert.Null(customerList[1].Email);               
+            Assert.Null(customerList[1].Email);
         }
 
         [Fact]

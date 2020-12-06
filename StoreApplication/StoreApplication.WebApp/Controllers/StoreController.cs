@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
@@ -9,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace StoreApplication.WebApp.Controllers
 {
@@ -24,7 +21,7 @@ namespace StoreApplication.WebApp.Controllers
             _logger = logger;
             _storeRepo = storeRepo;
         }
- 
+
         public ActionResult Index(string zipCode)
         {
             var viewStore = _storeRepo.GetAllStores().Select(x => new StoreViewModel
@@ -60,7 +57,7 @@ namespace StoreApplication.WebApp.Controllers
                 Category = cProduct.Category,
                 Price = cProduct.Price,
             });
-      
+
             if (!String.IsNullOrEmpty(category))
             {
                 var products = _storeRepo.GetInventoryOfOneStoreByCategory(storeLoc, category);
@@ -110,7 +107,7 @@ namespace StoreApplication.WebApp.Controllers
                 {
                     ModelState.AddModelError("", "This product has just been deleted");
                     return View(viewDP);
-                }         
+                }
                 CProduct cProduct = new CProduct(foundProduct.UniqueID, foundProduct.Name, foundProduct.Category, foundProduct.Price,
                                             viewDP.Quantity);
 
@@ -123,7 +120,7 @@ namespace StoreApplication.WebApp.Controllers
                 {
                     json = TempData.Peek("Cart").ToString();
                 }
-                           
+
                 List<CProduct> products = persist.ReadProductsTempData(json);
                 if (products == null)
                 {
@@ -134,7 +131,7 @@ namespace StoreApplication.WebApp.Controllers
                 TempData["Cart"] = cart;
                 TempData.Keep("Cart");
                 // route parameter is an object
-                return RedirectToAction("Select", "Store", new StoreViewModel { Storeloc = TempData.Peek("storeLoc").ToString() });               
+                return RedirectToAction("Select", "Store", new StoreViewModel { Storeloc = TempData.Peek("storeLoc").ToString() });
             }
             catch (Exception e)
             {
@@ -145,12 +142,12 @@ namespace StoreApplication.WebApp.Controllers
         }
 
         public ActionResult CheckCart()
-        {           
+        {
             JsonFilePersist persist = new JsonFilePersist();
             if (!TempData.ContainsKey("Cart"))
             {
                 return View(new List<DetailedProductViewModel>());
-            }             
+            }
             List<CProduct> products = persist.ReadProductsTempData(TempData.Peek("Cart").ToString());
             // empty cart to start with
             if (products == null)
@@ -159,7 +156,7 @@ namespace StoreApplication.WebApp.Controllers
             }
 
             var viewProducts = ViewModelMapper.MapDetailedProducts(products);
-             
+
             //fixed            
             double total = 0;
             foreach (var item in viewProducts)
@@ -182,22 +179,22 @@ namespace StoreApplication.WebApp.Controllers
             return View();
         }
 
-       
+
         public ActionResult Proceed()
         {
             // place to change address and payment method
             // then finally checkout
             if (!TempData.ContainsKey("Cart"))
             {
-                ModelState.AddModelError("","Cannot checkout empty cart");
+                ModelState.AddModelError("", "Cannot checkout empty cart");
                 return RedirectToAction("CheckCart");
             }
             return View();
         }
 
         public ActionResult Checkout()
-       {           
-            JsonFilePersist persist = new JsonFilePersist();           
+        {
+            JsonFilePersist persist = new JsonFilePersist();
             List<CProduct> products = persist.ReadProductsTempData(TempData.Peek("Cart").ToString());
             if (products == null)
             {
@@ -213,7 +210,7 @@ namespace StoreApplication.WebApp.Controllers
             // recalculate price in case customers change quantity in carts
             double totalCost = store.CalculateTotalPrice(products);
 
-            COrder newOrder = new COrder(orderID, store, cCustomer ,totalCost);
+            COrder newOrder = new COrder(orderID, store, cCustomer, totalCost);
 
             // check against inventory
             var inventory = _storeRepo.GetInventoryOfOneStore(storeLoc);
@@ -233,10 +230,10 @@ namespace StoreApplication.WebApp.Controllers
                 ModelState.AddModelError("", "Quantity set exceeds the maximum allowed");
                 _logger.LogError("Quantity set exceeds the maximum allowed");
                 return RedirectToAction("CheckCart");
-            }           
+            }
             if (isSuccessful)
             {
-     
+
                 if (!store.CheckInventory(newOrder))
                 {
                     ModelState.AddModelError("", "Not enough left in the inventory");
@@ -244,7 +241,7 @@ namespace StoreApplication.WebApp.Controllers
                     return RedirectToAction("CheckCart");
                 }
                 else
-                {                  
+                {
                     store.UpdateInventory(newOrder);
                     _storeRepo.CustomerPlaceOneOrder(newOrder, store, totalCost);
                 }
@@ -256,8 +253,8 @@ namespace StoreApplication.WebApp.Controllers
             sw.Close();
             TempData.Remove("Cart");
             TempData.Remove("Total");
-            return View();        
-       }
+            return View();
+        }
 
 
         public ActionResult CheckOrder()
@@ -268,10 +265,10 @@ namespace StoreApplication.WebApp.Controllers
             CStore store = _storeRepo.GetOneStore(storeLoc);
 
             // collection information about this customer
-            var OrderHistory = _storeRepo.GetOneCustomerOrderHistory(customer,store);
+            var OrderHistory = _storeRepo.GetOneCustomerOrderHistory(customer, store);
             if (OrderHistory == null)
             {
-                return View( new List<OrderViewModel>());
+                return View(new List<OrderViewModel>());
             }
             var viewOrder = ViewModelMapper.MapOrders(OrderHistory);
             return View(viewOrder);
@@ -280,9 +277,9 @@ namespace StoreApplication.WebApp.Controllers
 
         public ActionResult OrderDetail(string id)
         {
-            List<CProduct> products= _storeRepo.GetAllProductsOfOneOrder(id);
+            List<CProduct> products = _storeRepo.GetAllProductsOfOneOrder(id);
             var viewproducts = ViewModelMapper.MapDetailedProducts(products);
             return View(viewproducts);
-        }  
+        }
     }
 }

@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace StoreApplication.WebApp.ViewModels
 {
     public class StoreViewModel
     {
         [Required]
-        [Display( Name = "Store Location") ]       
+        [Display(Name = "Store Location")]
         public string Storeloc { get; set; }
 
         [Required]
-        [Display( Name = "Store Phone Number")]      
+        [Display(Name = "Store Phone Number")]
         [StringLength(10)]
         [RegularExpression("[0-9]*")]
         public string Storephone { get; set; }

@@ -1,8 +1,6 @@
 ﻿using StoreApplication.WebApp.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace StoreLibrary
 {
@@ -20,11 +18,11 @@ namespace StoreLibrary
                 Name = x.Name,
                 Category = x.Category,
                 Price = x.Price,
-                Quantity = x.Quantity,         
+                Quantity = x.Quantity,
             });
             return viewProducts;
         }
-        static public IEnumerable<DetailedProductViewModel> MapDetailedProducts(IEnumerable<CProduct> products )
+        static public IEnumerable<DetailedProductViewModel> MapDetailedProducts(IEnumerable<CProduct> products)
         {
             var viewProducts = products.Select(x => new DetailedProductViewModel
             {
@@ -49,12 +47,12 @@ namespace StoreLibrary
             };
             return viewProduct;
         }
-        static public DetailedProductViewModel MapSingleDetailedProduct (CProduct product )
+        static public DetailedProductViewModel MapSingleDetailedProduct(CProduct product)
         {
             var viewProduct = new DetailedProductViewModel
             {
                 UniqueID = product.UniqueID,
-                Name =  product.Name,
+                Name = product.Name,
                 Category = product.Category,
                 Price = product.Price,
                 Quantity = product.Quantity,
@@ -64,15 +62,15 @@ namespace StoreLibrary
         }
 
         // customers
-        static public IEnumerable<CustomerViewModel> MapCustomersWithoutEmail(Dictionary<string,CCustomer> customers)
-        { 
+        static public IEnumerable<CustomerViewModel> MapCustomersWithoutEmail(Dictionary<string, CCustomer> customers)
+        {
             var viewCustomers = customers.Select(x => new CustomerViewModel
-             {
-                 Customerid = x.Value.Customerid,
-                 Firstname = x.Value.FirstName,
-                 Lastname = x.Value.LastName,
-                 Phonenumber = x.Value.PhoneNumber,
-             });
+            {
+                Customerid = x.Value.Customerid,
+                Firstname = x.Value.FirstName,
+                Lastname = x.Value.LastName,
+                Phonenumber = x.Value.PhoneNumber,
+            });
             return viewCustomers;
         }
         static public IEnumerable<CustomerViewModel> MapCustomers(Dictionary<string, CCustomer> customers)
@@ -87,7 +85,7 @@ namespace StoreLibrary
             });
             return viewCustomers;
         }
-        static public CustomerViewModel MapSingleCustomerWithCredential(CCustomer customer, CCredential credential )
+        static public CustomerViewModel MapSingleCustomerWithCredential(CCustomer customer, CCredential credential)
         {
             var viewCustomer = new CustomerViewModel
             {
@@ -112,7 +110,7 @@ namespace StoreLibrary
                 TotalCost = x.TotalCost,
             });
             return viewOrders;
-               
+
         }
     }
 }

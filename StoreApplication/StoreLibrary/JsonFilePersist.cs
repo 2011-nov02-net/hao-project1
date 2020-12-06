@@ -1,10 +1,6 @@
-﻿
-using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using Newtonsoft.Json;
 
 namespace StoreLibrary
 {
@@ -23,31 +19,6 @@ namespace StoreLibrary
         {
             path = cpath;
         }
-      
-        /// <summary>
-        /// simplified only to write to a text file
-        /// </summary>
-        public void WriteText(string data)
-        {           
-            File.WriteAllText(path,data);           
-        }
-
-        /// <summary>
-        /// simplified only to read from a text file
-        /// </summary>
-        public string ReadText()
-        {
-            string data;
-            try
-            {         
-                data = File.ReadAllText(path);               
-            }
-            catch (FileNotFoundException e)
-            {
-                data = "777";
-            }
-            return data;
-        }
 
         /// <summary>
         /// original behavior to serialize and write data
@@ -59,7 +30,7 @@ namespace StoreLibrary
             serializer.NullValueHandling = NullValueHandling.Ignore;
             serializer.TypeNameHandling = TypeNameHandling.Auto;
             serializer.Formatting = Formatting.Indented;
-  
+
             using (StreamWriter sw = new StreamWriter(path))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
@@ -103,41 +74,6 @@ namespace StoreLibrary
         }
 
         //
-        public void WriteProductsData(List<CProduct> data)
-        {
-            JsonSerializer serializer = new JsonSerializer();
-            serializer.Converters.Add(new Newtonsoft.Json.Converters.IsoDateTimeConverter());
-            serializer.NullValueHandling = NullValueHandling.Ignore;
-            serializer.TypeNameHandling = TypeNameHandling.Auto;
-            serializer.Formatting = Formatting.Indented;
-            using (StreamWriter sw = new StreamWriter(path))
-            using (JsonWriter writer = new JsonTextWriter(sw))
-            {
-                serializer.Serialize(writer, data, typeof(List<CProduct>));
-
-            }
-        }
-
-        public List<CProduct> ReadProductsData()
-        {
-            List<CProduct> data;
-            try
-            {
-                string json = File.ReadAllText(path);              
-                data = JsonConvert.DeserializeObject<List<CProduct>>(json, new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Auto,
-                    NullValueHandling = NullValueHandling.Ignore,
-                });
-            }
-            catch (FileNotFoundException e)
-            {
-                return new List<CProduct>();
-            }
-            return data;
-        }
-
-        //
         public string WriteProductsTempData(List<CProduct> data)
         {
             JsonSerializer serializer = new JsonSerializer();
@@ -150,7 +86,7 @@ namespace StoreLibrary
             using (StreamWriter sw = new StreamWriter(path))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
-                serializer.Serialize(writer, data, typeof(List<CProduct>));               
+                serializer.Serialize(writer, data, typeof(List<CProduct>));
             }
 
             // should at least contain one product, so try catch is not needed, but just for safety
@@ -164,14 +100,14 @@ namespace StoreLibrary
                 return null;
             }
             return json;
-                
+
         }
 
-        public List<CProduct> ReadProductsTempData(string json )
+        public List<CProduct> ReadProductsTempData(string json)
         {
             List<CProduct> data;
             try
-            {                             
+            {
                 data = JsonConvert.DeserializeObject<List<CProduct>>(json, new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.Auto,

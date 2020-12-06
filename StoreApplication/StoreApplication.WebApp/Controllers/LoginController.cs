@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
 using StoreLibrary;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace StoreApplication.WebApp.Controllers
 {
@@ -28,7 +24,7 @@ namespace StoreApplication.WebApp.Controllers
             return View();
         }
 
-    
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(LoginViewModel viewLogin)
@@ -62,8 +58,8 @@ namespace StoreApplication.WebApp.Controllers
                 {
                     ModelState.AddModelError("", "This email address has not been registered");
                     return View();
-                }                
-                
+                }
+
                 if (cCredential.Password == viewLogin.Password)
                 {
                     // user successful login
@@ -78,9 +74,9 @@ namespace StoreApplication.WebApp.Controllers
                     return View();
                 }
                 // relative path
-                return RedirectToAction("Index","Store");
+                return RedirectToAction("Index", "Store");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(e, "error while tring to login");
                 ModelState.AddModelError("", "failed to login");
@@ -121,21 +117,21 @@ namespace StoreApplication.WebApp.Controllers
                 else
                 {
                     // customer don't type in his ID number, is assigned automatically
-                    string customerID = Guid.NewGuid().ToString().Substring(0,10);
-                  
-                    cCustomer = new CCustomer(customerID, viewCustomer.Firstname, viewCustomer.Lastname, viewCustomer.Phonenumber, viewCustomer.Email);    
+                    string customerID = Guid.NewGuid().ToString().Substring(0, 10);
+
+                    cCustomer = new CCustomer(customerID, viewCustomer.Firstname, viewCustomer.Lastname, viewCustomer.Phonenumber, viewCustomer.Email);
                     CCredential cCredential = new CCredential(viewCustomer.Email, viewCustomer.Password);
                     // it is possible that the credential gets in and customer profile not
                     _storeRepo.AddOneCredential(cCredential);
                     _storeRepo.AddOneCustomer(cCustomer);
-                    
+
                     TempData["User"] = cCustomer.Email;
                     TempData.Keep("User");
                     // changed to shopping cart later
                     TempData[cCustomer.Email] = 1;
-                   
+
                 }
-                return RedirectToAction("Index","Store");
+                return RedirectToAction("Index", "Store");
             }
             catch (Exception e)
             {
@@ -144,7 +140,7 @@ namespace StoreApplication.WebApp.Controllers
                 return View();
             }
         }
-      
+
 
     }
 }

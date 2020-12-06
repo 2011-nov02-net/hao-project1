@@ -5,9 +5,7 @@ using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
 using StoreLibrary;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace StoreApplication.WebApp.Controllers
 {
@@ -30,7 +28,7 @@ namespace StoreApplication.WebApp.Controllers
             {
                 Storeloc = x.Storeloc,
                 Storephone = x.Storephone,
-                Zipcode = x.Zipcode,                     
+                Zipcode = x.Zipcode,
             });
             return View(viewStores);
         }

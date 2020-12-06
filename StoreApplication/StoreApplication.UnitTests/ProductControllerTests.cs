@@ -7,16 +7,13 @@ using StoreApplication.WebApp.Controllers;
 using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
 using StoreLibrary;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace StoreApplication.UnitTests
 {
-    
+
     public class ProductControllerTests
     {
         // can't seem to mock arguments
@@ -28,11 +25,11 @@ namespace StoreApplication.UnitTests
         public void Index_GetAllProductsAtOneStore()
         {
             // arrange
-            var _mockRepo = new Mock<IStoreRepository>();      
+            var _mockRepo = new Mock<IStoreRepository>();
             var httpContext = new DefaultHttpContext();
             var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
             tempData["adminLoc"] = storeLoc;
-            var controller = new ProductController(_mockRepo.Object, new NullLogger<ProductController>())             
+            var controller = new ProductController(_mockRepo.Object, new NullLogger<ProductController>())
             {
                 TempData = tempData
             };
@@ -40,8 +37,8 @@ namespace StoreApplication.UnitTests
             _mockRepo.Setup(x => x.GetInventoryOfOneStore(It.IsAny<string>())).Returns(new List<CProduct>
             {
                 new CProduct ("P101","Dying Light","Game",24.99,600),
-                new CProduct ("P102","Dying Light 2","Game",59.99,700),               
-            });           
+                new CProduct ("P102","Dying Light 2","Game",59.99,700),
+            });
 
             // act
             IActionResult actionResult = controller.Index(noCategory);
@@ -113,17 +110,18 @@ namespace StoreApplication.UnitTests
                 .Returns((CProduct)null);
 
             string loc = null;
-            CProduct product = null;          
+            CProduct product = null;
             int quantity = 0;
-            _mockRepo.Setup(x => x.StoreAddOneProduct(It.IsAny<string>(),It.IsAny<CProduct>(),It.IsAny<int>()))
-                .Callback<string,CProduct,int>((x,y,z) => {
+            _mockRepo.Setup(x => x.StoreAddOneProduct(It.IsAny<string>(), It.IsAny<CProduct>(), It.IsAny<int>()))
+                .Callback<string, CProduct, int>((x, y, z) =>
+                {
                     loc = x;
                     product = y;
                     quantity = z;
-                    });
+                });
 
             var viewDP = new DetailedProductViewModel
-            {             
+            {
                 // ID is automatically assigned
                 Name = "Dying Light 3",
                 Category = "Game",
@@ -136,7 +134,7 @@ namespace StoreApplication.UnitTests
 
             // assert
             Assert.True(controller.ModelState.IsValid);
-            _mockRepo.Verify(r => r.StoreAddOneProduct(It.IsAny<string>(), It.IsAny<CProduct>(), It.IsAny<int>()), Times.Once);     
+            _mockRepo.Verify(r => r.StoreAddOneProduct(It.IsAny<string>(), It.IsAny<CProduct>(), It.IsAny<int>()), Times.Once);
             Assert.Equal(viewDP.Name, product.Name);
             Assert.Equal(viewDP.Category, product.Category);
             Assert.Equal(viewDP.Price, product.Price);
@@ -170,8 +168,8 @@ namespace StoreApplication.UnitTests
 
             // assert
             Assert.False(controller.ModelState.IsValid);
-            Assert.Equal(2, controller.ModelState.ErrorCount);          
-            var viewResult = Assert.IsAssignableFrom<ViewResult>(actionResult);                                          
+            Assert.Equal(2, controller.ModelState.ErrorCount);
+            var viewResult = Assert.IsAssignableFrom<ViewResult>(actionResult);
         }
-    }    
+    }
 }

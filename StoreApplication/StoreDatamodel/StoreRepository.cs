@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StoreApplication.WebApp;
 using StoreLibrary;
-
-using StoreLibrary.Search;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace StoreDatamodel
 {
@@ -27,7 +24,7 @@ namespace StoreDatamodel
             var dbStore = context.Stores.FirstOrDefault(x => x.Storeloc == storeLoc);
             if (dbStore == null) return null;
             // store has no customer profile yet
-            CStore domainStore = new CStore(dbStore.Storeloc, dbStore.Storephone,dbStore.Zipcode);          
+            CStore domainStore = new CStore(dbStore.Storeloc, dbStore.Storephone, dbStore.Zipcode);
             return domainStore;
         }
         public IEnumerable<CStore> GetAllStores()
@@ -35,13 +32,13 @@ namespace StoreDatamodel
             using var context = new Project0databaseContext(_contextOptions);
             var dbStores = context.Stores.ToList();
             if (dbStores == null) return null;
-            var domainStores = DomainModelMapper.MapStore(dbStores);            
+            var domainStores = DomainModelMapper.MapStore(dbStores);
             return domainStores;
         }
         public IEnumerable<CStore> GetAllStoresByZipcode(string zipCode)
-        { 
+        {
             using var context = new Project0databaseContext(_contextOptions);
-            IEnumerable<Store> dbStores ;
+            IEnumerable<Store> dbStores;
             try
             {
                 dbStores = context.Stores.Where(x => x.Zipcode == zipCode).ToList();
@@ -81,7 +78,7 @@ namespace StoreDatamodel
             */
             return domainInv;
         }// not mapped
-        public List<CProduct> GetInventoryOfOneStoreByCategory(string storeLoc,string category)
+        public List<CProduct> GetInventoryOfOneStoreByCategory(string storeLoc, string category)
         {
             using var context = new Project0databaseContext(_contextOptions);
             var dbStore = context.Stores.Include(x => x.Inventories)
@@ -94,14 +91,14 @@ namespace StoreDatamodel
             CProduct p = new CProduct();
             foreach (var product in dbStore.Inventories)
             {
-                
+
                 if (product.Product.Category == category)
                 {
                     p = new CProduct(product.Product.Productid, product.Product.Name,
                                                 product.Product.Category, product.Product.Price, product.Quantity);
                     inventory.Add(p);
                 }
-                    
+
             }
             return inventory;
         }// not mapped
@@ -113,17 +110,17 @@ namespace StoreDatamodel
             using var context = new Project0databaseContext(_contextOptions);
             var dbCustomer = context.Customers.FirstOrDefault(x => x.Customerid == id);
             if (dbCustomer == null) return null;
-            var domainCustomer = DomainModelMapper.MapSingleCustomer(dbCustomer);       
+            var domainCustomer = DomainModelMapper.MapSingleCustomer(dbCustomer);
             return domainCustomer;
         }
         public CCustomer GetOneCustomerByEmail(string email)
         {
             using var context = new Project0databaseContext(_contextOptions);
             var dbCustomer = context.Customers.FirstOrDefault(x => x.Email == email);
-            if (dbCustomer == null) return null;            
+            if (dbCustomer == null) return null;
             var domainCustomer = DomainModelMapper.MapSingleCustomer(dbCustomer);
             return domainCustomer;
-        }      
+        }
         public Dictionary<string, CCustomer> GetAllCustomersAtOneStore(string storeLoc)
         {
             using var context = new Project0databaseContext(_contextOptions);
@@ -135,13 +132,13 @@ namespace StoreDatamodel
             foreach (var customer in dbStore.Storecustomers)
             {
                 CCustomer c = new CCustomer(customer.Customer.Customerid, customer.Customer.Firstname,
-                                                customer.Customer.Lastname, customer.Customer.Phonenumber,customer.Customer.Email);
+                                                customer.Customer.Lastname, customer.Customer.Phonenumber, customer.Customer.Email);
                 // these customers have no order history atm
                 customers[c.Customerid] = c;
             }
             return customers;
         }// not mapped
-        public List<CCustomer> GetAllCustomersAtOneStoreByName(string storeLoc,string firstname,string lastName)
+        public List<CCustomer> GetAllCustomersAtOneStoreByName(string storeLoc, string firstname, string lastName)
         {
             using var context = new Project0databaseContext(_contextOptions);
             var dbStore = context.Stores.Include(x => x.Storecustomers)
@@ -158,7 +155,7 @@ namespace StoreDatamodel
                     // these customers have no order history atm
                     customers.Add(c);
                 }
-                
+
             }
             return customers;
         }// not mapped
@@ -218,7 +215,7 @@ namespace StoreDatamodel
             {
                 // these orders have no product list
                 // total cost not yet set
-                COrder o = new COrder(order.Orderid, store, customer, order.Orderedtime,order.Totalcost);
+                COrder o = new COrder(order.Orderid, store, customer, order.Orderedtime, order.Totalcost);
                 orders.Add(o);
             }
 
@@ -242,7 +239,7 @@ namespace StoreDatamodel
             }
             return OrderHistory;
         }
-      
+
         // product level
         public CProduct GetOneProduct(string productID)
         {
@@ -302,7 +299,7 @@ namespace StoreDatamodel
 
         // Add methods
         public void StoreAddOneProduct(string storeLoc, CProduct product, int quantity)
-        { 
+        {
             using var context = new Project0databaseContext(_contextOptions);
             var newProduct = new Product
             {
@@ -355,7 +352,7 @@ namespace StoreDatamodel
             {
                 Storeloc = store.Storeloc,
                 Storephone = store.Storephone,
-                Zipcode= store.Zipcode,
+                Zipcode = store.Zipcode,
             };
             context.Stores.Add(newStore);
             context.SaveChanges();
@@ -386,7 +383,7 @@ namespace StoreDatamodel
             context.Credentials.Add(cCredential);
             context.SaveChanges();
         }
-       
+
 
         // Edit methods
         public void EditOneProduct(string storeLoc, CProduct product, int quantity)
@@ -413,7 +410,7 @@ namespace StoreDatamodel
 
         // Delete methods
         public void DeleteOneStore(string storeLoc)
-        { 
+        {
             using var context = new Project0databaseContext(_contextOptions);
             var dbStore = context.Stores.FirstOrDefault(x => x.Storeloc == storeLoc);
             if (dbStore != null)
@@ -519,5 +516,5 @@ namespace StoreDatamodel
 }
 
 
-        
+
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace StoreLibrary.Search
+﻿namespace StoreLibrary.Search
 {
     /// <summary>
     /// search interface to map out several search methods

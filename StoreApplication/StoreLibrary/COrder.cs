@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
 
 
 namespace StoreLibrary
@@ -19,7 +18,7 @@ namespace StoreLibrary
         /// <summary>
         /// property to reference a store location
         /// </summary>
-        [JsonIgnore]    
+        [JsonIgnore]
         public CStore StoreLocation { get; set; }
 
         /// <summary>
@@ -39,32 +38,30 @@ namespace StoreLibrary
         /// property to record total cost of an order, must set it positive
         /// total cost should be finalized 
         /// </summary>
-        public double TotalCost {
+        public double TotalCost
+        {
             get { return totalCost; }
-            set {
+            set
+            {
                 if (value < 0)
                 {
                     throw new ArgumentException("total cost must be non-negative");
                 }
                 totalCost = value;
-            } }
+            }
+        }
 
 
         /// <summary>
         /// property to contain a list of products in an order, total quantity must not exceed 500
         /// </summary>
-        public List<CProduct> ProductList { get; set; }        
+        public List<CProduct> ProductList { get; set; }
 
-        /// <summary>
-        /// default constructor
-        /// </summary>
-        public COrder(string orderid)
-        { }
 
         /// <summary>
         /// parameterized constructor
         /// </summary>
-        public COrder(CStore storeLocation, CCustomer customer,DateTime orderedTime, double totalCost, List<CProduct> productList )
+        public COrder(CStore storeLocation, CCustomer customer, DateTime orderedTime, double totalCost, List<CProduct> productList)
         {
             StoreLocation = storeLocation;
             Customer = customer;
@@ -80,21 +77,13 @@ namespace StoreLibrary
             Customer = customer;
             OrderedTime = orderedTime;
             TotalCost = totalCost;
-        }
-
-        public COrder(string orderid, CStore storeLocation, CCustomer customer,DateTime orderedTime)
-        {
-            Orderid = orderid;
-            StoreLocation = storeLocation;
-            Customer = customer;
-            OrderedTime = orderedTime;        
-        }
+        }      
 
         public COrder(string orderid, CStore storeLocation, CCustomer customer, double totalCost)
         {
             Orderid = orderid;
             StoreLocation = storeLocation;
-            Customer = customer;        
+            Customer = customer;
             TotalCost = totalCost;
         }
 

@@ -1,7 +1,6 @@
 ﻿using StoreLibrary;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace StoreApplication.UnitTests
@@ -22,8 +21,8 @@ namespace StoreApplication.UnitTests
             Assert.Equal("123123121", customer.Customerid);
             Assert.Equal("John", customer.FirstName);
             Assert.Equal("Smith", customer.LastName);
-            Assert.Equal("6021111111", customer.PhoneNumber);        
-        }    
+            Assert.Equal("6021111111", customer.PhoneNumber);
+        }
 
         /// <summary>
         /// testing the scenario when a customer placed an order successfully
@@ -66,7 +65,7 @@ namespace StoreApplication.UnitTests
             {
                 Assert.Equal(10, item.Value.Quantity);
             }
-            
+
             // customer does not have an existing profile 
             // a failed order doesn not create a new user profile
             // userDict should be empty

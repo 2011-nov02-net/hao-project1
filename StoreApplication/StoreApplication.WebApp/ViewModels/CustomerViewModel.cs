@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StoreApplication.WebApp.ViewModels
 {
@@ -19,14 +15,14 @@ namespace StoreApplication.WebApp.ViewModels
         [Display(Name = "Last Name:")]
         public string Lastname { get; set; }
 
-        [Required]    
-        [Display( Name = "Phone Number:")]
+        [Required]
+        [Display(Name = "Phone Number:")]
         [StringLength(10)]
         [RegularExpression("[0-9]*")]
         public string Phonenumber { get; set; }
 
         [Required]
-        [Display (Name = "Email Address:")]
+        [Display(Name = "Email Address:")]
         public string Email { get; set; }
 
         [Required]
@@ -34,7 +30,7 @@ namespace StoreApplication.WebApp.ViewModels
         [MinLength(9)]
         public string Password { get; set; }
 
-         
+
         //[Required]
         [Display(Name = "Confirm Password:")]
         [MinLength(9)]

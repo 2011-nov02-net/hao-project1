@@ -5,9 +5,7 @@ using StoreApplication.WebApp.ViewModels;
 using StoreDatamodel;
 using StoreLibrary;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace StoreApplication.WebApp.Controllers
 {
@@ -20,11 +18,11 @@ namespace StoreApplication.WebApp.Controllers
             _storeRepo = storeRepo;
             _logger = logger;
         }
-     
+
         // updated with quantity
         public ActionResult Index(string category)
         {
-            string storeLoc = TempData.Peek("adminLoc").ToString();            
+            string storeLoc = TempData.Peek("adminLoc").ToString();
             var products = _storeRepo.GetInventoryOfOneStore(storeLoc);
             var viewProduct = ViewModelMapper.MapDetailedProductsWithoutTotal(products);
 
@@ -47,21 +45,21 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult Details(string id)
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
-            CProduct foundProduct = _storeRepo.GetOneProductWithQuantity(storeLoc,id);
+            CProduct foundProduct = _storeRepo.GetOneProductWithQuantity(storeLoc, id);
 
             // concurrent            
             if (foundProduct == null)
             {
                 ModelState.AddModelError("", "Another admin has just deleted this product");
                 return View();
-            }           
-            var viewProduct = ViewModelMapper.MapSingleDetailedProduct(foundProduct);           
+            }
+            var viewProduct = ViewModelMapper.MapSingleDetailedProduct(foundProduct);
             return View(viewProduct);
         }
 
-         
+
         public ActionResult Create()
-        {                
+        {
             return View();
         }
 
@@ -82,17 +80,17 @@ namespace StoreApplication.WebApp.Controllers
                 var foundProduct = _storeRepo.GetOneProductByNameAndCategory(viewDP.Name, viewDP.Category);
                 if (foundProduct != null)
                 {
-                    ModelState.AddModelError("","This product already exist in this category");
+                    ModelState.AddModelError("", "This product already exist in this category");
                     return View();
                 }
                 // a new randomly generated id for a new product                      
                 string productID = Guid.NewGuid().ToString().Substring(0, 10);
-                var cProduct = new CProduct(productID, viewDP.Name, viewDP.Category, viewDP.Price,viewDP.Quantity);
-                _storeRepo.StoreAddOneProduct(storeLoc,cProduct,viewDP.Quantity);
-    
+                var cProduct = new CProduct(productID, viewDP.Name, viewDP.Category, viewDP.Price, viewDP.Quantity);
+                _storeRepo.StoreAddOneProduct(storeLoc, cProduct, viewDP.Quantity);
+
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(e, "error while tring to add a product");
                 ModelState.AddModelError("", "failed to create a product");
@@ -104,21 +102,21 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult Edit(string id)
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
-            var cProduct = _storeRepo.GetOneProductWithQuantity(storeLoc,id);
+            var cProduct = _storeRepo.GetOneProductWithQuantity(storeLoc, id);
             var viewProduct = ViewModelMapper.MapSingleDetailedProductWithoutTotal(cProduct);
             return View(viewProduct);
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit( string id, DetailedProductViewModel viewDP)
+        public ActionResult Edit(string id, DetailedProductViewModel viewDP)
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             try
             {
-                if(!ModelState.IsValid)
-                { 
+                if (!ModelState.IsValid)
+                {
                     return View();
                 }
 
@@ -140,15 +138,15 @@ namespace StoreApplication.WebApp.Controllers
                         ModelState.AddModelError("", "A record with the same data already exist in this category");
                         return View();
                     }
-                }          
+                }
                 foundProduct = new CProduct(foundProduct.UniqueID, viewDP.Name, viewDP.Category, viewDP.Price);
-                _storeRepo.EditOneProduct(storeLoc,foundProduct, viewDP.Quantity);                              
+                _storeRepo.EditOneProduct(storeLoc, foundProduct, viewDP.Quantity);
                 return RedirectToAction(nameof(Index));
             }
-            catch( Exception e)
+            catch (Exception e)
             {
-                _logger.LogError( e , "error while trying to edit a product");
-                ModelState.AddModelError("","failed to edit a product" );
+                _logger.LogError(e, "error while trying to edit a product");
+                ModelState.AddModelError("", "failed to edit a product");
                 return View();
             }
         }
@@ -157,12 +155,12 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult Delete(string id)
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
-            var cProduct = _storeRepo.GetOneProductWithQuantity(storeLoc,id);
+            var cProduct = _storeRepo.GetOneProductWithQuantity(storeLoc, id);
             var viewProduct = ViewModelMapper.MapSingleDetailedProductWithoutTotal(cProduct);
             return View(viewProduct);
         }
 
-      
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(string id, IFormCollection collection)
@@ -178,13 +176,13 @@ namespace StoreApplication.WebApp.Controllers
                     return View();
                 }
 
-                _storeRepo.DeleteOneProduct(storeLoc,id);
+                _storeRepo.DeleteOneProduct(storeLoc, id);
                 return RedirectToAction(nameof(Index));
             }
-            catch( Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(e, "error while trying to delete a product");
-                ModelState.AddModelError("","Trying to delete a product that does not exist");
+                ModelState.AddModelError("", "Trying to delete a product that does not exist");
                 var viewMode = _storeRepo.GetOneProduct(id);
 
                 return View();

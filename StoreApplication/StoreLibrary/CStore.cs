@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace StoreLibrary
 {
@@ -33,16 +31,17 @@ namespace StoreLibrary
         /// key: customerid, value: customer object reference 
         /// </summary>
         public Dictionary<string, CCustomer> CustomerDict { get; set; } = new Dictionary<string, CCustomer>();
-    
+
         /// <summary>
         /// default constructor
         /// </summary>
         public CStore() { }
-    
+
         /// <summary>
         /// parameterized constructor
         /// </summary>
-        public CStore(string storeloc) {
+        public CStore(string storeloc)
+        {
             Storeloc = storeloc;
         }
 
@@ -67,9 +66,9 @@ namespace StoreLibrary
             Storeloc = storeloc;
             Storephone = storePhone;
             foreach (var product in supply)
-            {              
+            {
                 Inventory[product.UniqueID] = product;
-            }          
+            }
         }
 
         /// <summary>
@@ -111,9 +110,9 @@ namespace StoreLibrary
             foreach (var product in supply)
             {
                 CProduct temp;
-                if(Inventory.TryGetValue(product.UniqueID, out temp))
+                if (Inventory.TryGetValue(product.UniqueID, out temp))
                 {
-                    Inventory[product.UniqueID].Quantity += product.Quantity;        
+                    Inventory[product.UniqueID].Quantity += product.Quantity;
 
                 }
                 else
@@ -130,7 +129,7 @@ namespace StoreLibrary
             // create new profile
             string customerid = customer.Customerid;
 
-            CCustomer tempo; 
+            CCustomer tempo;
             if (CustomerDict.TryGetValue(customerid, out tempo))
             {
                 // already exist, no need to add 
@@ -139,7 +138,7 @@ namespace StoreLibrary
             {
                 // not found, create a new customer profile
                 CustomerDict[customerid] = customer;
-            }          
+            }
         }
 
         /// <summary>
@@ -158,14 +157,14 @@ namespace StoreLibrary
                 CCustomer tempo;
                 if (CustomerDict.TryGetValue(customerid, out tempo))
                 {
-                    CustomerDict[customerid].OrderHistory.Add(order);                    
+                    CustomerDict[customerid].OrderHistory.Add(order);
                 }
                 else
                 {
                     CustomerDict[customerid] = order.Customer;
                     CustomerDict[customerid].OrderHistory.Add(order);
-                }            
-            }   
+                }
+            }
         }
 
         /// <summary>
@@ -182,7 +181,7 @@ namespace StoreLibrary
                     Inventory[purchasedProduct.UniqueID].Quantity -= purchasedProduct.Quantity;
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -191,7 +190,7 @@ namespace StoreLibrary
         public bool CheckInventory(COrder order)
         {
             foreach (var purchasedProduct in order.ProductList)
-            {               
+            {
                 string uniqueID = purchasedProduct.UniqueID;
                 CProduct storage;
                 if (Inventory.TryGetValue(uniqueID, out storage))
@@ -223,6 +222,6 @@ namespace StoreLibrary
         {
             Inventory = new Dictionary<string, CProduct>();
         }
-     
+
     }
 }

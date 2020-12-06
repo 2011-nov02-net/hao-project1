@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StoreLibrary
 {
@@ -57,17 +55,11 @@ namespace StoreLibrary
                     throw new ArgumentException("quantity must be positive");
                 }
                 quantity = value;
-                
+
             }
         }
 
         public CProduct() { }
-        public CProduct(string name, string category, double price)
-        {
-            Name = name;
-            Category = category;
-            Price = price;
-        }
 
         public CProduct(string ID, string name, string category, double price)
         {
@@ -89,8 +81,8 @@ namespace StoreLibrary
             Quantity = quantity;
         }
 
-        
 
-        
+
+
     }
 }

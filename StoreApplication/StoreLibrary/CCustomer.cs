@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace StoreLibrary
 {
@@ -14,13 +10,13 @@ namespace StoreLibrary
         /// <summary>
         /// property customerid to uniquely identify a customer
         /// </summary>
-        
-        public string Customerid { get; set; }   
+
+        public string Customerid { get; set; }
 
         /// <summary>
         /// property first name of a customer
         /// </summary>
-        public string FirstName{ get; set; }
+        public string FirstName { get; set; }
 
         /// <summary>
         /// property last name of a customer
@@ -38,7 +34,7 @@ namespace StoreLibrary
         /// property to keep track of all orders of a customer
         /// </summary>
         public List<COrder> OrderHistory { get; set; } = new List<COrder>();
-    
+
         /// <summary>
         /// default constructor
         /// </summary>
@@ -48,11 +44,6 @@ namespace StoreLibrary
         /// <summary>
         /// parameterized constructor
         /// </summary>
-        public CCustomer(string firstName, string lastName)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-        }
 
         public CCustomer(string firstName, string lastName, string phoneNumber)
         {
@@ -60,14 +51,14 @@ namespace StoreLibrary
             LastName = lastName;
             PhoneNumber = phoneNumber;
         }
-      
 
-        public CCustomer(string customerid,string firstName, string lastName, string phoneNumber)
+
+        public CCustomer(string customerid, string firstName, string lastName, string phoneNumber)
         {
             Customerid = customerid;
             FirstName = firstName;
             LastName = lastName;
-            PhoneNumber = phoneNumber;    
+            PhoneNumber = phoneNumber;
         }
 
         public CCustomer(string customerid, string firstName, string lastName, string phoneNumber, string email)
@@ -84,11 +75,11 @@ namespace StoreLibrary
         /// <summary>
         /// customer's behavior to place an order at a store   
         /// <summary>
-        public void PlaceOrder(CStore storeLocation, COrder newOrder )     
+        public void PlaceOrder(CStore storeLocation, COrder newOrder)
         {
             storeLocation.UpdateInventoryAndCustomerOrder(newOrder);
         }
-        
+
 
     }
 }

@@ -7,7 +7,6 @@ using StoreLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace StoreApplication.WebApp.Controllers
 {
@@ -24,7 +23,7 @@ namespace StoreApplication.WebApp.Controllers
         }
 
         // GET: OrderController
-        public ActionResult Index(string firstName,string lastName)
+        public ActionResult Index(string firstName, string lastName)
         {
             string storeLoc = TempData.Peek("adminLoc").ToString();
             Dictionary<string, CCustomer> customers = _storeRepo.GetAllCustomersAtOneStore(storeLoc);
@@ -149,7 +148,7 @@ namespace StoreApplication.WebApp.Controllers
                 Category = x.Category,
                 Price = x.Price,
                 Quantity = x.Quantity,
-                TotalCostPerProduct  = x.Price*x.Quantity,
+                TotalCostPerProduct = x.Price * x.Quantity,
 
             });
             return View(viewProduct);
