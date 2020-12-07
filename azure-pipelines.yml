@@ -33,7 +33,10 @@ stages:
         scannerMode: 'MSBuild'
         projectKey: '2011-nov02-net_hao-project1'
         projectName: 'Techland 2.0 Sonar'
-        extraProperties: 'sonar.exclusions=**/lib/**'
+        extraProperties: |
+          sonar.exclusions=**/obj/**
+          sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
+          sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
 
     - task: UseDotNet@2
       displayName: dotnet 5.0
@@ -58,6 +61,7 @@ stages:
       inputs:
         command: 'test'
         workingDirectory: StoreApplication
+        arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --logger trx'
         publishTestResults: true
 
     - script: dotnet publish --configuration $(buildConfiguration) --output publish
