@@ -141,17 +141,101 @@ namespace StoreApplication.WebApp.Controllers
             return View(viewProducts);
         }
 
-
-        public ActionResult Edit()
+        [HttpGet]
+        public ActionResult Edit(string id)
         {
+            JsonFilePersist persist = new JsonFilePersist();
+            List<CProduct> products = persist.ReadProductsTempData(TempData.Peek("Cart").ToString());
+            CProduct foundProduct;
+            DetailedProductViewModel viewProduct;
+            if (products == null)
+            {
+                return RedirectToAction("CheckCart");
+            }
+            foreach (var product in products)
+            {
+                if (product.UniqueID == id)
+                {
+                    foundProduct = product;
+                    viewProduct = ViewModelMapper.MapSingleDetailedProductWithoutTotal(foundProduct);
+                    return View(viewProduct);                 
+                }
+            }
+            return View();     
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(string id, DetailedProductViewModel viewDP)
+        {
+            string path = "../../SimplyWriteData.json";
+            JsonFilePersist persist = new JsonFilePersist(path);
+            List<CProduct> products = persist.ReadProductsTempData(TempData.Peek("Cart").ToString());
+            if (products == null)
+            {
+                return RedirectToAction("CheckCart");
+            }
+            foreach (var product in products)
+            {
+                if (product.UniqueID == id)
+                {
+                    product.Quantity = viewDP.Quantity;   
+                    break;
+                }                
+            }
+            string cart = persist.WriteProductsTempData(products);
+            TempData["Cart"] = cart;
+            TempData.Keep("Cart");
+            return RedirectToAction("CheckCart");
+        }
+
+        [HttpGet]
+        public ActionResult Delete(string id)
+        {
+            JsonFilePersist persist = new JsonFilePersist();
+            List<CProduct> products = persist.ReadProductsTempData(TempData.Peek("Cart").ToString());
+            CProduct foundProduct;
+            DetailedProductViewModel viewProduct;
+            if (products == null)
+            {
+                return RedirectToAction("CheckCart");
+            }
+            foreach (var product in products)
+            {
+                if (product.UniqueID == id)
+                {
+                    foundProduct = product;
+                    viewProduct = ViewModelMapper.MapSingleDetailedProductWithoutTotal(foundProduct);
+                    return View(viewProduct);
+                }
+            }
             return View();
         }
 
-        public ActionResult Delete()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(string id, DetailedProductViewModel viewDP)
         {
-            return View();
+            string path = "../../SimplyWriteData.json";
+            JsonFilePersist persist = new JsonFilePersist(path);
+            List<CProduct> products = persist.ReadProductsTempData(TempData.Peek("Cart").ToString());
+            if (products == null)
+            {
+                return RedirectToAction("CheckCart");
+            }
+            foreach (var product in products)
+            {
+                if (product.UniqueID == id)
+                {
+                    products.Remove(product);
+                    break;
+                }
+            }
+            string cart = persist.WriteProductsTempData(products);
+            TempData["Cart"] = cart;
+            TempData.Keep("Cart");
+            return RedirectToAction("CheckCart");
         }
-
 
         public ActionResult Proceed()
         {

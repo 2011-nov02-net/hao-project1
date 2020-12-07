@@ -28,8 +28,8 @@ namespace StoreApplication.UnitTests
             var optionsBuilder = new DbContextOptionsBuilder<Project0databaseContext>();
             optionsBuilder.UseSqlServer(GetConnectionString());
             var option = optionsBuilder.Options;
-            string name = "diet coke";
-            string category = "drink";
+            string name = "Dying Light";
+            string category = "Game";
             CProduct searchedProduct;
             using (var context1 = new Project0databaseContext(option))
             {
@@ -73,7 +73,7 @@ namespace StoreApplication.UnitTests
             var optionsBuilder = new DbContextOptionsBuilder<Project0databaseContext>();
             optionsBuilder.UseSqlServer(GetConnectionString());
             var option = optionsBuilder.Options;
-            CStore newStore = new CStore("Techland China 5", "6026626662", "84561");
+            CStore newStore = new CStore("Techland Phoenix 5", "6025555555", "85281");
             using (var context1 = new Project0databaseContext(option))
             {
                 IStoreRepository repo = new StoreRepository(option);
@@ -82,7 +82,7 @@ namespace StoreApplication.UnitTests
             }
             // asert
             using var context2 = new Project0databaseContext(option);
-            var dbStore = context2.Stores.FirstOrDefault(x => x.Storeloc == "Techland China 5");
+            var dbStore = context2.Stores.FirstOrDefault(x => x.Storeloc == "Techland Phoenix 5");
             Assert.Equal(newStore.Storephone, dbStore.Storephone);
             Assert.Equal(newStore.Zipcode, dbStore.Zipcode);
             Assert.Empty(dbStore.Storecustomers);
@@ -95,7 +95,7 @@ namespace StoreApplication.UnitTests
             var optionsBuilder = new DbContextOptionsBuilder<Project0databaseContext>();
             optionsBuilder.UseSqlServer(GetConnectionString());
             var option = optionsBuilder.Options;
-            string storeLoc = "Techland China 5";
+            string storeLoc = "Techland Phoenix 5";
             using (var context1 = new Project0databaseContext(option))
             {
                 IStoreRepository repo = new StoreRepository(option);
@@ -104,7 +104,7 @@ namespace StoreApplication.UnitTests
             }
             // asert
             using var context2 = new Project0databaseContext(option);
-            var dbStore = context2.Stores.FirstOrDefault(x => x.Storeloc == "Techland China 5");
+            var dbStore = context2.Stores.FirstOrDefault(x => x.Storeloc == "Techland Phoenix 5");
             Assert.Null(dbStore);
         }
 

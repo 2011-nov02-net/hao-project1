@@ -4,11 +4,9 @@
     ViewData["Title"] = "Edit";
 }
 
-@{
-    Layout = "_AdminLayout";
-}
-
 <h1>Edit</h1>
+@{ Layout = "_StoreLayout";}
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,12 +14,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UniqueID" class="control-label"></label>
-                <input asp-for="UniqueID" class="form-control" disabled />
+                <input asp-for="UniqueID" class="form-control" disabled/>
                 <span asp-validation-for="UniqueID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" disabled />
+                <input asp-for="Name" class="form-control" disabled/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -31,7 +29,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" disabled/>
+                <input asp-for="Price" class="form-control" disabled />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -39,6 +37,7 @@
                 <input asp-for="Quantity" class="form-control" />
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -47,7 +46,7 @@
 </div>
 
 <div>
-    <a asp-action="Checkcart">Back to List</a>
+    <a asp-action="CheckCart">Back to List</a>
 </div>
 
 @section Scripts {

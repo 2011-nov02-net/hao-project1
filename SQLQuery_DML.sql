@@ -1,9 +1,9 @@
 
 -- insert products
-insert into product(productid,name,category,price) values('p101','diet coke','drink',1.0);
-insert into product(productid,name,category,price) values('p102','regular coke','drink',2.0);
-insert into product(productid,name,category,price) values('p103','pizza','frozen food',3.0);
-insert into product(productid,name,category,price) values('p104','milk','diary',4.0);
+insert into product(productid,name,category,price) values('p101','Dying Light','Game',1.0);
+insert into product(productid,name,category,price) values('p102','Dying Light 2','Game',2.0);
+insert into product(productid,name,category,price) values('p103','Lootbox one','Lootbox',3.0);
+insert into product(productid,name,category,price) values('p104','Lootbox two','Lootbox',4.0);
 
 --insert login credential
 insert into credential(email,password) values ('JSmith@gmail.com', '52640JSmith');
@@ -21,27 +21,25 @@ insert into customer(customerid,firstname,lastname,email,phonenumber) values('cu
 insert into customer(customerid,firstname,lastname,email,phonenumber) values('cus4','Tim','Cook','TCook@gmail.com','7771231234');
 
 -- insert store
-insert into store(storeloc,storephone,zipcode) values('Central Ave 1', '1111111111','85041');
-insert into store(storeloc,storephone,zipcode) values('South Ave 2', '2222222222','85033');
-insert into store(storeloc,storephone,zipcode) values('Mountain View 3', '3333333333','85041');
-insert into store(storeloc,storephone,zipcode) values('River View 4', '4444444444','85033');
+insert into store(storeloc,storephone,zipcode) values('Techland Los Angeles 1', '2131111111','90012');
+insert into store(storeloc,storephone,zipcode) values('Techland Portland 2', '5032222222','97207');
+insert into store(storeloc,storephone,zipcode) values('Techland New York 3', '5183333333','10001');
+insert into store(storeloc,storephone,zipcode) values('Techland Miami 4', '3054444444','33101');
 
 
 -- insert order
 -- recalculate total for total cost
 -- total
-insert into orderr(orderid,storeloc,customerid,totalcost) values('o001','Central Ave 1','cus1',1);
-
-
-insert into orderr(orderid,storeloc,customerid,totalcost) values('o002','South Ave 2','cus2',4);
-insert into orderr(orderid,storeloc,customerid,totalcost) values('o003','Mountain View 3','cus3',9);
-insert into orderr(orderid,storeloc,customerid,totalcost) values('o004','River View 4','cus4',16);
+insert into orderr(orderid,storeloc,customerid,totalcost) values('o001','Techland Los Angeles 1','cus1',1);
+insert into orderr(orderid,storeloc,customerid,totalcost) values('o002','Techland Portland 2','cus2',4);
+insert into orderr(orderid,storeloc,customerid,totalcost) values('o003','Techland New York 3','cus3',9);
+insert into orderr(orderid,storeloc,customerid,totalcost) values('o004','Techland Miami 4','cus4',16);
 
 -- insert bridges store - product
-insert into Inventory(storeloc,productid,quantity) values('Central Ave 1', 'p101',100);
-insert into Inventory(storeloc,productid,quantity) values('Central Ave 1', 'p102',100);
-insert into Inventory(storeloc,productid,quantity) values('Central Ave 1', 'p103',100);
-insert into Inventory(storeloc,productid,quantity) values('Central Ave 1', 'p104',100);
+insert into Inventory(storeloc,productid,quantity) values('Techland Los Angeles 1', 'p101',1000);
+insert into Inventory(storeloc,productid,quantity) values('Techland Los Angeles 1', 'p102',1000);
+insert into Inventory(storeloc,productid,quantity) values('Techland Los Angeles 1', 'p103',1000);
+insert into Inventory(storeloc,productid,quantity) values('Techland Los Angeles 1', 'p104',1000);
 
 -- insert brideges product - order
 -- processid is auto generated
@@ -51,16 +49,16 @@ insert into orderproduct(orderid,productid,quantity) values('o002','p102',2);
 insert into orderproduct(orderid,productid,quantity) values('o003','p103',3);
 insert into orderproduct(orderid,productid,quantity) values('o004','p104',4);
 
-update Inventory set quantity = 99 where productid = 'p101';
-update Inventory set quantity = 98 where productid = 'p102';
-update Inventory set quantity = 97 where productid = 'p103';
-update Inventory set quantity = 96 where productid = 'p104';
+update Inventory set quantity = 999 where productid = 'p101';
+update Inventory set quantity = 998 where productid = 'p102';
+update Inventory set quantity = 997 where productid = 'p103';
+update Inventory set quantity = 996 where productid = 'p104';
 
 -- insert bridges store - customer
-insert into storecustomer(storeloc,customerid) values('Central Ave 1','cus1');
-insert into storecustomer(storeloc,customerid) values('South Ave 2','cus2');
-insert into storecustomer(storeloc,customerid) values('Mountain View 3','cus3');
-insert into storecustomer(storeloc,customerid) values('River View 4','cus4');
+insert into storecustomer(storeloc,customerid) values('Techland Los Angeles 1','cus1');
+insert into storecustomer(storeloc,customerid) values('Techland Portland 2','cus2');
+insert into storecustomer(storeloc,customerid) values('Techland New York 3','cus3');
+insert into storecustomer(storeloc,customerid) values('Techland Miami 4','cus4');
 
 --
 select* from store;
