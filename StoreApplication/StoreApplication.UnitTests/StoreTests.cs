@@ -9,9 +9,6 @@ namespace StoreApplication.UnitTests
     /// </summary>
     public class StoreTests
     {
-
-
-
         /// <summary>
         /// testing its constructor
         /// </summary>
@@ -50,7 +47,6 @@ namespace StoreApplication.UnitTests
                     Assert.True(true);
             }
         }
-
         // updatecustomerorder and checkupdateinventory have been tested in customer tests
     }
 }
