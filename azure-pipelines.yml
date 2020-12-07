@@ -61,7 +61,7 @@ stages:
       inputs:
         command: 'test'
         workingDirectory: StoreApplication
-        arguments: '--configuration $(BuildConfiguration) --collect:"Xplat Code Coverage" --DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover'
+        arguments: '--collect:"Xplat Code Coverage" --DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover'
         publishTestResults: true
 
     - script: dotnet publish --configuration $(buildConfiguration) --output publish
