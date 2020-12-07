@@ -34,7 +34,7 @@ stages:
         projectKey: '2011-nov02-net_hao-project1'
         projectName: 'Techland 2.0 Sonar'
         extraProperties: |
-          sonar.exclusions=**/obj/**
+          sonar.exclusions=**/obj/**,**/lib/**
           sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
           sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
 
