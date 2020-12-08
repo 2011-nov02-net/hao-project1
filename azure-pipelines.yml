@@ -61,7 +61,7 @@ stages:
       inputs:
         command: 'test'
         workingDirectory: StoreApplication
-        arguments: '--collect:"Xplat Code Coverage"'
+        arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --logger trx'
         publishTestResults: true
 
     - script: dotnet publish --configuration $(buildConfiguration) --output publish
