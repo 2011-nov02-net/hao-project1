@@ -41,12 +41,12 @@ namespace StoreApplication.WebApp.Controllers
 
             if (storeLoc == null) storeLoc = TempData.Peek("storeLoc").ToString();
             var products = _storeRepo.GetInventoryOfOneStore(storeLoc);
-            var viewProduct = ViewModelMapper.MapNonDetailedProducts(products);
+            var viewProduct = ViewModelMapper.MapBindedProducts(products);
 
             if (!String.IsNullOrEmpty(category))
             {
                 var foundProducts = _storeRepo.GetInventoryOfOneStoreByCategory(storeLoc, category);
-                viewProduct = ViewModelMapper.MapNonDetailedProducts(foundProducts);
+                viewProduct = ViewModelMapper.MapBindedProducts(foundProducts);
             }
             TempData["storeLoc"] = storeLoc;
             TempData.Keep("storeLoc");
@@ -58,20 +58,20 @@ namespace StoreApplication.WebApp.Controllers
         public ActionResult AddToCart(string id)
         {
             var cProduct = _storeRepo.GetOneProduct(id);
-            var viewDP = ViewModelMapper.MapSingleNonDetailedProduct(cProduct);
+            var viewDP = ViewModelMapper.MapSingleBindedProduct(cProduct);
             return View(viewDP);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddToCart(string id, DetailedProductViewModel viewDP)
+        public ActionResult AddToCart(string id, BindedProductViewModel bindedProduct)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
                     ModelState.AddModelError("", "invalid input format");
-                    return View(viewDP);
+                    return View(bindedProduct);
                 }
 
                 // handle concurrency
@@ -79,10 +79,10 @@ namespace StoreApplication.WebApp.Controllers
                 if (foundProduct == null)
                 {
                     ModelState.AddModelError("", "This product has just been deleted");
-                    return View(viewDP);
+                    return View(bindedProduct);
                 }
                 CProduct cProduct = new CProduct(foundProduct.UniqueID, foundProduct.Name, foundProduct.Category, foundProduct.Price,
-                                            viewDP.Quantity);
+                                            bindedProduct.Quantity);
 
                 // use tempdata to store products in a cart
                 // do not know how to return a serialized string directly, use a local text file for now
@@ -110,7 +110,7 @@ namespace StoreApplication.WebApp.Controllers
             {
                 _logger.LogError(e, "error while tring to add a product");
                 ModelState.AddModelError("", "failed to create a product");
-                return View(viewDP);
+                return View(bindedProduct);
             }
         }
 
@@ -147,7 +147,7 @@ namespace StoreApplication.WebApp.Controllers
             JsonFilePersist persist = new JsonFilePersist();
             List<CProduct> products = persist.ReadProductsTempData(TempData.Peek("Cart").ToString());
             CProduct foundProduct;
-            DetailedProductViewModel viewProduct;
+            BindedProductViewModel viewProduct;
             if (products == null)
             {
                 return RedirectToAction("CheckCart");
@@ -157,7 +157,7 @@ namespace StoreApplication.WebApp.Controllers
                 if (product.UniqueID == id)
                 {
                     foundProduct = product;
-                    viewProduct = ViewModelMapper.MapSingleDetailedProductWithoutTotal(foundProduct);
+                    viewProduct = ViewModelMapper.MapSingleBindedProduct(foundProduct);
                     return View(viewProduct);                 
                 }
             }
@@ -166,7 +166,7 @@ namespace StoreApplication.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(string id, DetailedProductViewModel viewDP)
+        public ActionResult Edit(string id, BindedProductViewModel viewDP)
         {
             string path = "../../SimplyWriteData.json";
             JsonFilePersist persist = new JsonFilePersist(path);

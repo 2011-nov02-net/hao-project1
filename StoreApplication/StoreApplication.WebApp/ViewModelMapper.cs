@@ -62,25 +62,27 @@ namespace StoreLibrary
         }
 
         // non-detailed products
-        static public IEnumerable<DetailedProductViewModel> MapNonDetailedProducts(IEnumerable<CProduct>products)
+        static public IEnumerable<BindedProductViewModel> MapBindedProducts(IEnumerable<CProduct>products)
         { 
-            var viewProducts = products.Select(x => new DetailedProductViewModel
+            var viewProducts = products.Select(x => new BindedProductViewModel
             {
                 UniqueID = x.UniqueID,
                 Name = x.Name,
                 Category = x.Category,
                 Price = x.Price,
+                Quantity = x.Quantity,
             });
             return viewProducts;
         }
-        static public DetailedProductViewModel MapSingleNonDetailedProduct(CProduct product)
+        static public BindedProductViewModel MapSingleBindedProduct(CProduct product)
         {
-            var viewProduct = new DetailedProductViewModel
+            var viewProduct = new BindedProductViewModel
             {
                 UniqueID = product.UniqueID,
                 Name = product.Name,
                 Category = product.Category,
                 Price = product.Price,
+                Quantity = product.Quantity,
             };
             return viewProduct;
         }

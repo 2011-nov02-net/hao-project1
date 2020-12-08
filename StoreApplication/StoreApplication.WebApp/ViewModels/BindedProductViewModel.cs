@@ -1,28 +1,35 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace StoreApplication.WebApp.ViewModels
 {
-    // replaced by DetailedProductViewModel
-    public class ProductViewModel
+    // bind never
+    public class BindedProductViewModel
     {
+        [BindNever]
         // [Required]
         [Display(Name = "Product ID")]
         public string UniqueID { get; set; }
 
+        [BindNever]
         [Display(Name = "Product Name")]
-        [Required]
+        //[Required]
         public string Name { get; set; }
 
+        [BindNever]
         [Display(Name = "Product Category")]
-        [Required]
+        //[Required]
         public string Category { get; set; }
 
-        [Required]
+        [BindNever]
+        //[Required]
         [Range(0, 99999)]
         public double Price { get; set; }
 
-        // public int Quantity { get; set; }
+        [Required]
+        [Range(0, 99999)]
+        public int Quantity { get; set; }
 
 
     }

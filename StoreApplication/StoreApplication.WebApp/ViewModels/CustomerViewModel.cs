@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
 namespace StoreApplication.WebApp.ViewModels
 {
     public class CustomerViewModel
     {
+         
         // [Required]
         public string Customerid { get; set; }
 
@@ -31,7 +33,7 @@ namespace StoreApplication.WebApp.ViewModels
         [MinLength(9)]
         public string Password { get; set; }
 
-
+        
         //[Required]
         [Display(Name = "Confirm Password:")]
         [MinLength(9)]
