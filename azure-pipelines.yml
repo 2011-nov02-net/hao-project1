@@ -49,15 +49,6 @@ stages:
     - script: dotnet build --configuration $(buildConfiguration)
       displayName: 'dotnet build $(buildConfiguration)'
       workingDirectory: StoreApplication
-
-    - task: SonarCloudAnalyze@1
-      displayName: sonar run analysis
-    - task: SonarCloudPublish@1
-      displayName: sonar analysis publish
-      inputs:
-        pollingTimeoutSec: '300'
-
-  
     - task: DotNetCoreCLI@2
       displayName: dotnet test
       inputs:
@@ -66,6 +57,12 @@ stages:
         arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover'
 
         publishTestResults: true
+    - task: SonarCloudAnalyze@1
+      displayName: sonar run analysis
+    - task: SonarCloudPublish@1
+      displayName: sonar analysis publish
+      inputs:
+        pollingTimeoutSec: '300'
 
     - script: dotnet publish --configuration $(buildConfiguration) --output publish
       displayName: dotnet publish
