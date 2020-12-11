@@ -36,8 +36,9 @@ stages:
         projectName: 'Techland 2.0 Sonar'
         extraProperties: |
           sonar.exclusions=**/obj/**,**/lib/**
-          sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
-          sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+          sonar.cs.opencover.reportsPaths = $(Agent.TempDirectory)/**/coverage.opencover.xml
+
+          
 
     - task: UseDotNet@2
       displayName: dotnet 5.0
@@ -56,19 +57,14 @@ stages:
       inputs:
         pollingTimeoutSec: '300'
 
-    - task: AzureKeyVault@1
-      inputs:
-        azureSubscription: 'Azure subscription 1(1)(2f48b30f-7fe3-404e-90b7-a9e6dfbbda20)'
-        KeyVaultName: 'SecretConnection'
-        SecretsFilter: '*'
-
-
+  
     - task: DotNetCoreCLI@2
       displayName: dotnet test
       inputs:
         command: 'test'
         workingDirectory: StoreApplication
-        arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --logger trx'
+        arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover'
+
         publishTestResults: true
 
     - script: dotnet publish --configuration $(buildConfiguration) --output publish
