@@ -18,6 +18,7 @@ stages:
 
     variables:
       buildConfiguration: 'Release'
+      
 
     steps:
     - task: UseDotNet@2
@@ -42,7 +43,7 @@ stages:
       displayName: dotnet 5.0
       inputs:
         packageType: 'sdk'
-        version: '5.0.x'
+        version: '5.0.x' 
 
     - script: dotnet build --configuration $(buildConfiguration)
       displayName: 'dotnet build $(buildConfiguration)'
@@ -54,6 +55,12 @@ stages:
       displayName: sonar analysis publish
       inputs:
         pollingTimeoutSec: '300'
+
+    - task: AzureKeyVault@1
+      inputs:
+        azureSubscription: 'Azure subscription 1(1)(2f48b30f-7fe3-404e-90b7-a9e6dfbbda20)'
+        KeyVaultName: 'SecretConnection'
+        SecretsFilter: '*'
 
 
     - task: DotNetCoreCLI@2
