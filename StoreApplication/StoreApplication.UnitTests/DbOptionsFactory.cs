@@ -16,6 +16,7 @@ namespace StoreApplication.UnitTests
         /// </summary>
         static DbOptionsFactory()
         {
+            // connection string masked
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
