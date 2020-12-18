@@ -23,7 +23,6 @@ MVC Techland is a website that facilitates showcasing and vending Techland video
 
 ## Getting Started
 * No commands and setup needed, access it here at https://hao-techland2.azurewebsites.net/ using the credentials mentioned in project description. 
-* Here is the repo for reference https://github.com/2011-nov02-net/hao-project1.
 
 ## Usage
 * A regular user after his login credential has been verified, is able to select a store and view all products the store currently has in its inventory. He can select a product, put them in a cart, and return to shopping or other activities. His cart will not be emptied out as long as he remains logged in. All purchases made are kept permanently in a remote database and the user is able to view every single order in detail.
