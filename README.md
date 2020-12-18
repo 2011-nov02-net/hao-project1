@@ -1,4 +1,4 @@
-PROJECT NAME: MVC Techland
+#PROJECT NAME: MVC Techland
 Project Description
 MVC Techland is a website that facilitates showcasing and vending Techland video games and other merchandises. Its current focus is to advertise for Dying Light 2 and help customers pre-order this new franchise. Because of its ease of use, customers are able to view and purchase all products Techland carries at anytime anywhere. The design pattern follows a standard Model-View-Controller structure where Model is programmed in .Net5, View and Controller are handled in ASP .Net. This project has been temporarily paused because other team project has taken precedence, but it will be updated continuously until the release date. Feel free to use a regular user's login credential JSmith@gmail.com and 52640JSmith, as well as an admin's login credential haoyang439@gmail.com and 52640HYang to access the website at https://hao-techland2.azurewebsites.net. 
 
